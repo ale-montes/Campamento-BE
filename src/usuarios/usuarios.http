@@ -40,28 +40,38 @@ POST http://localhost:3000/api/usuarios
 Content-Type: application/json
 
 {
-  "nombre": "Julián",
-  "apellido": "Gómez",
+  "nombre": "Pepe",
+  "apellido": "Gimenez",
   "email": "julian@mail.com",
   "nick": "julig",
-  "contrasena": "Pawd11",
+  "contrasena": "Paas1234@",
   "fechaNac": "1990-01-01",
   "direccion": "Calle 123",
   "alergia": "Ninguna",
   "grupoSanguineo": "O",
-  "rh": "+"
+  "rh": "+",
+  "rol": "admin",
+  "telefono": "1234567890"
 }
 
 
-### Actualizar con errores PUT
+### Actualizar con errores PATCH
 PATCH  http://localhost:3000/api/usuarios/a02b91bc-3769-4221-beb1-d7a3aeba7dad
 Content-Type: application/json
 
 {
+  "nombre": "Julián",
+  "apellido": "Gómez",
+  "email": "julian@mail.com",
+  "nick": "julig",
+  "contrasena": "Password123@",
+  "fechaNac": "1990-01-01",
+  "direccion": "Calle 123",
   "alergia": "Ninguna",
-  "grupoSanguineo": "P",
+  "grupoSanguineo": "A",
   "rh": "+",
-  "rol": "campista"
+  "rol": "instructor",
+  "telefono": "1234567890"
 }
 
 ### Actualizar con error PUT

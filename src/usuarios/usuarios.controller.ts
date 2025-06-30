@@ -1,30 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { Usuario } from './usuarios.entity.js';
 import { UsuarioRepository } from './usuarios.repository.js';
 import crypto from 'crypto';
 
 const repo = new UsuarioRepository();
-
-export function sanitizeUsuarioInput(req: Request, _resp: Response, next: NextFunction) {
-  req.body.sanitizedInput = {
-    nombre: req.body.nombre,
-    apellido: req.body.apellido,
-    email: req.body.email,
-    nick: req.body.nick,
-    contrasena: req.body.contrasena,
-    fechaNac: req.body.fechaNac,
-    direccion: req.body.direccion,
-    alergia: req.body.alergia,
-    grupoSanguineo: req.body.grupoSanguineo,
-    rh: req.body.rh,
-  };
-  Object.keys(req.body.sanitizedInput).forEach((key) => {
-    if (req.body.sanitizedInput[key] === undefined) {
-      delete req.body.sanitizedInput[key];
-    }
-  });
-  next();
-}
 
 export const usuariosController = {
   getUsuarios: (req: Request, res: Response) => {
@@ -42,18 +21,19 @@ export const usuariosController = {
   },
 
   createUsuario: (req: Request, res: Response) => {
+    const data = req.body.sanitizedInput;
     const usuario = new Usuario(
       crypto.randomUUID(),
-      req.body.nombre,
-      req.body.apellido,
-      req.body.email,
-      req.body.nick,
-      req.body.contrasena,
-      req.body.fechaNac,
-      req.body.direccion,
-      req.body.alergia,
-      req.body.grupoSanguineo,
-      req.body.rh,
+      data.nombre,
+      data.apellido,
+      data.email,
+      data.nick,
+      data.contrasena,
+      data.fechaNac,
+      data.direccion,
+      data.alergia,
+      data.grupoSanguineo,
+      data.rh,
       'campista',
     );
     repo.add(usuario);
