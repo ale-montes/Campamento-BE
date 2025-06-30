@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { usuariosController, sanitizeUsuarioInput } from './usuarios.controller.js';
-import { usuarioSchema } from './usuarios.schema.js';
+import { usuarioSchema, usuarioUpdateSchema } from './usuarios.schema.js';
 import { validateSchema } from '../shared/validate.js';
 
 const router = Router();
@@ -13,8 +13,18 @@ router.post(
   sanitizeUsuarioInput,
   usuariosController.createUsuario,
 );
-router.put('/:id', sanitizeUsuarioInput, usuariosController.updateUsuario);
-router.patch('/:id', sanitizeUsuarioInput, usuariosController.updateUsuario);
+router.put(
+  '/:id',
+  validateSchema(usuarioSchema),
+  sanitizeUsuarioInput,
+  usuariosController.updateUsuario,
+);
+router.patch(
+  '/:id',
+  validateSchema(usuarioUpdateSchema),
+  sanitizeUsuarioInput,
+  usuariosController.updateUsuario,
+);
 router.delete('/:id', usuariosController.deleteUsuario);
 
 export const usuariosRoutes = router;

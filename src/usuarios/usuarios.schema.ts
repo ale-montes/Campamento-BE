@@ -17,15 +17,24 @@ export const usuarioSchema = z.object({
   contrasena: z
     .string()
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!¿?])[A-Za-z\d@$#!¿?\s]{8,}$/,
       'La contraseña debe tener mínimo 8 caracteres, con mayúscula, minúscula, número y símbolo especial',
     ),
-  fechaNac: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), // YYYY-MM-DD
+  fechaNac: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato inválido: YYYY-MM-DD')
+    .refine((val) => !isNaN(Date.parse(val)), { message: 'Fecha inválida' }),
   direccion: z
     .string()
     .min(5)
-    .regex(/^[a-zA-Z0-9\s]+$/, 'Solo letras y números permitidos'),
-  alergia: z.string().regex(/^[a-zA-Z]+$/, 'Solo letras permitidas'),
+    .regex(/^[a-zA-Z0-9\s.,áéíóúÁÉÍÓÚñÑ-]+$/, 'Dirección inválida'),
+  alergia: z.string().regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'Solo letras permitidas'),
   grupoSanguineo: z.enum(['A', 'B', 'AB', 'O']),
   rh: z.enum(['+', '-']),
 });
+
+export const usuarioUpdateSchema = usuarioSchema
+  .partial()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'Debes enviar al menos un campo para actualizar',
+  });

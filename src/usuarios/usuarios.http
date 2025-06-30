@@ -28,9 +28,49 @@ Content-Type: application/json
 {
   "alergia": "Ninguna",
   "grupoSanguineo": "O",
-  "rh": "+",
-  "rol": "campista"
+  "rh": "+"
 }
 
 ### Eliminar
 DELETE http://localhost:3000/api/usuarios/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+
+
+### Crear con errores
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "Julián",
+  "apellido": "Gómez",
+  "email": "julian@mail.com",
+  "nick": "julig",
+  "contrasena": "Pawd11",
+  "fechaNac": "1990-01-01",
+  "direccion": "Calle 123",
+  "alergia": "Ninguna",
+  "grupoSanguineo": "O",
+  "rh": "+"
+}
+
+
+### Actualizar con errores PUT
+PATCH  http://localhost:3000/api/usuarios/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "alergia": "Ninguna",
+  "grupoSanguineo": "P",
+  "rh": "+",
+  "rol": "campista"
+}
+
+### Actualizar con error PUT
+PUT  http://localhost:3000/api/usuarios/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "alergia": "Ninguna",
+  "grupoSanguineo": "O",
+  "rh": "+",
+  "rol": "campista"
+}
