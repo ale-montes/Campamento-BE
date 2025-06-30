@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "incremental": true, /* Habilita la compilación incremental para mejorar el tiempo de compilación */
+    "target": "es2020", /* Especifica el objetivo de ECMAScript */ 
+    "module": "ES2022",  /* Especifica el sistema de módulos */ 
+    "moduleResolution": "bundler", /* Resuelve los módulos de acuerdo al sistema de módulos especificado */ 
+    "sourceMap": true, /* Genera archivos de mapa de origen para depuración */ 
+    "outDir": "./dist",  /* Especifica el directorio de salida para los archivos compilados */ 
+    "esModuleInterop": true,  /* Permite la interoperabilidad entre módulos CommonJS y ES */
+    "forceConsistentCasingInFileNames": true, /* Obliga a que los nombres de archivo sean consistentes en cuanto a mayúsculas y minúsculas */ 
+    "strict": true,  /* Habilita todas las comprobaciones estrictas de tipo */
+    "alwaysStrict": true,  /* Asegura que el código se ejecute en modo estricto */
+    "skipLibCheck": true, /* Omite la comprobación de tipos en los archivos de declaración de tipo */ 
+    "emitDecoratorMetadata": true, /* Emite metadatos de decoradores para la reflexión */ 
+    "experimentalDecorators": true 
+  },
+  "include": ["src/**/*", "**/*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,36 @@
+### Obtener todos los usuarios
+GET http://localhost:3000/api/usuarios
+
+### Obtener por ID
+GET http://localhost:3000/api/usuarios/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+
+### Crear
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "Julián",
+  "apellido": "Gómez",
+  "email": "julian@mail.com",
+  "nick": "julig",
+  "contrasena": "Password123@",
+  "fechaNac": "1990-01-01",
+  "direccion": "Calle 123",
+  "alergia": "Ninguna",
+  "grupoSanguineo": "O",
+  "rh": "+"
+}
+
+### Actualizar
+PATCH  http://localhost:3000/api/usuarios/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "alergia": "Ninguna",
+  "grupoSanguineo": "O",
+  "rh": "+",
+  "rol": "campista"
+}
+
+### Eliminar
+DELETE http://localhost:3000/api/usuarios/a02b91bc-3769-4221-beb1-d7a3aeba7dad

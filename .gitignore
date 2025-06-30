@@ -1,0 +1,55 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+*.out
+*.pid
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Variables de entorno
+.env
+.env.* 
+
+# Archivos temporales
+*.swp
+*.swo
+*.tmp
+*.bak
+
+# JWT u otros archivos sensibles
+jwt.key
+jwt.pem
+*.pem
+*.key
+
+# Coverage (si usás pruebas)
+coverage/
+.nyc_output/
+
+# Compilados (si usás TypeScript o Babel)
+dist/
+build/
+lib/
+*.tsbuildinfo
+
+
+# Test output
+test-output/
+jest-html-reporters-*
+
+# Docker
+docker-compose.override.yml
+
+# Otros
+*.local
+notas.md
+
+pnpm-lock.yaml
