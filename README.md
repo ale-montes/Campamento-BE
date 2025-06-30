@@ -47,3 +47,11 @@ Este sistema está pensado para manejar:
    git clone git@github.com:usuario/sistema-campamento.git
    cd sistema-campamento
    ```
+2. Instala las dependencias
+   ```bash
+   pnpm install
+   ```
+3. Corre el servidor en modo desarrollo con recarga
+   ```bash
+   pnpm run dev
+   ```
