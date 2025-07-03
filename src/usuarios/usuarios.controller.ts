@@ -1,12 +1,15 @@
 import { Request, Response } from 'express';
 import { Usuario } from './usuarios.entity.js';
 import { UsuarioRepository } from './usuarios.repository.js';
+import { sanitizeUser } from './usuarios.utils.js';
 import crypto from 'crypto';
 
 const repo = new UsuarioRepository();
 
 const getUsuarios = (req: Request, res: Response) => {
-  res.json(repo.findAll());
+  const usuarios = repo.findAll() ?? [];
+  const usuariosSanitizados = usuarios.map(sanitizeUser);
+  res.json(usuariosSanitizados);
 };
 
 const getUsuario = (req: Request, res: Response) => {
@@ -16,7 +19,7 @@ const getUsuario = (req: Request, res: Response) => {
     res.status(404).json({ message: 'No encontrado' });
     return;
   }
-  res.json(usuario);
+  res.json(sanitizeUser(usuario));
 };
 
 const createUsuario = (req: Request, res: Response) => {
@@ -36,7 +39,7 @@ const createUsuario = (req: Request, res: Response) => {
     'campista',
   );
   repo.add(usuario);
-  res.status(201).send({ message: 'User Created', data: usuario });
+  res.status(201).send({ message: 'User Created', data: sanitizeUser(usuario) });
 };
 
 const updateUsuario = (req: Request, res: Response) => {
@@ -46,7 +49,7 @@ const updateUsuario = (req: Request, res: Response) => {
     res.status(404).send({ error: 'User not found' });
     return;
   }
-  res.status(200).send({ message: 'User updated', data: usuario });
+  res.status(200).send({ message: 'User updated', data: sanitizeUser(usuario) });
 };
 
 const deleteUsuario = (req: Request, res: Response) => {
