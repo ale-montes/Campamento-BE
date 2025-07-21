@@ -1,0 +1,28 @@
+### Obtener todas las deidades
+GET http://localhost:3000/api/deidades
+
+### Obtener por ID
+GET http://localhost:3000/api/deidades/2b3c4d5e-6789-01ab-cdef-2345678901bc
+
+### Crear
+POST http://localhost:3000/api/deidades
+Content-Type: application/json
+
+{
+  "nombre": "Zeus",
+  "descripcion": "Dios del cielo y el trueno",
+  "elemento": "Aire"
+}
+
+### Actualizar
+PATCH http://localhost:3000/api/deidades/2b3c4d5e-6789-01ab-cdef-2345678901bc
+Content-Type: application/json
+
+{
+  "descripcion": "Dios del cielo, el trueno y la lluvia",
+  "elemento": "Aire"
+}
+
+### Eliminar
+DELETE http://localhost:3000/api/deidades/2b3c4d5e-6789-01ab-cdef-2345678901bc
+
