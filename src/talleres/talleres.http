@@ -1,0 +1,31 @@
+### Obtener todos los talleres
+GET http://localhost:3000/api/talleres
+
+### Obtener por ID
+GET http://localhost:3000/api/talleres/a04b91bc-3769-4221-beb1-d7a3aeba7dad
+
+### Crear Taller
+POST http://localhost:3000/api/talleres
+Content-Type: application/json
+
+{
+  "titulo": "Taller de Esgrima",
+  "descripcion": "Aprende a defenderte con la espada",
+  "fechaHora": "2025-09-01T14:00:00.000Z",
+  "lugar": "Rocodromo",
+  "instructor": "Luke Castellan"
+}
+
+### Actualizar Taller
+PATCH http://localhost:3000/api/talleres/a04b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "fechaHora": "2025-09-01T15:00:00.000Z", 
+  "lugar": "Rocodromo",
+  "instructor": "Percy Jackson"
+}
+
+### Eliminar Taller
+DELETE http://localhost:3000/api/talleres/a04b91bc-3769-4221-beb1-d7a3aeba7dad
+

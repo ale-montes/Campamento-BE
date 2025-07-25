@@ -1,0 +1,26 @@
+### Obtener todas las cabañas
+GET http://localhost:3000/api/cabanas
+### Obtener por ID
+GET http://localhost:3000/api/cabanas/a04b91bc-3769-4221-beb1-d7a3aeba7dad
+
+### Crear Cabaña
+POST http://localhost:3000/api/cabanas
+Content-Type: application/json
+
+{
+  "nombreCabana": "Cabaña 4",
+  "dios": "Demeter",
+  "cantCampistas": 2,
+  "campistas": ["Miranda Gardiner", "Meg McCaffrey"]
+}
+
+### Actualizar Cabaña
+PATCH http://localhost:3000/api/cabanas/a06b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "cantCampistas": 2,
+  "campistas": ["Percy Jackson", "Tyson el Ciclope"]
+}
+### Eliminar Cabaña
+DELETE http://localhost:3000/api/cabanas/a04b91bc-3769-4221-beb1-d7a3aeba7dad
