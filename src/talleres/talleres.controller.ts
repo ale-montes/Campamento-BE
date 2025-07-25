@@ -25,8 +25,7 @@ const createTaller = (req: Request, res: Response) => {
     crypto.randomUUID(),
     data.titulo,
     data.descripcion,
-    data.dia,
-    data.hora,
+    new Date(data.fechaHora),
     data.lugar,
     data.instructor,
   );

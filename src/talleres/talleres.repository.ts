@@ -1,12 +1,11 @@
-import { Taller, Dia } from './talleres.entity.js';
+import { Taller } from './talleres.entity.js';
 
 const Talleres = [
   new Taller(
     'a04b91bc-3769-4221-beb1-d7a3aeba7dad',
     'Taller de Griego Antiguo',
     'Taller para poder leer mejor y evitar la dislexia',
-    Dia.Lunes,
-    '15:00',
+    new Date('2025-08-01T14:00:00'),
     'Casa grande',
     'Annabeth Chase',
   ),
@@ -14,8 +13,7 @@ const Talleres = [
     'b04b91bc-3769-4221-beb1-d7a3aeba7dad',
     'Taller de Natacion',
     'Taller para aprender a nadar y mejorar técnicas',
-    Dia.Viernes,
-    '11:00',
+    new Date('2025-08-01T15:00:00'),
     'Lago de las canoas',
     'Percy Jackson',
   ),
@@ -23,8 +21,7 @@ const Talleres = [
     'c04b91bc-3769-4221-beb1-d7a3aeba7dad',
     'Taller de tiro con Arco',
     'Taller para aprender a disparar con arco y mejorar técnicas de puntería',
-    Dia.Miercoles,
-    '10:00',
+    new Date('2025-08-01T16:00:00'),
     'Campo de tiro',
     'Will Solace',
   ),

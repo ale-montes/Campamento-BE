@@ -1,11 +1,16 @@
 import { z } from 'zod';
-import { Dia } from '../talleres/talleres.entity.js';
 
 export const tallerSchema = z.object({
   titulo: z.string().min(2).max(100),
   descripcion: z.string().min(10).max(500),
-  dia: z.nativeEnum(Dia),
-  hora: z.string().regex(/^\d{2}:\d{2}$/),
+  fechaHora: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, {
+      message: 'Fecha debe estar en formato ISO 8601 UTC (ej: 2025-08-01T19:00:00.000Z)',
+    })
+    .refine((date) => !isNaN(Date.parse(date)), {
+      message: 'Fecha y hora deben ser válidas',
+    }),
   lugar: z.string().min(2).max(100),
   instructor: z.string().min(2).max(100),
 });

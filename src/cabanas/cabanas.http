@@ -23,4 +23,4 @@ Content-Type: application/json
   "campistas": ["Percy Jackson", "Tyson el Ciclope"]
 }
 ### Eliminar Cabaña
-DELETE http://localhost:3000/api/cabanas/eabb5077-da86-43ef-b61d-0035dbc0a44e
+DELETE http://localhost:3000/api/cabanas/a04b91bc-3769-4221-beb1-d7a3aeba7dad
