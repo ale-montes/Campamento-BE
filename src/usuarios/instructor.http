@@ -1,0 +1,42 @@
+### GET all instructores
+GET http://localhost:3000/api/instructor
+
+### GET by ID
+GET http://localhost:3000/api/instructor/1
+
+### Create Instructor
+POST http://localhost:3000/api/instructor
+Content-Type: application/json
+
+{
+  "nombre": "Jorge",
+  "apellido": "Sanchez",
+  "email": "jorguesanchez@gmail.com",
+  "nick": "jorgesanchez123",
+  "contrasena": "jorge1234",
+  "fechaNac": "1996-10-05T00:00:00.000Z",
+  "direccion": "Calle Falsa 123, Chaco",
+  "alergias": "Mani",
+  "grupoSanguineo": "AB",
+  "rh": "+",
+  "especialidad": "Supervivencia",
+  "nivel": 1
+}
+
+### Create Instructor 2
+POST http://localhost:3000/api/instructor
+Content-Type: application/json
+{
+  "nombre": "Laura",
+  "apellido": "Perez",
+  "email": "lauperez85@gmail.com",
+  "nick": "lau_perez85",
+  "contrasena": "lau1234",
+  "fechaNac": "1990-08-20T00:00:00.000Z",
+  "direccion": "Avenida Siempre Viva 456, Springfield",
+  "alergias": "Ninguna",
+  "grupoSanguineo": "O",
+  "rh": "-",
+  "especialidad": "Primeros Auxilios",
+  "nivel": 2
+}

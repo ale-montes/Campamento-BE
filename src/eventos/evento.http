@@ -1,0 +1,27 @@
+### GET all eventos
+GET http://localhost:3000/api/eventos
+
+### GET by ID
+GET http://localhost:3000/api/eventos/1
+
+### Create Evento
+POST http://localhost:3000/api/eventos
+Content-Type: application/json
+
+{
+  "titulo": "Gran fogata",
+  "descripcion": "Una noche mágica junto al fuego con historias y canciones.",
+  "fechahora": "2023-10-15T19:00:00Z",
+  "lugar": "Plaza central del campamento"
+}
+
+### Create Evento 2
+POST http://localhost:3000/api/eventos
+Content-Type: application/json
+
+{
+  "titulo": "Torneo de arquería",
+  "descripcion": "Competencia amistosa de tiro con arco para todos los campistas.",
+  "fechahora": "2023-10-16T10:00:00Z",
+  "lugar": "Campo de tiro del campamento"
+}

@@ -1,0 +1,22 @@
+### GET all characters
+GET http://localhost:3000/api/admin
+
+### GET by ID
+GET http://localhost:3000/api/admin/1
+
+### Create Admin
+POST http://localhost:3000/api/admin
+Content-Type: application/json
+
+{
+  "nombre": "Luke",
+  "apellido": "Castellan",
+  "email": "lukecastenllan@gmail.com",
+  "nick": "Luke123",
+  "contrasena": "123456",
+  "fechaNac": "1990-01-01T00:00:00.000Z",
+  "direccion": "123 Main St",
+  "alergias": "Ninguna",
+  "grupoSanguineo": "O",
+  "rh": "+"
+}
