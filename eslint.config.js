@@ -22,6 +22,8 @@ export default [
     rules: {
       ...pluginTs.configs.recommended.rules,
       'prettier/prettier': 'error',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     },
   },
 ];

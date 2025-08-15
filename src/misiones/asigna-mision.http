@@ -1,0 +1,27 @@
+### GET all asignaciones a misiones
+GET http://localhost:3000/api/asigna-mision
+
+### GET by ID
+GET http://localhost:3000/api/asigna-mision/1
+
+### Create asignacion a mision
+POST http://localhost:3000/api/asigna-mision
+Content-Type: application/json
+
+{
+  "campista": 1,
+  "mision": 1,
+  "estado": "asignada"
+}
+
+### Create asignacion a mision 2
+POST http://localhost:3000/api/asigna-mision
+Content-Type: application/json
+
+{
+  "campista": 1,
+  "mision": 2,
+  "estado": "asignada"
+}
+
+# type EstadoMision = 'en progreso' | 'completada' | 'fallida';
