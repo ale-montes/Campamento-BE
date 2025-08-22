@@ -8,31 +8,21 @@ GET http://localhost:3000/api/campista/1
 POST http://localhost:3000/api/campista
 Content-Type: application/json
 
-{
-  "nombre": "Mike",
-  "apellido": "Martinez",
-  "email": "mikematinez@gmail.com",
-  "nick": "mike1234",
-  "contrasena": "asd123",
-  "fechaNac": "1998-12-10T00:00:00.000Z",
-  "direccion": "Siempre Viva 456",
-  "alergias": "Trabajo",
-  "grupoSanguineo": "A",
-  "rh": "-"
+{ 
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "email": "juanperez@gmail.com",
+  "telefono": "+543123456789",
+  "contrasena": "$2b$12$wEa8ibV0tmJ774RHB7Qk3e56rmHjhcJpE4zzFZe/ymUc/9CmA9OVG"
 }
 
 ### Create Campista 2
 POST http://localhost:3000/api/campista
 Content-Type: application/json
 {
-  "nombre": "Ana",
-  "apellido": "Gomez",
-  "email": "anagomez@gmail.com",
-  "nick": "ana_g",
-  "contrasena": "ana1234",
-  "fechaNac": "1999-05-15T00:00:00.000Z",
-  "direccion": "Calle Luna 789",
-  "alergias": "Ninguna",
-  "grupoSanguineo": "O",
-  "rh": "+"
+  "nombre": "María",
+  "apellido": "Gómez",
+  "email": "mariagomez@gmail.com",
+  "telefono": "+543987654321",
+  "contrasena": "$2b$12$wEa8ibV0tmJ774RHB7Qk3e56rmHjhcJpE4zzFZe/ymUc/9CmA9OVG"
 }
