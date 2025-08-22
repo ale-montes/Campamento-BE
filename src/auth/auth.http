@@ -1,0 +1,28 @@
+### Login de usuario con error email y contraseña incorrectos
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "contrasena": "123456"
+}
+
+
+### Login de usuario con email valido y contraseña incorrectos
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+  "email": "alemontes@gmail.com",
+  "contrasena": "perro"
+}
+
+
+### Login de usuario con email y contraseña validos
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+  "email": "alemontes@gmail.com",
+  "contrasena": "123456"
+}
