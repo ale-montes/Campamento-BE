@@ -18,6 +18,7 @@ import { solicitudEventoRoutes } from './eventos/solicitud-evento.routes.js';
 import { deidadRoutes } from './deidades/deidad.routes.js';
 import { cabaniaRoutes } from './cabanas/cabania.routes.js';
 import { hospedaRoutes } from './cabanas/hospeda.routes.js';
+import { authRoutes } from './auth/auth.routes.js';
 
 dotenv.config();
 const app = express();
@@ -45,6 +46,7 @@ app.use('/api/solicitud-evento', solicitudEventoRoutes);
 app.use('/api/deidades', deidadRoutes);
 app.use('/api/cabanias', cabaniaRoutes);
 app.use('/api/hospedaje', hospedaRoutes);
+app.use('/api/login', authRoutes);
 
 app.use(jsonErrorHandler);
 app.use(cors({ origin: 'http://localhost:5173' }));

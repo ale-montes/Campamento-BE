@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Campista } from './campista.entity.js';
 import { orm } from '../shared/db/orm.js';
+import bcrypt from 'bcryptjs';
 
 const em = orm.em;
 
@@ -38,8 +39,11 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const { contrasena: _omit, ...campistaSanitized } = em.create(Campista, req.body);
+    const { contrasena, ...rest } = req.body;
+    const hashedPassword = await bcrypt.hash(contrasena, 10);
+    const campista = em.create(Campista, { ...rest, contrasena: hashedPassword });
     await em.flush();
+    const { contrasena: _omit, ...campistaSanitized } = campista;
     res.status(201).json({ message: 'user created', data: campistaSanitized });
   } catch (error: unknown) {
     if (error instanceof Error) {

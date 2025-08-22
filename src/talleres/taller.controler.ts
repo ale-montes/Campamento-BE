@@ -7,7 +7,19 @@ const em = orm.em;
 async function findAll(req: Request, res: Response) {
   try {
     const talleres = await em.find(Taller, {}, { populate: ['instructor'] });
-    res.status(200).json({ message: 'found all talleres', data: talleres });
+
+    const talleresSanitizados = talleres.map((taller) => ({
+      id: taller.id,
+      titulo: taller.titulo,
+      descripcion: taller.descripcion,
+      fechaHora: taller.fechaHora,
+      lugar: taller.lugar,
+      instructor: {
+        nombre: taller.instructor.nombre,
+        apellido: taller.instructor.apellido,
+      },
+    }));
+    res.status(200).json({ message: 'found all talleres', data: talleresSanitizados });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
