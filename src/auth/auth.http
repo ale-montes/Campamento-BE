@@ -1,20 +1,16 @@
-### Login de usuario con error email y contraseña incorrectos
-POST http://localhost:3000/api/login
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJhbGVtb250ZXNAZ21haWwuY29tIiwicm9sZSI6ImNhbXBpc3RhIiwiaWF0IjoxNzU2NDcxMjY4LCJleHAiOjE3NTkwNjMyNjh9.JdZ82toNaxcGVGXZte1eWYxEV0eTALEdWd0uiNePk2w
+@tokenmail = cde9e583-9952-4b14-aaa2-8ed43e977458
+
+### Create Campista 2
+POST http://localhost:3000/api/register
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "nombre": "Alejandro",
+  "apellido": "Gómez",
+  "email": "gomez@gmail.com",
+  "telefono": "+543987654321",
   "contrasena": "123456"
-}
-
-
-### Login de usuario con email valido y contraseña incorrectos
-POST http://localhost:3000/api/login
-Content-Type: application/json
-
-{
-  "email": "alemontes@gmail.com",
-  "contrasena": "perro"
 }
 
 
@@ -23,6 +19,24 @@ POST http://localhost:3000/api/login
 Content-Type: application/json
 
 {
-  "email": "alemontes@gmail.com",
+  "email": "qmb.tecno@gmail.com",
   "contrasena": "123456"
+}
+
+###verificar verifyEmail
+GET http://localhost:3000/api/verify-email/{{tokenmail}}
+Content-Type: application/json
+
+###Consultar quien soy con token valido
+GET http://localhost:3000/api/me
+Content-Type: application/json
+Cookie: token={{token}}
+
+
+###Reenviar email de verificacion
+PUT http://localhost:3000/api/resend-verification
+Content-Type: application/json
+
+{
+  "email": "qmb.tecno@gmail.com"
 }

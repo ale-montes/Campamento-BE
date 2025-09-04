@@ -11,7 +11,7 @@ Content-Type: application/json
 { 
   "nombre": "Juan",
   "apellido": "Pérez",
-  "email": "juanperez@gmail.com",
+  "email": "juanperez2@gmail.com",
   "telefono": "+543123456789",
   "contrasena": "$2b$12$wEa8ibV0tmJ774RHB7Qk3e56rmHjhcJpE4zzFZe/ymUc/9CmA9OVG"
 }

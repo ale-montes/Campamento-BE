@@ -2,8 +2,61 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { findByMail } from '../usuarios/usuarios.controler.js';
+import { Campista } from '../usuarios/campista.entity.js';
+import { orm } from '../shared/db/orm.js';
+import { sendVerificationEmail } from './email.service.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
+
+const em = orm.em;
+
+export async function register(req: Request, res: Response) {
+  try {
+    const { contrasena, ...rest } = req.body;
+    const hashedPassword = await bcrypt.hash(contrasena, 10);
+    const token = crypto.randomUUID();
+    const campista = em.create(Campista, {
+      ...rest,
+      contrasena: hashedPassword,
+      isVerified: false,
+      verificationToken: token,
+    });
+    await em.flush();
+    const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email?token=${token}`;
+    console.log('Enviar este link al email:', verificationUrl);
+    await sendVerificationEmail(campista.email, verificationUrl);
+    res.status(201).json({ message: 'Usuario creado. Revisá tu correo para verificarlo.' });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    } else {
+      console.log('Unknown error', error);
+      res.status(500).json({ message: 'Unknown error' });
+    }
+  }
+}
+
+// Endpoint de verificación
+export const verifyEmail = async (req: Request, res: Response) => {
+  const { token } = req.params;
+  console.log('Token de verificación recibido:', token);
+
+  if (!token || typeof token !== 'string') {
+    return res.status(400).json({ message: 'Token inválido' });
+  }
+  const user = await em.findOneOrFail(Campista, { verificationToken: token });
+  if (!user) {
+    return res.status(400).json({ message: 'Token inválido o expirado' });
+  }
+
+  user.isVerified = true;
+  user.verificationToken = null;
+
+  await em.flush();
+
+  res.json({ message: 'Correo verificado con éxito.' });
+};
 
 export async function login(req: Request, res: Response) {
   try {
@@ -17,25 +70,28 @@ export async function login(req: Request, res: Response) {
     if (!result) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
+    if (result.user.isVerified === false) {
+      return res
+        .status(403)
+        .json({ message: 'Por favor, verifica tu email antes de iniciar sesión.' });
+    }
 
     const { user, role } = result;
 
-    // verificar contraseña (asumiendo que user.contrasena está hasheada con bcrypt)
     const validPassword = await bcrypt.compare(contrasena, user.contrasena);
     if (!validPassword) {
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
 
-    // generar token
     const token = jwt.sign({ id: user.id, email: user.email, role }, JWT_SECRET, {
-      expiresIn: '1h',
+      expiresIn: '30d',
     });
 
     res.cookie('token', token, {
-      httpOnly: true, // no accesible desde JS (XSS safe)
-      secure: true, // requiere HTTPS en prod
-      sameSite: 'strict', // protege contra CSRF
-      maxAge: 1000 * 60 * 60, // 1 hora
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60,
     });
     res.json({ message: 'Login exitoso' });
   } catch (error: unknown) {
@@ -44,6 +100,63 @@ export async function login(req: Request, res: Response) {
       res.status(500).json({ message: 'Internal server error' });
     } else {
       console.error('Unknown error', error);
+      res.status(500).json({ message: 'Unknown error' });
+    }
+  }
+}
+
+export async function whoami(req: Request, res: Response) {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ message: 'No autenticado' });
+    }
+
+    // verificar y decodificar token
+    const decoded = jwt.verify(token, JWT_SECRET) as { id: number; email: string; role: string };
+
+    res.json({ id: decoded.id, email: decoded.email, role: decoded.role });
+  } catch (error: unknown) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({ message: 'Token inválido' });
+    } else if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({ message: 'Token expirado' });
+    } else if (error instanceof Error) {
+      console.error(error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    } else {
+      console.error('Unknown error', error);
+      res.status(500).json({ message: 'Unknown error' });
+    }
+  }
+}
+
+export async function resendVerification(req: Request, res: Response) {
+  try {
+    const { email } = req.body;
+    if (!email || typeof email !== 'string') {
+      return res.status(400).json({ message: 'Email inválido' });
+    }
+    const user = await em.findOne(Campista, { email });
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+    if (user.isVerified) {
+      return res.status(400).json({ message: 'El usuario ya está verificado' });
+    }
+    const token = crypto.randomUUID();
+    user.verificationToken = token;
+    await em.flush();
+    const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email?token=${token}`;
+    console.log('Reenviar este link al email:', verificationUrl);
+    await sendVerificationEmail(user.email, verificationUrl);
+    res.json({ message: 'Correo de verificación reenviado. Revisá tu email.' });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    } else {
+      console.log('Unknown error', error);
       res.status(500).json({ message: 'Unknown error' });
     }
   }

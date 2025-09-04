@@ -19,13 +19,16 @@ import { deidadRoutes } from './deidades/deidad.routes.js';
 import { cabaniaRoutes } from './cabanas/cabania.routes.js';
 import { hospedaRoutes } from './cabanas/hospeda.routes.js';
 import { authRoutes } from './auth/auth.routes.js';
+import cookieParser from 'cookie-parser';
+import { apiLimiter } from './shared/ratelimit.js';
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(cookieParser());
 
 //luego de los middlewares base
 app.use((req, res, next) => {
@@ -34,6 +37,8 @@ app.use((req, res, next) => {
 //antes de las rutas y middlewares de negocio
 
 //Routes
+app.use('/api/', apiLimiter);
+app.use('/api/', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/campista', campistaRoutes);
 app.use('/api/instructor', instructorRoutes);
@@ -46,7 +51,6 @@ app.use('/api/solicitud-evento', solicitudEventoRoutes);
 app.use('/api/deidades', deidadRoutes);
 app.use('/api/cabanias', cabaniaRoutes);
 app.use('/api/hospedaje', hospedaRoutes);
-app.use('/api/login', authRoutes);
 
 app.use(jsonErrorHandler);
 app.use(cors({ origin: 'http://localhost:5173' }));
