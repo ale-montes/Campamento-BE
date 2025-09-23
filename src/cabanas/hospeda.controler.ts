@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Hospeda } from './hospeda.entity.js';
 import { orm } from '../shared/db/orm.js';
+import { Cabania } from '../cabanas/cabania.entity.js';
 
 const em = orm.em;
 
@@ -55,15 +56,23 @@ async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
     const hospeda = await em.findOneOrFail(Hospeda, { id });
-    em.assign(hospeda, req.body);
+
+    // aceptar tanto cabania como cabania_id
+    const cabaniaId = req.body.cabania ?? req.body.cabania_id;
+    if (cabaniaId) {
+      hospeda.cabania = em.getReference(Cabania, Number(cabaniaId));
+    }
+
+    // resto de campos simples
+    em.assign(hospeda, { ...req.body, cabania: undefined, cabania_id: undefined });
+
     await em.flush();
-    res.status(200).json({ message: 'hospeda updated' });
+    res.status(200).json({ message: 'hospeda updated', data: hospeda });
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.log(error.message);
+      console.error(error.message);
       res.status(500).json({ message: 'Internal server error' });
     } else {
-      console.log('Unknown error', error);
       res.status(500).json({ message: 'Unknown error' });
     }
   }
