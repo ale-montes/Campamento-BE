@@ -78,6 +78,32 @@ async function update(req: Request, res: Response) {
   }
 }
 
+export async function moveCampista(req: Request, res: Response) {
+  try {
+    const id = Number(req.params.id);
+    const nuevaCabaniaId = Number(req.body.cabania);
+
+    if (!nuevaCabaniaId) {
+      return res.status(400).json({ message: 'Debe enviar cabaña' });
+    }
+
+    const hospeda = await em.findOneOrFail(Hospeda, { id });
+
+    // Cambiar la cabaña
+    hospeda.cabania = em.getReference(Cabania, nuevaCabaniaId);
+
+    await em.flush();
+
+    res.status(200).json({ message: 'Campista movido correctamente', data: hospeda });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      res.status(500).json({ message: 'Error al mover campista' });
+    } else {
+      res.status(500).json({ message: 'Error desconocido' });
+    }
+  }
+}
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
