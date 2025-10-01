@@ -34,14 +34,18 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const taller = await em.findOneOrFail(Taller, { id }, { populate: ['instructor'] });
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'Invalid ID format' });
+    }
+    const taller = await em.findOne(Taller, { id }, { populate: ['instructor'] });
+    if (!taller) {
+      return res.status(404).json({ message: `not found` });
+    }
     res.status(200).json({ message: 'found taller', data: taller });
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.log(error.message);
       res.status(500).json({ message: 'Internal server error' });
     } else {
-      console.log('Unknown error', error);
       res.status(500).json({ message: 'Unknown error' });
     }
   }
