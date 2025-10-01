@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Instructor } from './instructor.entity.js';
 import { orm } from '../shared/db/orm.js';
+import bcrypt from 'bcryptjs';
 
 const em = orm.em;
 
@@ -40,9 +41,19 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const { contrasena: _omit, ...instructorSanitized } = em.create(Instructor, req.body);
+    const { contrasena, ...rest } = req.body;
+    const hashedPassword = await bcrypt.hash(contrasena, 10);
+    const token = crypto.randomUUID();
+    const instructor = em.create(Instructor, {
+      ...rest,
+      contrasena: hashedPassword,
+      isVerified: false,
+      verificationToken: token,
+    });
     await em.flush();
-    res.status(201).json({ message: 'user created', data: instructorSanitized });
+    res
+      .status(201)
+      .json({ message: 'user created, email pendient the verification', email: instructor.email });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
