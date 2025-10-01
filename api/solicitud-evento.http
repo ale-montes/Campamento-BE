@@ -1,0 +1,33 @@
+### GET all solicitud-evento
+GET http://localhost:3000/api/solicitud-evento
+
+### GET by ID
+GET http://localhost:3000/api/solicitud-evento/1
+
+### Create Solicitud Evento
+POST http://localhost:3000/api/solicitud-evento
+Content-Type: application/json
+
+{
+  "campista": 4,
+  "evento": 1,
+  "estado": "pendiente"
+}
+
+### Create Solicitud Evento 2
+POST http://localhost:3000/api/solicitud-evento
+Content-Type: application/json
+
+{
+  "campista": 4,
+  "evento": 2,
+  "estado": "pendiente"
+}
+
+### Update Solicitud Evento (cambiar estado)
+PUT http://localhost:3000/api/solicitud-evento/1
+Content-Type: application/json
+
+{
+  "estado": "aprobada"
+}

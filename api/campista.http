@@ -1,0 +1,28 @@
+### GET all campistas
+GET http://localhost:3000/api/campista
+
+### GET by ID
+GET http://localhost:3000/api/campista/1
+
+### Create Campista
+POST http://localhost:3000/api/campista
+Content-Type: application/json
+
+{ 
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "email": "juanperez2@gmail.com",
+  "telefono": "+543123456789",
+  "contrasena": "$2b$12$wEa8ibV0tmJ774RHB7Qk3e56rmHjhcJpE4zzFZe/ymUc/9CmA9OVG"
+}
+
+### Create Campista 2
+POST http://localhost:3000/api/campista
+Content-Type: application/json
+{
+  "nombre": "María",
+  "apellido": "Gómez",
+  "email": "mariagomez@gmail.com",
+  "telefono": "+543987654321",
+  "contrasena": "$2b$12$wEa8ibV0tmJ774RHB7Qk3e56rmHjhcJpE4zzFZe/ymUc/9CmA9OVG"
+}

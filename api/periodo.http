@@ -1,0 +1,34 @@
+### GET all periodos
+GET http://localhost:3000/api/periodo
+
+### GET by ID
+GET http://localhost:3000/api/periodo/1
+
+### Create Periodo
+POST http://localhost:3000/api/periodo
+Content-Type: application/json
+
+{
+  "nombre": "Verano 2024",
+  "descripcion": "Periodo de actividades de verano 2024",
+  "fechaInicioPer": "2024-06-15T00:00:00.000Z",
+  "fechaFinPer": "2024-08-15T00:00:00.000Z",
+  "fechaInicioInsc": "2024-05-01T00:00:00.000Z",
+  "fechaFinInsc": "2024-06-10T00:00:00.000Z"
+}
+
+### update Periodo estado to 'abierto'
+PATCH http://localhost:3000/api/periodo/1
+Content-Type: application/json
+
+{
+  "estado": "abierto"
+}
+
+### update Periodo estado to 'en cuerso'
+PATCH http://localhost:3000/api/periodo/1
+Content-Type: application/json
+
+{
+  "estado": "en curso"
+}

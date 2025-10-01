@@ -1,0 +1,41 @@
+### Obtener todas las cabañas
+GET http://localhost:3000/api/cabanias
+### Obtener por ID
+GET http://localhost:3000/api/cabanias/1
+
+### Crear Cabaña 1
+POST http://localhost:3000/api/cabanias
+Content-Type: application/json
+
+{
+  "nombre": "Cabaña del bosque",
+  "capacidad": 6,
+  "descripcion": "Una acogedora cabaña rodeada de árboles y naturaleza.",
+  "ubicacion": "Sector norte del campamento",
+  "deidad": 1
+}
+
+### Crear Cabaña 2
+POST http://localhost:3000/api/cabanias
+Content-Type: application/json
+
+{
+  "nombre": "Cabaña del lago",
+  "capacidad": 8,
+  "descripcion": "Cabaña con vista al lago, ideal para grupos grandes.",
+  "ubicacion": "Sector sur del campamento",
+  "deidad": 2
+}
+
+### Crear Cabaña 3
+POST http://localhost:3000/api/cabanias
+Content-Type: application/json
+
+{
+  "nombre": "Cabaña de la montaña",
+  "capacidad": 4,
+  "descripcion": "Cabaña rústica en la ladera de la montaña, perfecta para escapadas.",
+  "ubicacion": "Sector este del campamento",
+  "deidad": 3
+}
+
