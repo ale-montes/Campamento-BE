@@ -37,7 +37,6 @@ export async function register(req: Request, res: Response) {
   }
 }
 
-// Endpoint de verificación
 export const verifyEmail = async (req: Request, res: Response) => {
   const { token } = req.params;
   console.log('Token de verificación recibido:', token);
