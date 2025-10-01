@@ -1,17 +1,24 @@
 import { Request, Response } from 'express';
 import { InscripcionTaller } from './inscripcion-taller.entity.js';
 import { orm } from '../shared/db/orm.js';
+import { Periodo } from '../periodo/periodo.entity.js';
 
 const em = orm.em;
 
 async function findAll(req: Request, res: Response) {
   try {
-    const inscripciones = await em.find(
-      InscripcionTaller,
-      {},
-      { populate: ['campista', 'taller'] },
-    );
-    res.status(200).json({ message: 'found all talleres', data: inscripciones });
+    if (req.user?.role === 'campista') {
+      const id = req.user.id;
+      const inscripciones = await em.findOneOrFail(
+        InscripcionTaller,
+        { campista: Number(id) },
+        { populate: ['taller'] },
+      );
+      res.status(200).json({ message: 'found inscripciones', data: inscripciones });
+    } else {
+      const inscripciones = await em.find(InscripcionTaller, {}, { populate: ['taller'] });
+      res.status(200).json({ message: 'found inscripciones', data: inscripciones });
+    }
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -26,11 +33,10 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const inscripcion = await em.findOneOrFail(
-      InscripcionTaller,
-      { id },
-      { populate: ['campista', 'taller'] },
-    );
+    if (req.user?.role === 'campista' && req.user?.id !== id) {
+      return res.status(403).json({ message: 'No autorizado' });
+    }
+    const inscripcion = await em.findOneOrFail(InscripcionTaller, { id }, { populate: ['taller'] });
     res.status(200).json({ message: 'found inscripcion', data: inscripcion });
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -94,4 +100,45 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { findAll, findOne, add, update, remove };
+async function findAllYourOwn(req: Request, res: Response) {
+  try {
+    // 1. Obtener el usuario autenticado
+    if (!req.user) {
+      return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+    const { id } = req.user;
+
+    // 2. Buscar el periodo 'en curso'
+    const periodo = await em.findOne(Periodo, { estado: 'en curso' });
+    if (!periodo) {
+      return res.status(404).json({ message: 'No hay periodo en curso' });
+    }
+
+    const { fechaInicioPer, fechaFinPer } = periodo;
+
+    // 3. Buscar inscripciones del campista dentro de las fechas del periodo
+    const inscripciones = await em.find(
+      InscripcionTaller,
+      {
+        campista: Number(id),
+        createdAt: {
+          $gte: fechaInicioPer,
+          $lte: fechaFinPer,
+        },
+      },
+      { populate: ['taller'] },
+    );
+
+    res.status(200).json({ message: 'found talleres del periodo actual', data: inscripciones });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.log(error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    } else {
+      console.log('Unknown error', error);
+      res.status(500).json({ message: 'Unknown error' });
+    }
+  }
+}
+
+export { findAll, findOne, add, update, remove, findAllYourOwn };

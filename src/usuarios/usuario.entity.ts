@@ -42,6 +42,12 @@ export abstract class Usuario extends BaseEntity {
 
   @Property({ nullable: false })
   activo?: boolean = true;
+
+  @Property({ default: false })
+  isVerified: boolean = false;
+
+  @Property({ nullable: true })
+  verificationToken?: string | null;
 }
 
 //### Herencia de tabla por clase concreta

@@ -4,6 +4,7 @@ import { InscripcionTaller } from '../talleres/inscripcion-taller.entity.js';
 import { SolicitudEvento } from '../eventos/solicitud-evento.entity.js';
 import { AsignaMision } from '../misiones/asigna-mision.entity.js';
 import { Hospeda } from '../cabanas/hospeda.entity.js';
+import { InscripcionPeriodo } from '../periodo/inscripcion-periodo.entity.js';
 
 @Entity()
 export class Campista extends Usuario {
@@ -11,6 +12,11 @@ export class Campista extends Usuario {
     cascade: [Cascade.ALL],
   })
   talleresInscriptos = new Collection<InscripcionTaller>(this);
+
+  @OneToMany(() => InscripcionPeriodo, (inscripcion) => inscripcion.campista, {
+    cascade: [Cascade.ALL],
+  })
+  InscripcionPeriodo = new Collection<InscripcionPeriodo>(this);
 
   @OneToMany(() => SolicitudEvento, (solicitud) => solicitud.campista, {
     cascade: [Cascade.ALL],

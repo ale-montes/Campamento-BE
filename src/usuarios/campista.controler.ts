@@ -41,10 +41,17 @@ async function add(req: Request, res: Response) {
   try {
     const { contrasena, ...rest } = req.body;
     const hashedPassword = await bcrypt.hash(contrasena, 10);
-    const campista = em.create(Campista, { ...rest, contrasena: hashedPassword });
+    const token = crypto.randomUUID();
+    const campista = em.create(Campista, {
+      ...rest,
+      contrasena: hashedPassword,
+      isVerified: false,
+      verificationToken: token,
+    });
     await em.flush();
-    const { contrasena: _omit, ...campistaSanitized } = campista;
-    res.status(201).json({ message: 'user created', data: campistaSanitized });
+    res
+      .status(201)
+      .json({ message: 'user created, email pendient the verification', email: campista.email });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);

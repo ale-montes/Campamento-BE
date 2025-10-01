@@ -1,15 +1,14 @@
 import { Request, Response } from 'express';
-import { Instructor } from './instructor.entity.js';
+import { InscripcionPeriodo } from './inscripcion-periodo.entity.js';
 import { orm } from '../shared/db/orm.js';
-import bcrypt from 'bcryptjs';
+import { Periodo } from './periodo.entity.js';
 
 const em = orm.em;
 
 async function findAll(req: Request, res: Response) {
   try {
-    const instructores = await em.find(Instructor, {});
-    const instructoresSanitized = instructores.map(({ contrasena: _omit, ...rest }) => rest);
-    res.status(200).json({ message: 'found all instructores', data: instructoresSanitized });
+    const periodosInscripciones = await em.find(InscripcionPeriodo, {}, { populate: ['periodo'] });
+    res.status(200).json({ message: 'found all periodos', data: periodosInscripciones });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -24,10 +23,12 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const { contrasena: _omit, ...instructorSanitized } = await em.findOneOrFail(Instructor, {
-      id,
-    });
-    res.status(200).json({ message: 'found user', data: instructorSanitized });
+    const incripcionPeriodo = await em.findOneOrFail(
+      InscripcionPeriodo,
+      { id },
+      { populate: ['periodo'] },
+    );
+    res.status(200).json({ message: 'found incripcionPeriodo', data: incripcionPeriodo });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -41,19 +42,15 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const { contrasena, ...rest } = req.body;
-    const hashedPassword = await bcrypt.hash(contrasena, 10);
-    const token = crypto.randomUUID();
-    const instructor = em.create(Instructor, {
-      ...rest,
-      contrasena: hashedPassword,
-      isVerified: false,
-      verificationToken: token,
-    });
+    // Obtener el periodo relacionado
+    const periodoId = req.body.periodo;
+    const periodo = await em.findOneOrFail(Periodo, { id: periodoId });
+    if (periodo.estado !== 'abierto') {
+      return res.status(400).json({ message: 'El periodo no está abierto para inscripciones.' });
+    }
+    const incripcionPeriodo = em.create(InscripcionPeriodo, req.body);
     await em.flush();
-    res
-      .status(201)
-      .json({ message: 'user created, email pendient the verification', email: instructor.email });
+    res.status(201).json({ message: 'incripcionPeriodo created', data: incripcionPeriodo });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -68,10 +65,10 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const instructor = em.getReference(Instructor, id);
-    em.assign(instructor, req.body);
+    const incripcionPeriodo = await em.findOneOrFail(InscripcionPeriodo, { id });
+    em.assign(incripcionPeriodo, req.body);
     await em.flush();
-    res.status(200).json({ message: 'user updated' });
+    res.status(200).json({ message: 'incripcionPeriodo updated' });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -86,9 +83,9 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const instructor = em.getReference(Instructor, id);
-    await em.removeAndFlush(instructor);
-    res.status(200).send({ message: 'user deleted' });
+    const incripcionPeriodo = em.getReference(InscripcionPeriodo, id);
+    await em.removeAndFlush(incripcionPeriodo);
+    res.status(200).send({ message: 'incripcionPeriodo deleted' });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);

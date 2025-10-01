@@ -1,15 +1,13 @@
 import { Request, Response } from 'express';
-import { Instructor } from './instructor.entity.js';
+import { Periodo } from './periodo.entity.js';
 import { orm } from '../shared/db/orm.js';
-import bcrypt from 'bcryptjs';
 
 const em = orm.em;
 
 async function findAll(req: Request, res: Response) {
   try {
-    const instructores = await em.find(Instructor, {});
-    const instructoresSanitized = instructores.map(({ contrasena: _omit, ...rest }) => rest);
-    res.status(200).json({ message: 'found all instructores', data: instructoresSanitized });
+    const periodos = await em.find(Periodo, {});
+    res.status(200).json({ message: 'found all periodos', data: periodos });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -24,10 +22,8 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const { contrasena: _omit, ...instructorSanitized } = await em.findOneOrFail(Instructor, {
-      id,
-    });
-    res.status(200).json({ message: 'found user', data: instructorSanitized });
+    const periodo = await em.findOneOrFail(Periodo, { id });
+    res.status(200).json({ message: 'found periodo', data: periodo });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -41,19 +37,9 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const { contrasena, ...rest } = req.body;
-    const hashedPassword = await bcrypt.hash(contrasena, 10);
-    const token = crypto.randomUUID();
-    const instructor = em.create(Instructor, {
-      ...rest,
-      contrasena: hashedPassword,
-      isVerified: false,
-      verificationToken: token,
-    });
+    const periodo = em.create(Periodo, req.body);
     await em.flush();
-    res
-      .status(201)
-      .json({ message: 'user created, email pendient the verification', email: instructor.email });
+    res.status(201).json({ message: 'periodo created', data: periodo });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -68,10 +54,10 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const instructor = em.getReference(Instructor, id);
-    em.assign(instructor, req.body);
+    const periodo = em.getReference(Periodo, id);
+    em.assign(periodo, req.body);
     await em.flush();
-    res.status(200).json({ message: 'user updated' });
+    res.status(200).json({ message: 'periodo updated' });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
@@ -86,9 +72,9 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const instructor = em.getReference(Instructor, id);
-    await em.removeAndFlush(instructor);
-    res.status(200).send({ message: 'user deleted' });
+    const periodo = em.getReference(Periodo, id);
+    await em.removeAndFlush(periodo);
+    res.status(200).send({ message: 'periodo deleted' });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);

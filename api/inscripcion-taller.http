@@ -1,0 +1,37 @@
+### GET all inscripciones a talleres
+GET http://localhost:3000/api/inscripcion-taller/
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+### GET all inscripciones a talleres
+GET http://localhost:3000/api/inscripcion-taller/
+Content-Type: application/json
+Cookie: token={{tokencampista}}
+
+### GET by ID
+GET http://localhost:3000/api/inscripcion-taller/2
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+### Create inscripcion a taller
+POST http://localhost:3000/api/inscripcion-taller
+Content-Type: application/json
+Cookie: token={{tokeninstructor}}
+
+{
+  "campista": 2,
+  "taller": 2,
+  "fechaInscripcion": "2025-09-01T10:00:00Z",
+  "estado": "aceptado"
+}
+
+### Create inscripcion a taller 2
+POST http://localhost:3000/api/inscripcion-taller
+Content-Type: application/json
+
+{
+  "campista": 2,
+  "taller": 1,
+  "fechaInscripcion": "2025-09-02T10:00:00Z",
+  "estado": "pendiente"
+}

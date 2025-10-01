@@ -12,11 +12,20 @@ Content-Type: application/json
   "nombre": "Luke",
   "apellido": "Castellan",
   "email": "lukecastenllan@gmail.com",
-  "nick": "Luke123",
+  "telefono": "123456789",
   "contrasena": "123456",
   "fechaNac": "1990-01-01T00:00:00.000Z",
   "direccion": "123 Main St",
   "alergias": "Ninguna",
-  "grupoSanguineo": "O",
-  "rh": "+"
+  "grupoSanguineo": "O+"
+}
+
+
+### update admin
+PATCH  http://localhost:3000/api/admin/1
+Content-Type: application/json
+
+{
+  "verificationToken": null,
+  "isVerified": true
 }

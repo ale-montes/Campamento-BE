@@ -1,7 +1,14 @@
-{
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "eslint.validate": ["typescript"],
-  "typescript.preferences.importModuleSpecifierEnding": "js",
-  "javascript.preferences.importModuleSpecifierEnding": "js"
-}
+   {
+     "editor.formatOnSave": true,
+     "editor.defaultFormatter": "esbenp.prettier-vscode",
+     "eslint.validate": ["typescript"],
+     "typescript.preferences.importModuleSpecifierEnding": "js",
+     "javascript.preferences.importModuleSpecifierEnding": "js",
+     "rest-client.environmentVariables": {
+       "dev": {
+         "tokenadmin": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJsdWtlY2FzdGVubGxhbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NTcxNzM4MTgsImV4cCI6MTc1OTc2NTgxOH0.lOmXa7T1sp5uEAfVtP4YE-450SAFqJWpDYAUKBD6owI",
+         "tokeninstructor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqb3JndWVzYW5jaGV6QGdtYWlsLmNvbSIsInJvbGUiOiJpbnN0cnVjdG9yIiwiaWF0IjoxNzU5MzI4Mzk1LCJleHAiOjE3NjE5MjAzOTV9.UllvXHnL6m7Lg-FWnj_9a4Oabg2Ut8CelG8lF1OaPBA",
+         "tokencampista": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsImVtYWlsIjoicW1iLnRlY25vQGdtYWlsLmNvbSIsInJvbGUiOiJjYW1waXN0YSIsImlhdCI6MTc1OTMyODQ3MiwiZXhwIjoxNzYxOTIwNDcyfQ.Gl8H6Bqye9n8c2K_zo5qvif2dE8UINE_wG0TB0p2neo"
+       }
+     }
+   }

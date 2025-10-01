@@ -9,7 +9,7 @@ POST http://localhost:3000/api/asigna-mision
 Content-Type: application/json
 
 {
-  "campista": 1,
+  "campista": 4,
   "mision": 1,
   "estado": "asignada"
 }
@@ -19,7 +19,7 @@ POST http://localhost:3000/api/asigna-mision
 Content-Type: application/json
 
 {
-  "campista": 1,
+  "campista": 4,
   "mision": 2,
   "estado": "asignada"
 }
