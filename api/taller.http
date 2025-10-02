@@ -1,12 +1,17 @@
 ### GET all talleres
 GET http://localhost:3000/api/talleres
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 ### GET by ID
-GET http://localhost:3000/api/talleres/1
+GET http://localhost:3000/api/talleres/2
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 ### Create Taller
 POST http://localhost:3000/api/talleres
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "titulo": "Taller de RCP",
@@ -26,4 +31,17 @@ Content-Type: application/json
   "fechaHora": "2025-10-02T10:00:00Z",
   "lugar": "Zona 3: El bosque encantado",
   "instructor": 2
+}
+
+### Create Taller 3
+POST http://localhost:3000/api/talleres
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+{
+  "titulo": "Taller de Primeros Auxilios",
+  "descripcion": "Aprende a brindar primeros auxilios en situaciones de emergencia.",
+  "fechaHora": "2025-10-03T10:00:00Z",
+  "lugar": "Zona 5: La clínica móvil",
+  "instructor": 1
 }

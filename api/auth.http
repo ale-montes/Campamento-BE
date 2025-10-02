@@ -1,0 +1,60 @@
+@tokenmail = cde9e583-9952-4b14-aaa2-8ed43e977458
+
+### Create Campista 2
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "Alejandro",
+  "apellido": "Gómez",
+  "email": "gomez@gmail.com",
+  "telefono": "+543987654321",
+  "contrasena": "123456"
+}
+
+
+### Login de usuario con email y contraseña validos CAMPISTA
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "qmb.tecno@gmail.com",
+  "contrasena": "123456"
+}
+
+### Login de usuario con email y contraseña validos InSTRUCTOR
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "jorguesanchez@gmail.com",
+  "contrasena": "jorge1234"
+}
+
+
+###verificar verifyEmail
+GET http://localhost:3000/api/auth/verify-email/{{tokenmail}}
+Content-Type: application/json
+
+###Consultar quien soy con token valido
+GET http://localhost:3000/api/auth/me
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+
+###Reenviar email de verificacion
+PUT http://localhost:3000/api/auth/resend-verification
+Content-Type: application/json
+
+{
+  "email": "qmb.tecno@gmail.com"
+}
+
+###Login de admin
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "lukecastenllan@gmail.com",
+  "contrasena": "123456"
+}

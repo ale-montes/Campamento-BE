@@ -18,6 +18,15 @@ export class Taller extends BaseEntity {
   @Property({ nullable: false })
   lugar!: string;
 
+  @Property({ nullable: false })
+  cupo!: number;
+
+  @Property({ nullable: false })
+  duracionHoras!: number;
+
+  @Property({ nullable: false, default: 'abierto' })
+  estado!: 'abierto' | 'cerrado' | 'en progreso' | 'cancelado' | 'completado';
+
   @ManyToOne(() => Instructor, { nullable: false })
   instructor!: Rel<Instructor>;
 

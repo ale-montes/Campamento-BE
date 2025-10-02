@@ -9,10 +9,10 @@ POST http://localhost:3000/api/admin
 Content-Type: application/json
 
 {
-  "nombre": "Quirón",
-  "apellido": "Cronosson",
-  "email": "quironmaestrodeheroes@gmail.com",
-  "nick": "Quiron123",
+  "nombre": "Luke",
+  "apellido": "Castellan",
+  "email": "lukecastenllan@gmail.com",
+  "telefono": "123456789",
   "contrasena": "123456",
   "fechaNac": "1920-01-01T00:00:00.000Z",
   "direccion": "3141 Farmroad",
@@ -34,6 +34,15 @@ Content-Type: application/json
   "fechaNac": "1924-01-01T00:00:00.000Z",
   "direccion": "3141 Farmroad",
   "alergias": "Ninguna",
-  "grupoSanguineo": "O",
-  "rh": "+"
+  "grupoSanguineo": "O+"
+}
+
+
+### update admin
+PATCH  http://localhost:3000/api/admin/1
+Content-Type: application/json
+
+{
+  "verificationToken": null,
+  "isVerified": true
 }
