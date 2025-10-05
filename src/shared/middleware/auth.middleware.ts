@@ -11,7 +11,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
   if (!token) return res.status(401).json({ error: 'No autenticado' });
 
   try {
-    const decode = jwt.verify(token, process.env.JWT_SECRET as string);
+    const JWT_SECRET = (process.env.JWT_SECRET as string) || 'supersecret';
+    const decode = jwt.verify(token, JWT_SECRET);
     req.user = decode as { id: number; role: string; email: string };
     next();
   } catch {
