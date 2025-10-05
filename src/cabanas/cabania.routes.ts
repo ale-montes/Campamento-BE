@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { findAll, findOne, add, update, remove } from './cabania.controler.js';
-import { validateSchema } from '../shared/validate.js';
+import { validateSchema } from '../shared/middleware/validation.middleware.js';
 import { cabanaSchema, cabanaUpdateSchema } from './cabanas.schema.js';
 import { authMiddleware } from '../shared/middleware/auth.middleware.js';
 import { checkPermission } from '../shared/middleware/permission.middleware.js';

@@ -18,6 +18,7 @@ const apiBasePath = process.env.API_BASE_PATH || '/api';
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 
 // Contexto de MikroORM
 app.use((req, res, next) => {
@@ -29,7 +30,6 @@ app.use(apiBasePath, apiLimiter, routes);
 
 // Middlewares
 app.use(jsonErrorHandler);
-app.use(cors({ origin: 'http://localhost:5173' }));
 app.use((_, res) => {
   res.status(404).json({ message: 'Resource not found' });
 });

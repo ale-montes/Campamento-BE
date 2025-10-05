@@ -44,15 +44,14 @@ export const verifyEmail = async (req: Request, res: Response) => {
   if (!token || typeof token !== 'string') {
     return res.status(400).json({ message: 'Token inválido' });
   }
-  const user = await em.findOneOrFail(Campista, { verificationToken: token });
+  const user = await em.findOne(Campista, { verificationToken: token });
   if (!user) {
     return res.status(400).json({ message: 'Token inválido o expirado' });
   }
 
   user.isVerified = true;
   user.verificationToken = null;
-
-  await em.flush();
+  await orm.em.persistAndFlush(user);
 
   res.json({ message: 'Correo verificado con éxito.' });
 };
