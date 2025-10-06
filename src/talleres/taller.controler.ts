@@ -18,6 +18,8 @@ async function findAll(req: Request, res: Response) {
         nombre: taller.instructor.nombre,
         apellido: taller.instructor.apellido,
       },
+      cupo: taller.cupo,
+      duracionHoras: taller.duracionHoras,
     }));
     res.status(200).json({ message: 'found all talleres', data: talleresSanitizados });
   } catch (error: unknown) {
