@@ -12,11 +12,15 @@ async function findAll(req: Request, res: Response) {
       const inscripciones = await em.findOneOrFail(
         InscripcionTaller,
         { campista: Number(id) },
-        { populate: ['taller'] },
+        { populate: ['taller', 'campista'] },
       );
       res.status(200).json({ message: 'found inscripciones', data: inscripciones });
     } else {
-      const inscripciones = await em.find(InscripcionTaller, {}, { populate: ['taller'] });
+      const inscripciones = await em.find(
+        InscripcionTaller,
+        {},
+        { populate: ['taller', 'campista'] },
+      );
       res.status(200).json({ message: 'found inscripciones', data: inscripciones });
     }
   } catch (error: unknown) {
@@ -36,7 +40,11 @@ async function findOne(req: Request, res: Response) {
     if (req.user?.role === 'campista' && req.user?.id !== id) {
       return res.status(403).json({ message: 'No autorizado' });
     }
-    const inscripcion = await em.findOneOrFail(InscripcionTaller, { id }, { populate: ['taller'] });
+    const inscripcion = await em.findOneOrFail(
+      InscripcionTaller,
+      { id },
+      { populate: ['taller', 'campista'] },
+    );
     res.status(200).json({ message: 'found inscripcion', data: inscripcion });
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -126,7 +134,7 @@ async function findAllYourOwn(req: Request, res: Response) {
           $lte: fechaFinPer,
         },
       },
-      { populate: ['taller'] },
+      { populate: ['taller', 'campista'] },
     );
 
     res.status(200).json({ message: 'found talleres del periodo actual', data: inscripciones });

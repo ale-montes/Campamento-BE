@@ -14,6 +14,8 @@ async function findAll(req: Request, res: Response) {
       descripcion: taller.descripcion,
       fechaHora: taller.fechaHora,
       lugar: taller.lugar,
+      cupo: taller.cupo,
+      duracionHoras: taller.duracionHoras,
       instructor: {
         nombre: taller.instructor.nombre,
         apellido: taller.instructor.apellido,
