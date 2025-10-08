@@ -6,7 +6,7 @@ import { Campista } from '../usuarios/campista.entity.js';
 import { orm } from '../shared/db/orm.js';
 import { sendVerificationEmail } from './email.service.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
+const JWT_SECRET = (process.env.JWT_SECRET as string) || 'supersecret';
 
 const em = orm.em;
 
@@ -44,15 +44,14 @@ export const verifyEmail = async (req: Request, res: Response) => {
   if (!token || typeof token !== 'string') {
     return res.status(400).json({ message: 'Token inválido' });
   }
-  const user = await em.findOneOrFail(Campista, { verificationToken: token });
+  const user = await em.findOne(Campista, { verificationToken: token });
   if (!user) {
     return res.status(400).json({ message: 'Token inválido o expirado' });
   }
 
   user.isVerified = true;
   user.verificationToken = null;
-
-  await em.flush();
+  await orm.em.persistAndFlush(user);
 
   res.json({ message: 'Correo verificado con éxito.' });
 };
@@ -88,11 +87,20 @@ export async function login(req: Request, res: Response) {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
+      secure: false, /// ⚠️ false en localhost (solo true en HTTPS)
+      sameSite: 'lax',
       maxAge: 1000 * 60 * 60,
+      path: '/', // disponible en toda la app
     });
-    res.json({ message: 'Login exitoso' });
+    return res.status(200).json({
+      message: 'Login exitoso',
+      user: {
+        id: user.id,
+        nombre: user.nombre,
+        email: user.email,
+        role,
+      },
+    });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(error.message);

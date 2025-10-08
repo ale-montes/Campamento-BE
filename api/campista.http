@@ -4,10 +4,30 @@ GET http://localhost:3000/api/campista
 ### GET by ID
 GET http://localhost:3000/api/campista/1
 
-### Create Campista
+### GET all campistas
+GET http://localhost:3000/api/campista
+
+### GET by ID
+GET http://localhost:3000/api/campista/1
+
+### Create Clarisse La Rue
 POST http://localhost:3000/api/campista
 Content-Type: application/json
 
+{
+  "nombre": "Clarisse",
+  "apellido": "La Rue",
+  "email": "clarisse.larue@chb.com",
+  "telefono": "555-0103",
+  "contrasena": "aresPower",
+  "fechaNac": "1990-03-18",
+  "direccion": "Cabaña 5, Campamento Mestizo",
+  "alergias": "Ninguna conocida",
+  "grupoSanguineo": "A"
+}
+
+POST http://localhost:3000/api/campista
+Content-Type: application/json
 { 
   "nombre": "Juan",
   "apellido": "Pérez",
@@ -15,14 +35,146 @@ Content-Type: application/json
   "telefono": "+543123456789",
   "contrasena": "$2b$12$wEa8ibV0tmJ774RHB7Qk3e56rmHjhcJpE4zzFZe/ymUc/9CmA9OVG"
 }
-
-### Create Campista 2
+### Create Percy Jackson
 POST http://localhost:3000/api/campista
 Content-Type: application/json
+
 {
-  "nombre": "María",
-  "apellido": "Gómez",
-  "email": "mariagomez@gmail.com",
-  "telefono": "+543987654321",
-  "contrasena": "$2b$12$wEa8ibV0tmJ774RHB7Qk3e56rmHjhcJpE4zzFZe/ymUc/9CmA9OVG"
+  "nombre": "Percy",
+  "apellido": "Jackson",
+  "email": "percy.jackson@chb.com",
+  "telefono": "555-0104",
+  "contrasena": "riptide",
+  "fechaNac": "1993-08-18",
+  "direccion": "Cabaña 3, Campamento Mestizo",
+  "alergias": "Ninguna conocida",
+  "grupoSanguineo": "O"
+}
+
+### Create Annabeth Chase
+POST http://localhost:3000/api/campista
+Content-Type: application/json
+
+{
+  "nombre": "Annabeth",
+  "apellido": "Chase",
+  "email": "annabeth.chase@chb.com",
+  "telefono": "555-0105",
+  "contrasena": "wisdom",
+  "fechaNac": "1993-07-12",
+  "direccion": "Cabaña 6, Campamento Mestizo",
+  "alergias": "Ninguna conocida",
+  "grupoSanguineo": "AB"
+}
+
+### Create Nico Di Angelo
+POST http://localhost:3000/api/campista
+Content-Type: application/json
+
+{
+  "nombre": "Nico",
+  "apellido": "Di Angelo",
+  "email": "nico.diangelo@chb.com",
+  "telefono": "555-0106",
+  "contrasena": "ghostKing",
+  "fechaNac": "1932-01-28",
+  "direccion": "Cabaña 13, Campamento Mestizo",
+  "alergias": "Ninguna conocida",
+  "grupoSanguineo": "A"
+}
+
+### Create Will Solace
+POST http://localhost:3000/api/campista
+Content-Type: application/json
+
+{
+  "nombre": "Will",
+  "apellido": "Solace",
+  "email": "will.solace@chb.com",
+  "telefono": "555-0107",
+  "contrasena": "sunshine",
+  "fechaNac": "1992-04-30",
+  "direccion": "Cabaña 7, Campamento Mestizo",
+  "alergias": "Ninguna conocida",
+  "grupoSanguineo": "O"
+}
+
+### Create Piper McLean
+POST http://localhost:3000/api/campista
+Content-Type: application/json
+
+{
+  "nombre": "Piper",
+  "apellido": "McLean",
+  "email": "piper.mclean@chb.com",
+  "telefono": "555-0108",
+  "contrasena": "cherokee",
+  "fechaNac": "1994-06-03",
+  "direccion": "Cabaña 10, Campamento Mestizo",
+  "alergias": "Ninguna conocida",
+  "grupoSanguineo": "B"
+}
+
+### Create Lou Ellen Blackstone
+POST http://localhost:3000/api/campista
+Content-Type: application/json
+
+{
+  "nombre": "Lou Ellen",
+  "apellido": "Blackstone",
+  "email": "lou.blackstone@chb.com",
+  "telefono": "555-0109",
+  "contrasena": "magicmist",
+  "fechaNac": "1995-10-31",
+  "direccion": "Cabaña 20, Campamento Mestizo",
+  "alergias": "Ninguna conocida",
+  "grupoSanguineo": "A"
+}
+
+### Create Travis Stoll
+POST http://localhost:3000/api/campista
+Content-Type: application/json
+
+{
+  "nombre": "Travis",
+  "apellido": "Stoll",
+  "email": "travis.stoll@chb.com",
+  "telefono": "555-0110",
+  "contrasena": "prankster",
+  "fechaNac": "1991-05-12",
+  "direccion": "Cabaña 11, Campamento Mestizo",
+  "alergias": "Ninguna conocida",
+  "grupoSanguineo": "B"
+}
+
+### Create Meg McCaffrey
+POST http://localhost:3000/api/campista
+Content-Type: application/json
+
+{
+  "nombre": "Meg",
+  "apellido": "McCaffrey",
+  "email": "meg.mccaffrey@chb.com",
+  "telefono": "555-0111",
+  "contrasena": "peaches",
+  "fechaNac": "2004-04-07",
+  "direccion": "Cabaña 4, Campamento Mestizo",
+  "alergias": "Ninguna conocida",
+  "grupoSanguineo": "O"
+}
+
+### Create Leo Valdez
+POST http://localhost:3000/api/campista
+Content-Type: application/json
+
+{
+  "nombre": "Leo",
+  "apellido": "Valdez",
+  "email": "leo.valdez@chb.com",
+  "telefono": "555-0112",
+  "contrasena": "badboyleo",
+  "fechaNac": "1994-07-07",
+  "direccion": "Cabaña 9, Campamento Mestizo",
+  "alergias": "Ninguna conocida",
+  "grupoSanguineo": "AB"
 }

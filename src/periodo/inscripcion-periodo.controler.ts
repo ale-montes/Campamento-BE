@@ -7,7 +7,11 @@ const em = orm.em;
 
 async function findAll(req: Request, res: Response) {
   try {
-    const periodosInscripciones = await em.find(InscripcionPeriodo, {}, { populate: ['periodo'] });
+    const periodosInscripciones = await em.find(
+      InscripcionPeriodo,
+      {},
+      { populate: ['periodo', 'campista'] },
+    );
     res.status(200).json({ message: 'found all periodos', data: periodosInscripciones });
   } catch (error: unknown) {
     if (error instanceof Error) {
