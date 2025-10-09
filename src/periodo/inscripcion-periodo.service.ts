@@ -13,11 +13,7 @@ export async function findByUserId(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    const inscripciones = await em.find(
-      InscripcionPeriodo,
-      { campista: { id: userId } },
-      { populate: ['periodo', 'campista'] },
-    );
+    const inscripciones = await em.find(InscripcionPeriodo, { campista: userId });
 
     res.status(200).json({
       message: 'found user inscriptions',
