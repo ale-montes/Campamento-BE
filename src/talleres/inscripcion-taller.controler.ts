@@ -9,10 +9,10 @@ async function findAll(req: Request, res: Response) {
   try {
     if (req.user?.role === 'campista') {
       const id = req.user.id;
-      const inscripciones = await em.findOneOrFail(
+      const inscripciones = await em.find(
         InscripcionTaller,
         { campista: Number(id) },
-        { populate: ['taller', 'campista'] },
+        { populate: ['taller', 'campista', 'taller.instructor'] },
       );
       res.status(200).json({ message: 'found inscripciones', data: inscripciones });
     } else {
