@@ -122,7 +122,27 @@ export async function whoami(req: Request, res: Response) {
     // verificar y decodificar token
     const decoded = jwt.verify(token, JWT_SECRET) as { id: number; email: string; role: string };
 
-    res.json({ id: decoded.id, email: decoded.email, role: decoded.role });
+    // buscar el usuario en la base de datos
+    const user = await em.findOne(Campista, { id: decoded.id });
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // devolver todos los datos relevantes del campista
+    res.json({
+      id: user.id,
+      nombre: user.nombre,
+      apellido: user.apellido,
+      telefono: user.telefono,
+      email: user.email,
+      fechaNac: user.fechaNac,
+      pais: user.pais,
+      ciudad: user.ciudad,
+      direccion: user.direccion,
+      grupoSanguineo: user.grupoSanguineo,
+      telefonoEmergencia: user.telefonoEmergencia,
+      role: decoded.role,
+    });
   } catch (error: unknown) {
     if (error instanceof jwt.JsonWebTokenError) {
       return res.status(401).json({ message: 'Token inválido' });
