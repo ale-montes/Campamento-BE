@@ -49,7 +49,6 @@ Content-Type: application/json
 ###Consultar quien soy con token valido
 GET http://localhost:3000/api/auth/me
 Content-Type: application/json
-Cookie: token={{tokenadmin}}
 
 ### Consultar quien soy con token admin
 GET http://localhost:3000/api/auth/me

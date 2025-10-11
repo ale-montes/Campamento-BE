@@ -18,8 +18,25 @@ Cookie: token={{tokenadmin}}
   "email": "lukecastenllan@gmail.com",
   "telefono": "123456789",
   "contrasena": "123456",
-  "fechaNac": "1990-01-01T00:00:00.000Z",
-  "direccion": "123 Main St",
+  "fechaNac": "1920-01-01T00:00:00.000Z",
+  "direccion": "3141 Farmroad",
+  "alergias": "Ninguna",
+  "grupoSanguineo": "O",
+  "rh": "+"
+}
+
+### Create admin  2
+POST http://localhost:3000/api/admin
+Content-Type: application/json
+
+{
+  "nombre": "Dionisio",
+  "apellido": "God",
+  "email": "directorgeneralseñord@gmail.com",
+  "nick": "SeñorD",
+  "contrasena": "123456",
+  "fechaNac": "1924-01-01T00:00:00.000Z",
+  "direccion": "3141 Farmroad",
   "alergias": "Ninguna",
   "grupoSanguineo": "O+"
 }

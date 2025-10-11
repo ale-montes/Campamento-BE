@@ -2,6 +2,10 @@ import { Entity, ManyToOne, OneToMany, Collection, Rel, Property } from '@mikro-
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Deidad } from '../deidades/deidad.entity.js';
 import { Hospeda } from './hospeda.entity.js';
+export enum cabinStatus {
+  Activo = 'Activo',
+  Inactivo = 'Inactivo',
+}
 
 @Entity()
 export class Cabania extends BaseEntity {
@@ -16,6 +20,9 @@ export class Cabania extends BaseEntity {
 
   @Property({ nullable: false })
   ubicacion!: string;
+
+  @Property({ type: 'string', default: cabinStatus.Activo })
+  cabinStatus!: cabinStatus;
 
   @ManyToOne(() => Deidad, { nullable: false })
   deidad!: Rel<Deidad>;
