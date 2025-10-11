@@ -26,6 +26,7 @@ Cookie: token={{tokencampista}}
 ### Create Taller 2
 POST http://localhost:3000/api/talleres
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "titulo": "Taller de Supervivencia",
