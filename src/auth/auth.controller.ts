@@ -1,170 +1,76 @@
-import { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { findByMail } from '../usuarios/usuarios.controler.js';
-import { Campista } from '../usuarios/campista.entity.js';
-import { orm } from '../shared/db/orm.js';
-import { sendVerificationEmail } from './email.service.js';
+import { Request, Response, NextFunction } from 'express';
+import { AuthService } from './auth.service.js';
+import { CampistaInput } from '../usuarios/campista.schema.js';
+import { getEm } from '../shared/db/orm.js';
 
-const JWT_SECRET = (process.env.JWT_SECRET as string) || 'supersecret';
+export class AuthController {
+  constructor(private readonly service = new AuthService()) {}
 
-const em = orm.em;
-
-export async function register(req: Request, res: Response) {
-  try {
-    const { contrasena, ...rest } = req.body;
-    const hashedPassword = await bcrypt.hash(contrasena, 10);
-    const token = crypto.randomUUID();
-    const campista = em.create(Campista, {
-      ...rest,
-      contrasena: hashedPassword,
-      isVerified: false,
-      verificationToken: token,
-    });
-    await em.flush();
-    const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email?token=${token}`;
-    console.log('Enviar este link al email:', verificationUrl);
-    await sendVerificationEmail(campista.email, verificationUrl);
-    res.status(201).json({ message: 'Usuario creado. Revisá tu correo para verificarlo.' });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
+  async register(req: Request, res: Response, next: NextFunction) {
+    try {
+      const em = getEm();
+      const data: CampistaInput = req.body.sanitizedInput;
+      await this.service.register(data, em);
+      res.status(201).json({ message: 'Campista registrado correctamente' });
+    } catch (error) {
+      next(error);
     }
   }
-}
 
-export const verifyEmail = async (req: Request, res: Response) => {
-  const { token } = req.params;
-  console.log('Token de verificación recibido:', token);
-
-  if (!token || typeof token !== 'string') {
-    return res.status(400).json({ message: 'Token inválido' });
-  }
-  const user = await em.findOne(Campista, { verificationToken: token });
-  if (!user) {
-    return res.status(400).json({ message: 'Token inválido o expirado' });
-  }
-
-  user.isVerified = true;
-  user.verificationToken = null;
-  await orm.em.persistAndFlush(user);
-
-  res.json({ message: 'Correo verificado con éxito.' });
-};
-
-export async function login(req: Request, res: Response) {
-  try {
-    const { email, contrasena } = req.body;
-
-    if (!email || !contrasena) {
-      return res.status(400).json({ message: 'Email y contraseña requeridos' });
-    }
-
-    const result = await findByMail(email);
-    if (!result) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-    if (result.user.isVerified === false) {
-      return res
-        .status(403)
-        .json({ message: 'Por favor, verifica tu email antes de iniciar sesión.' });
-    }
-
-    const { user, role } = result;
-
-    const validPassword = await bcrypt.compare(contrasena, user.contrasena);
-    if (!validPassword) {
-      return res.status(401).json({ message: 'Credenciales inválidas' });
-    }
-
-    const token = jwt.sign({ id: user.id, email: user.email, role }, JWT_SECRET, {
-      expiresIn: '30d',
-    });
-
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: false, /// ⚠️ false en localhost (solo true en HTTPS)
-      sameSite: 'lax',
-      maxAge: 1000 * 60 * 60,
-      path: '/', // disponible en toda la app
-    });
-    return res.status(200).json({
-      message: 'Login exitoso',
-      user: {
-        id: user.id,
-        nombre: user.nombre,
-        email: user.email,
-        role,
-      },
-    });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.error('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
+  async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const em = getEm();
+      const { email, contrasena } = req.body;
+      const { token, role, user } = await this.service.login(email, contrasena, em);
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 1000 * 60 * 60 * 24 * 30, // 30 dias
+        path: '/',
+      });
+      return res.status(200).json({
+        message: 'Login exitoso',
+        user: {
+          id: user.id,
+          nombre: user.nombre,
+          role,
+        },
+      });
+    } catch (error) {
+      next(error);
     }
   }
-}
 
-export async function whoami(req: Request, res: Response) {
-  try {
-    const token = req.cookies.token;
-    if (!token) {
-      return res.status(401).json({ message: 'No autenticado' });
-    }
-
-    // verificar y decodificar token
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: number; email: string; role: string };
-
-    res.json({ id: decoded.id, email: decoded.email, role: decoded.role });
-  } catch (error: unknown) {
-    if (error instanceof jwt.JsonWebTokenError) {
-      return res.status(401).json({ message: 'Token inválido' });
-    } else if (error instanceof jwt.TokenExpiredError) {
-      return res.status(401).json({ message: 'Token expirado' });
-    } else if (error instanceof Error) {
-      console.error(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.error('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
+  async whoami(req: Request, res: Response, next: NextFunction) {
+    try {
+      const token = req.user;
+      res.status(200).json({ message: 'Usuario identificado', data: token });
+    } catch (error) {
+      next(error);
     }
   }
-}
 
-export async function resendVerification(req: Request, res: Response) {
-  try {
-    const { email } = req.body;
-    if (!email || typeof email !== 'string') {
-      return res.status(400).json({ message: 'Email inválido' });
+  async verifyEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const em = getEm();
+      const token = req.params.token as string;
+      if (!token) throw new Error('Token no proporcionado');
+      const result = await this.service.verifyEmail(token, em);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
     }
-    const user = await em.findOne(Campista, { email });
-    if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-    if (user.isVerified) {
-      return res.status(400).json({ message: 'El usuario ya está verificado' });
-    }
-    const token = crypto.randomUUID();
-    user.verificationToken = token;
-    await em.flush();
-    const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email?token=${token}`;
-    console.log('Reenviar este link al email:', verificationUrl);
-    await sendVerificationEmail(user.email, verificationUrl);
-    res.json({ message: 'Correo de verificación reenviado. Revisá tu email.' });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
+  }
+
+  async resendVerification(req: Request, res: Response, next: NextFunction) {
+    try {
+      const em = getEm();
+      const { email } = req.body;
+      await this.service.resendVerification(email, em);
+      res.status(200).json({ message: 'Email de verificación reenviado' });
+    } catch (error) {
+      next(error);
     }
   }
 }

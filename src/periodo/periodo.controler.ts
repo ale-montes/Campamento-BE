@@ -1,89 +1,68 @@
-import { Request, Response } from 'express';
-import { Periodo } from './periodo.entity.js';
-import { orm } from '../shared/db/orm.js';
+// src/periodo/periodo.controller.ts
+import { Request, Response, NextFunction } from 'express';
+import { PeriodoService } from './periodo.service.js';
+import { getEm } from '../shared/db/orm.js';
+import { PeriodoInput } from './periodo.schema.js';
 
-const em = orm.em;
+export class PeriodoController {
+  constructor(private readonly service = new PeriodoService()) {}
 
-async function findAll(req: Request, res: Response) {
-  try {
-    const periodos = await em.find(Periodo, {});
-    res.status(200).json({ message: 'found all periodos', data: periodos });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
+  async findAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const periodos = await this.service.findAll(getEm());
+      res.status(200).json({ message: 'found all periodos', data: periodos });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async findOne(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = Number(req.params.id);
+      const periodo = await this.service.findOne(id, getEm());
+      res.status(200).json({ message: 'found periodo', data: periodo });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async add(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data: PeriodoInput = req.body.sanitizedInput;
+      const periodo = await this.service.add(data, getEm());
+      res.status(201).json({ message: 'periodo created', data: periodo });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = Number(req.params.id);
+      const data = req.body.sanitizedInput;
+      const periodo = await this.service.update(id, data, getEm());
+      res.status(200).json({ message: 'periodo updated', data: periodo });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async remove(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = Number(req.params.id);
+      await this.service.remove(id, getEm());
+      res.status(200).json({ message: 'periodo deleted' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getVigente(req: Request, res: Response, next: NextFunction) {
+    try {
+      const periodo = await this.service.getVigente(getEm());
+      res.status(200).json({ message: 'periodo vigente', date: periodo });
+    } catch (error) {
+      next(error);
     }
   }
 }
-
-async function findOne(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const periodo = await em.findOneOrFail(Periodo, { id });
-    res.status(200).json({ message: 'found periodo', data: periodo });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function add(req: Request, res: Response) {
-  try {
-    const periodo = em.create(Periodo, req.body);
-    await em.flush();
-    res.status(201).json({ message: 'periodo created', data: periodo });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function update(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const periodo = em.getReference(Periodo, id);
-    em.assign(periodo, req.body);
-    await em.flush();
-    res.status(200).json({ message: 'periodo updated' });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function remove(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const periodo = em.getReference(Periodo, id);
-    await em.removeAndFlush(periodo);
-    res.status(200).send({ message: 'periodo deleted' });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-export { findAll, findOne, add, update, remove };

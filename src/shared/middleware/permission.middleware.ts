@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { ForbiddenError } from '../errors/http-error.js';
+import { validateId } from '../validateParam.js';
 
 const apiBasePath = process.env.API_BASE_PATH || '/api';
 
@@ -31,12 +33,21 @@ export async function checkPermission(req: Request, res: Response, next: NextFun
   const allowedRoles = permissions[pathKey]?.[method];
 
   if (!allowedRoles) {
-    return res.status(403).json({ error: 'No autorizado - ruta no definida' });
+    return next(new ForbiddenError('Ruta no definida para tu rol'));
   }
 
   if (!role || !allowedRoles.includes(role)) {
-    return res.status(403).json({ error: 'No autorizado - permiso denegado' });
+    return next(new ForbiddenError('Permiso denegado'));
   }
+
+  // if (role === 'campista' && req.params.id) {
+  //   const paramId = validateId(req.params.id);
+  //   const userId = validateId(req.user?.id);
+
+  //   if (userId !== paramId) {
+  //     return next(new ForbiddenError('No tienes permiso para acceder a este recurso'));
+  //   }
+  // }
 
   next();
 }

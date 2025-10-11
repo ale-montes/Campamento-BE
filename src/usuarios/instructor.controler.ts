@@ -1,103 +1,56 @@
-import { Request, Response } from 'express';
-import { Instructor } from './instructor.entity.js';
-import { orm } from '../shared/db/orm.js';
-import bcrypt from 'bcryptjs';
+import { Request, Response, NextFunction } from 'express';
+import { InstructorService } from './instructor.service.js';
+import { getEm } from '../shared/db/orm.js';
+import { validateId } from '../shared/validateParam.js';
 
-const em = orm.em;
+export class InstructorController {
+  constructor(private readonly service = new InstructorService()) {}
 
-async function findAll(req: Request, res: Response) {
-  try {
-    const instructores = await em.find(Instructor, {});
-    const instructoresSanitized = instructores.map(({ contrasena: _omit, ...rest }) => rest);
-    res.status(200).json({ message: 'found all instructores', data: instructoresSanitized });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
+  async findAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const instructors = await this.service.findAll(getEm());
+      res.status(200).json({ message: 'found all instructors', data: instructors });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async findOne(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = validateId(req.params.id);
+      const instructor = await this.service.findOne(id, getEm());
+      res.status(200).json({ success: true, data: instructor });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async add(req: Request, res: Response, next: NextFunction) {
+    try {
+      const instructor = await this.service.add(req.body.sanitizedInput, getEm());
+      res.status(201).json({ message: 'instructor creado', data: instructor });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = validateId(req.params.id);
+      const instructor = await this.service.update(id, req.body.sanitizedInput, getEm());
+      res.status(200).json({ message: 'instructor actualizado', data: instructor });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async remove(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = validateId(req.params.id);
+      await this.service.remove(id, getEm());
+      res.status(200).json({ message: 'instructor eliminado' });
+    } catch (error) {
+      next(error);
     }
   }
 }
-
-async function findOne(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const { contrasena: _omit, ...instructorSanitized } = await em.findOneOrFail(Instructor, {
-      id,
-    });
-    res.status(200).json({ message: 'found user', data: instructorSanitized });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function add(req: Request, res: Response) {
-  try {
-    const { contrasena, ...rest } = req.body;
-    const hashedPassword = await bcrypt.hash(contrasena, 10);
-    const token = crypto.randomUUID();
-    const instructor = em.create(Instructor, {
-      ...rest,
-      contrasena: hashedPassword,
-      isVerified: false,
-      verificationToken: token,
-    });
-    await em.flush();
-    res
-      .status(201)
-      .json({ message: 'user created, email pendient the verification', email: instructor.email });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function update(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const instructor = em.getReference(Instructor, id);
-    em.assign(instructor, req.body);
-    await em.flush();
-    res.status(200).json({ message: 'user updated' });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function remove(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const instructor = em.getReference(Instructor, id);
-    await em.removeAndFlush(instructor);
-    res.status(200).send({ message: 'user deleted' });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-export { findAll, findOne, add, update, remove };

@@ -1,5 +1,7 @@
 ### GET all periodos
 GET http://localhost:3000/api/periodo
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 ### GET by ID
 GET http://localhost:3000/api/periodo/1
@@ -28,7 +30,13 @@ Content-Type: application/json
 ### update Periodo estado to 'en cuerso'
 PATCH http://localhost:3000/api/periodo/1
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
-  "estado": "en curso"
+  "fechaFinPer": "2025-12-15T00:00:00.000Z"
 }
+
+### Obtener el periodo vigente
+GET http://localhost:3000/api/periodo/vigente
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
