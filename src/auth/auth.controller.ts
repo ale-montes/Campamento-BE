@@ -73,4 +73,26 @@ export class AuthController {
       next(error);
     }
   }
+
+  async getProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const em = getEm();
+      const profile = await this.service.getProfile(req.user!, em);
+      res.status(200).json({ message: 'Perfil obtenido', data: profile });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // PUT /profile
+  async updateProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const em = getEm();
+      const { id, role } = req.user!;
+      const updated = await this.service.updateProfile({ id, role }, req.body.sanitizedInput, em);
+      res.status(200).json({ message: 'Perfil actualizado', data: updated });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

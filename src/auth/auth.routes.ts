@@ -2,7 +2,12 @@ import { Router } from 'express';
 import { AuthController } from './auth.controller.js';
 import { authMiddleware } from '../shared/middleware/auth.middleware.js';
 import { campistaSchema, campistaUpdateSchema } from '../usuarios/campista.schema.js';
-import { validateSchema } from '../shared/middleware/validation.middleware.js';
+import {
+  validateSchema,
+  validateSchemaByRole,
+} from '../shared/middleware/validation.middleware.js';
+import { instructorUpdateSchema } from '../usuarios/instructor.schema.js';
+import { adminUpdateSchema } from '../usuarios/admin.schema.js';
 
 const authController = new AuthController();
 export const authRoutes = Router();
@@ -23,3 +28,14 @@ authRoutes.put('/resend-verification', authController.resendVerification.bind(au
 
 // Rutas protegidas
 authRoutes.get('/me', authMiddleware, authController.whoami.bind(authController));
+authRoutes.get('/profile', authMiddleware, authController.getProfile.bind(authController));
+authRoutes.patch(
+  '/profile',
+  authMiddleware,
+  validateSchemaByRole({
+    campista: campistaUpdateSchema,
+    instructor: instructorUpdateSchema,
+    admin: adminUpdateSchema,
+  }),
+  authController.updateProfile.bind(authController),
+);

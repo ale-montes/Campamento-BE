@@ -55,6 +55,9 @@ export class InstructorService {
         { lockMode: LockMode.PESSIMISTIC_WRITE },
       );
       if (!instructor) throw new NotFoundError(`Instructor ${id} no encontrado`);
+      if (data.contrasena) {
+        data.contrasena = await bcrypt.hash(data.contrasena, 10);
+      }
       tEm.assign(instructor, data);
       await tEm.flush();
       const { contrasena: _omit, ...sanitized } = instructor;
