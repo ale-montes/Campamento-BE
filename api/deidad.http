@@ -1,5 +1,7 @@
 ### Obtener todas las deidades
 GET http://localhost:3000/api/deidades
+Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 ### Obtener por ID
 GET http://localhost:3000/api/deidades/1
