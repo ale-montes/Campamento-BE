@@ -22,7 +22,7 @@ export class Taller extends BaseEntity {
   cupo!: number;
 
   @Property({ nullable: false })
-  duracionHoras!: number;
+  duracionMin!: number;
 
   @Property({ nullable: false, default: 'abierto' })
   estado!: 'abierto' | 'cerrado' | 'en progreso' | 'cancelado' | 'completado';
