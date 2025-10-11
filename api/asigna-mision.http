@@ -1,12 +1,17 @@
 ### GET all asignaciones a misiones
 GET http://localhost:3000/api/asigna-mision
+Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 ### GET by ID
 GET http://localhost:3000/api/asigna-mision/1
+Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 ### Create asignacion a mision
 POST http://localhost:3000/api/asigna-mision
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "campista": 4,
@@ -17,11 +22,10 @@ Content-Type: application/json
 ### Create asignacion a mision 2
 POST http://localhost:3000/api/asigna-mision
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "campista": 4,
   "mision": 2,
   "estado": "asignada"
 }
-
-# type EstadoMision = 'en progreso' | 'completada' | 'fallida';

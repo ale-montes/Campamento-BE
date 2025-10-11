@@ -7,8 +7,8 @@
   "rest-client.environmentVariables": {
     "dev": {
       "tokenadmin": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJsdWtlY2FzdGVubGxhbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NTk5Njk2NjYsImV4cCI6MTc2MjU2MTY2Nn0.OEhJwI3GjE2ht3v3R545Jd5DyXjVxmIyzCvXG5LP1uI",
-      "tokeninstructor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqb3JndWVzYW5jaGV6QGdtYWlsLmNvbSIsInJvbGUiOiJpbnN0cnVjdG9yIiwiaWF0IjoxNzYwMTkyNTM0LCJleHAiOjE3NjI3ODQ1MzR9.rNJWjnlbyPcjyh9nWBmlPDVdt258MiGgViUzIXxiPrQ",
-      "tokencampista": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsImVtYWlsIjoicW1iLnRlY25vQGdtYWlsLmNvbSIsInJvbGUiOiJjYW1waXN0YSIsImlhdCI6MTc2MDE5MjQ3NywiZXhwIjoxNzYyNzg0NDc3fQ.0ggJh26FEdqgQMvv7-MHqPvwmLfY-aRextP1FhZQReI"
+      "tokeninstructor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqb3JndWVzYW5jaGV6QGdtYWlsLmNvbSIsInJvbGUiOiJpbnN0cnVjdG9yIiwiaWF0IjoxNzYwMjE5MjU0LCJleHAiOjE3NjI4MTEyNTR9.l50ELFy5zjwyXUhT0O3oVB9tGb1uxqgDXrbXEYgGPW8",
+      "tokencampista": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsImVtYWlsIjoicW1iLnRlY25vQGdtYWlsLmNvbSIsInJvbGUiOiJjYW1waXN0YSIsImlhdCI6MTc2MDIxOTI3NCwiZXhwIjoxNzYyODExMjc0fQ.FrZs-upMdKn2m-4zTYn1wkSSbf2Clz8FGIgiNaRjcng"
     }
   },
   "rest-client.rememberCookiesForSubsequentRequests": false

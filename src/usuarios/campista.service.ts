@@ -55,6 +55,9 @@ export class CampistaService {
         { lockMode: LockMode.PESSIMISTIC_WRITE },
       );
       if (!campista) throw new NotFoundError(`Campista ${id} no encontrado`);
+      if (data.contrasena) {
+        data.contrasena = await bcrypt.hash(data.contrasena, 10);
+      }
       tEm.assign(campista, data);
       await tEm.flush();
       const { contrasena: _omit, ...sanitized } = campista;
