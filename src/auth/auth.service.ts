@@ -1,5 +1,5 @@
 import { CampistaService } from '../usuarios/campista.service.js';
-import { UsuariosService } from '../usuarios/usuarios.service.js';
+import { UsuariosService, UserEntityOmitPass, UserEntity } from '../usuarios/usuarios.service.js';
 import { sendVerificationEmail } from './email.service.js';
 import { generateJwtToken } from '../shared/jwtUtils.js';
 import { CampistaInput } from '../usuarios/campista.schema.js';
@@ -55,5 +55,22 @@ export class AuthService {
     const result = await sendVerificationEmail(user.email, verificationUrl);
     if (!result) throw new Error('Problemas al enviar el Correo');
     return { message: 'Correo de verificación reenviado.' };
+  }
+
+  async getProfile(
+    user: { id: number; role: string },
+    em: EntityManager,
+  ): Promise<UserEntityOmitPass | null> {
+    const profile = await this.usuarioService.findByIdAndRole(user.id, user.role, em);
+    if (!profile) throw new Error('Usuario no encontrado');
+    return profile;
+  }
+  async updateProfile(
+    user: { id: number; role: string },
+    data: Partial<UserEntity>,
+    em: EntityManager,
+  ): Promise<UserEntityOmitPass> {
+    const updated = await this.usuarioService.updateByIdAndRole(user.id, user.role, data, em);
+    return updated;
   }
 }

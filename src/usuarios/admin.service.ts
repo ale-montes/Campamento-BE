@@ -51,6 +51,9 @@ export class AdminService {
     const updated = await em.transactional(async (tEm) => {
       const admin = await tEm.findOne(Admin, { id }, { lockMode: LockMode.PESSIMISTIC_WRITE });
       if (!admin) throw new NotFoundError(`Admin ${id} no encontrado`);
+      if (data.contrasena) {
+        data.contrasena = await bcrypt.hash(data.contrasena, 10);
+      }
       tEm.assign(admin, data);
       await tEm.flush();
       const { contrasena: _omit, ...sanitized } = admin;

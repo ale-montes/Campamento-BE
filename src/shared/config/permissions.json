@@ -10,6 +10,6 @@
 "periodo":{"GET":["instructor","campista"],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},
 "inscripcion-periodo":{"GET":["campista","instructor"],"POST":["campista"],"PUT":[],"PATCH":[],"DELETE":[]},
 "admin":{"GET":[],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},
-"instructor":{"GET":["instructor"],"POST":[],"PUT":[],"PATCH":["instructor"],"DELETE":[]},
-"campista":{"GET":["campista"],"POST":[],"PUT":[],"PATCH":["campista"],"DELETE":[]}
+"instructor":{"GET":[],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},
+"campista":{"GET":[],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]}
 }

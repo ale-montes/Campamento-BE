@@ -18,11 +18,7 @@ export class InscripcionTallerService {
     if (user.role === 'campista' && id !== user.id) {
       throw new ForbiddenError('No autorizado');
     }
-    const inscripcion = await em.findOne(
-      InscripcionTaller,
-      { id },
-      { populate: ['taller', 'campista'] },
-    );
+    const inscripcion = await em.findOne(InscripcionTaller, { id }, { populate: ['taller'] });
     if (!inscripcion) throw new NotFoundError('Inscripción');
     return inscripcion;
   }
