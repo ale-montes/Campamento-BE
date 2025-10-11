@@ -6,7 +6,12 @@ Cookie: token={{tokencampista}}
 ### GET all inscripciones a talleres
 GET http://localhost:3000/api/inscripcion-taller/
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
+
+### GET by ID
+GET http://localhost:3000/api/inscripcion-taller/2
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 ### GET by ID
 GET http://localhost:3000/api/inscripcion-taller/2
@@ -28,6 +33,7 @@ Cookie: token={{tokencampista}}
 ### Create inscripcion a taller 2
 POST http://localhost:3000/api/inscripcion-taller
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "campista": 2,

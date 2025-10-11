@@ -1,12 +1,27 @@
 ### GET all instructores
 GET http://localhost:3000/api/instructor
+Content-Type: application/json
+Cookie: token={{tokencampista}}
+
+### GET all instructores
+GET http://localhost:3000/api/instructor
+Content-Type: application/json
+Cookie: token={{tokeninstructor}}
 
 ### GET by ID
 GET http://localhost:3000/api/instructor/1
+Content-Type: application/json
+Cookie: token={{tokencampista}}
+
+### GET by ID
+GET http://localhost:3000/api/instructor/1
+Content-Type: application/json
+Cookie: token={{tokeninstructor}}
 
 ### Create Instructor
 POST http://localhost:3000/api/instructor
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "nombre": "Jorge",
@@ -27,6 +42,7 @@ Content-Type: application/json
 ### Create Instructor 2
 POST http://localhost:3000/api/instructor
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "nombre": "Laura",
