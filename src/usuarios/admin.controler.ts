@@ -1,101 +1,56 @@
-import { Request, Response } from 'express';
-import { Admin } from './admin.entity.js';
-import { orm } from '../shared/db/orm.js';
-import bcrypt from 'bcryptjs';
+import { Request, Response, NextFunction } from 'express';
+import { AdminService } from './admin.service.js';
+import { getEm } from '../shared/db/orm.js';
+import { validateId } from '../shared/validateParam.js';
 
-const em = orm.em;
+export class AdminController {
+  constructor(private readonly service = new AdminService()) {}
 
-async function findAll(req: Request, res: Response) {
-  try {
-    const admins = await em.find(Admin, {});
-    const adminsSanitized = admins.map(({ contrasena: _omit, ...rest }) => rest);
-    res.status(200).json({ message: 'found all admins', data: adminsSanitized });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
+  async findAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const admins = await this.service.findAll(getEm());
+      res.status(200).json({ message: 'found all admins', data: admins });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async findOne(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = validateId(req.params.id);
+      const admin = await this.service.findOne(id, getEm());
+      res.status(200).json({ success: true, data: admin });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async add(req: Request, res: Response, next: NextFunction) {
+    try {
+      const admin = await this.service.add(req.body.sanitizedInput, getEm());
+      res.status(201).json({ message: 'admin creado', data: admin });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = validateId(req.params.id);
+      const admin = await this.service.update(id, req.body.sanitizedInput, getEm());
+      res.status(200).json({ message: 'admin actualizado', data: admin });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async remove(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = validateId(req.params.id);
+      await this.service.remove(id, getEm());
+      res.status(200).json({ message: 'admin eliminado' });
+    } catch (error) {
+      next(error);
     }
   }
 }
-
-async function findOne(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const { contrasena: _omit, ...adminSanitized } = await em.findOneOrFail(Admin, { id });
-    res.status(200).json({ message: 'found user', data: adminSanitized });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function add(req: Request, res: Response) {
-  try {
-    const { contrasena, ...rest } = req.body;
-    const hashedPassword = await bcrypt.hash(contrasena, 10);
-    const token = crypto.randomUUID();
-    const admin = em.create(Admin, {
-      ...rest,
-      contrasena: hashedPassword,
-      isVerified: false,
-      verificationToken: token,
-    });
-    await em.flush();
-    res
-      .status(201)
-      .json({ message: 'user created, email pendient the verification', email: admin.email });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function update(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const admin = em.getReference(Admin, id);
-    em.assign(admin, req.body);
-    await em.flush();
-    res.status(200).json({ message: 'user updated' });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function remove(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const admin = em.getReference(Admin, id);
-    await em.removeAndFlush(admin);
-    res.status(200).send({ message: 'user deleted' });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-export { findAll, findOne, add, update, remove };

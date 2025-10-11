@@ -1,20 +1,32 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { UnauthorizedError } from '../errors/http-error.js';
+import { UserPayload } from '../../types/user.js';
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  let token = req.cookies?.token;
-
-  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
-    token = req.headers.authorization.split(' ')[1];
-  }
-
-  if (!token) return res.status(401).json({ error: 'No autenticado' });
-
+export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   try {
-    const decode = jwt.verify(token, process.env.JWT_SECRET as string);
-    req.user = decode as { id: number; role: string; email: string };
+    //Obtener el token desde cookie o header
+    const authHeader = req.headers.authorization;
+    const token =
+      req.cookies?.token ||
+      (authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined);
+
+    if (!token) {
+      throw new UnauthorizedError('No autenticado');
+    }
+
+    //Verificar token JWT
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload & UserPayload;
+
+    //Asignar el usuario decodificado a la request
+    req.user = {
+      id: decoded.id,
+      role: decoded.role,
+      email: decoded.email,
+    };
+
     next();
   } catch {
-    return res.status(401).json({ error: 'Token inválido o expirado' });
+    next(new UnauthorizedError('Token inválido o expirado'));
   }
 };

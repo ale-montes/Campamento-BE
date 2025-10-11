@@ -1,12 +1,22 @@
 ### GET all campistas
 GET http://localhost:3000/api/campista
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+### GET all campistas
+GET http://localhost:3000/api/campista
+Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 ### GET by ID
-GET http://localhost:3000/api/campista/1
+GET http://localhost:3000/api/campista/14
+Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 ### Create Campista
 POST http://localhost:3000/api/campista
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 { 
   "nombre": "Juan",
@@ -19,6 +29,8 @@ Content-Type: application/json
 ### Create Campista 2
 POST http://localhost:3000/api/campista
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
 {
   "nombre": "María",
   "apellido": "Gómez",
