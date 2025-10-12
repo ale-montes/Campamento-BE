@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { findByMail } from '../usuarios/usuarios.controler.js';
 import { Campista } from '../usuarios/campista.entity.js';
+import { Instructor } from '../usuarios/instructor.entity.js';
+import { Admin } from '../usuarios/admin.entity.js';
 import { orm } from '../shared/db/orm.js';
 import { sendVerificationEmail } from './email.service.js';
 
@@ -112,48 +114,89 @@ export async function login(req: Request, res: Response) {
   }
 }
 
-export async function whoami(req: Request, res: Response) {
+interface JwtPayload {
+  id: number;
+  email: string;
+  role: 'campista' | 'instructor' | 'admin';
+}
+
+// tipo combinado de entidades posibles
+type Usuario = Campista | Instructor | Admin;
+
+export async function whoami(req: Request, res: Response): Promise<void> {
   try {
-    const token = req.cookies.token;
+    const token = req.cookies?.token;
     if (!token) {
-      return res.status(401).json({ message: 'No autenticado' });
+      res.status(401).json({ message: 'No autenticado' });
+      return;
     }
 
-    // verificar y decodificar token
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: number; email: string; role: string };
+    // verificar token
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
-    // buscar el usuario en la base de datos
-    const user = await em.findOne(Campista, { id: decoded.id });
+    let user: Usuario | null = null;
+
+    // buscar usuario según rol
+    switch (decoded.role) {
+      case 'campista':
+        user = await em.findOne(Campista, { id: decoded.id });
+        break;
+      case 'instructor':
+        user = await em.findOne(Instructor, { id: decoded.id });
+        break;
+      case 'admin':
+        user = await em.findOne(Admin, { id: decoded.id });
+        break;
+      default:
+        res.status(400).json({ message: 'Rol desconocido' });
+        return;
+    }
+
     if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      res.status(404).json({ message: 'Usuario no encontrado' });
+      return;
     }
 
-    // devolver todos los datos relevantes del campista
+    // devolver datos relevantes (TypeScript-friendly)
+    const {
+      id,
+      nombre,
+      apellido,
+      email,
+      telefono,
+      direccion,
+      fechaNac,
+      pais,
+      ciudad,
+      telefonoEmergencia,
+      grupoSanguineo,
+    } = user;
+
     res.json({
-      id: user.id,
-      nombre: user.nombre,
-      apellido: user.apellido,
-      telefono: user.telefono,
-      email: user.email,
-      fechaNac: user.fechaNac,
-      pais: user.pais,
-      ciudad: user.ciudad,
-      direccion: user.direccion,
-      grupoSanguineo: user.grupoSanguineo,
-      telefonoEmergencia: user.telefonoEmergencia,
+      id,
+      nombre,
+      apellido,
+      email,
+      telefono,
+      direccion,
+      fechaNac,
+      pais,
+      ciudad,
+      telefonoEmergencia,
+      grupoSanguineo,
       role: decoded.role,
     });
   } catch (error: unknown) {
     if (error instanceof jwt.JsonWebTokenError) {
-      return res.status(401).json({ message: 'Token inválido' });
+      res.status(401).json({ message: 'Token inválido' });
     } else if (error instanceof jwt.TokenExpiredError) {
-      return res.status(401).json({ message: 'Token expirado' });
+      res.status(401).json({ message: 'Token expirado' });
     } else if (error instanceof Error) {
       console.error(error.message);
-      res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({ message: 'Error interno del servidor' });
     } else {
-      console.error('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
+      console.error('Error desconocido:', error);
+      res.status(500).json({ message: 'Error desconocido' });
     }
   }
 }
