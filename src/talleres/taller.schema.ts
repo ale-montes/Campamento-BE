@@ -12,17 +12,13 @@ export const tallerSchema = z.object({
       message: 'Fecha y hora deben ser válidas',
     }),
   lugar: z.string().min(2).max(100),
-  instructor: z.number().min(1).max(1000),
+  instructor: z.number().min(1),
   cupo: z.number().int().min(1).max(1000),
   duracionMin: z.number().int().min(0).max(480),
-  estado: z
-    .enum(['abierto', 'cerrado', 'en progreso', 'cancelado', 'completado'])
-    .optional()
-    .default('abierto'),
+  periodo: z.number().min(1),
+  estado: z.enum(['abierto', 'cerrado', 'en progreso', 'cancelado', 'completado']).optional().default('abierto'),
 });
 export type TallerInput = z.infer<typeof tallerSchema>;
-export const tallerUpdateSchema = tallerSchema
-  .partial()
-  .refine((data) => Object.keys(data).length > 0, {
-    message: 'Debes enviar al menos un campo para actualizar',
-  });
+export const tallerUpdateSchema = tallerSchema.partial().refine((data) => Object.keys(data).length > 0, {
+  message: 'Debes enviar al menos un campo para actualizar',
+});

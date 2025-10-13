@@ -16,14 +16,6 @@ tallerRoutes.use(authMiddleware, checkPermission);
 tallerRoutes.get('/', tallerController.findAll.bind(tallerController));
 tallerRoutes.get('/:id', tallerController.findOne.bind(tallerController));
 tallerRoutes.post('/', validateSchema(tallerSchema), tallerController.add.bind(tallerController));
-tallerRoutes.put(
-  '/:id',
-  validateSchema(tallerSchema),
-  tallerController.update.bind(tallerController),
-);
-tallerRoutes.patch(
-  '/:id',
-  validateSchema(tallerUpdateSchema),
-  tallerController.update.bind(tallerController),
-);
+tallerRoutes.put('/:id', validateSchema(tallerSchema), tallerController.update.bind(tallerController));
+tallerRoutes.patch('/:id', validateSchema(tallerUpdateSchema), tallerController.update.bind(tallerController));
 tallerRoutes.delete('/:id', tallerController.remove.bind(tallerController));

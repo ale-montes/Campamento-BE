@@ -22,11 +22,7 @@ export class AuthService {
     console.log(user);
     if (!user) throw new Error('Token inválido o expirado');
     const id = Number(user.id);
-    const userUpdate = await this.campistaService.update(
-      id,
-      { isVerified: true, verificationToken: null },
-      em,
-    );
+    const userUpdate = await this.campistaService.update(id, { isVerified: true, verificationToken: null }, em);
 
     if (!userUpdate) throw new Error('Error al verificar token');
     return { message: 'Email verificado con éxito.' };
@@ -57,10 +53,7 @@ export class AuthService {
     return { message: 'Correo de verificación reenviado.' };
   }
 
-  async getProfile(
-    user: { id: number; role: string },
-    em: EntityManager,
-  ): Promise<UserEntityOmitPass | null> {
+  async getProfile(user: { id: number; role: string }, em: EntityManager): Promise<UserEntityOmitPass | null> {
     const profile = await this.usuarioService.findByIdAndRole(user.id, user.role, em);
     if (!profile) throw new Error('Usuario no encontrado');
     return profile;

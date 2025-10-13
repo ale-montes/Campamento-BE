@@ -42,18 +42,10 @@ export class InstructorService {
     return sanitized;
   }
 
-  async update(
-    id: number,
-    data: Partial<Instructor>,
-    em: EntityManager,
-  ): Promise<Omit<Instructor, 'contrasena'>> {
+  async update(id: number, data: Partial<Instructor>, em: EntityManager): Promise<Omit<Instructor, 'contrasena'>> {
     validateId(id);
     const updated = await em.transactional(async (tEm) => {
-      const instructor = await tEm.findOne(
-        Instructor,
-        { id },
-        { lockMode: LockMode.PESSIMISTIC_WRITE },
-      );
+      const instructor = await tEm.findOne(Instructor, { id }, { lockMode: LockMode.PESSIMISTIC_WRITE });
       if (!instructor) throw new NotFoundError(`Instructor ${id} no encontrado`);
       if (data.contrasena) {
         data.contrasena = await bcrypt.hash(data.contrasena, 10);

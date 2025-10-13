@@ -8,8 +8,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     //Obtener el token desde cookie o header
     const authHeader = req.headers.authorization;
     const token =
-      req.cookies?.token ||
-      (authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined);
+      req.cookies?.token || (authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined);
 
     if (!token) {
       throw new UnauthorizedError('No autenticado');

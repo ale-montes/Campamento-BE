@@ -14,7 +14,7 @@ export class InscripcionTaller extends BaseEntity {
   taller!: Rel<Taller>;
 
   @Property({ nullable: true })
-  estado!: EstadoTaller;
+  estado?: EstadoTaller;
 
   @Property({ nullable: true })
   nota?: number;

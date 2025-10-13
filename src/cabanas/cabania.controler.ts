@@ -6,11 +6,7 @@ const em = orm.em;
 
 async function findAll(req: Request, res: Response) {
   try {
-    const cabanias = await em.find(
-      Cabania,
-      { cabinStatus: cabinStatus.Activo },
-      { populate: ['deidad'] },
-    );
+    const cabanias = await em.find(Cabania, { cabinStatus: cabinStatus.Activo }, { populate: ['deidad'] });
     res.status(200).json({ message: 'found all cabanias', data: cabanias });
   } catch (error: unknown) {
     if (error instanceof Error) {

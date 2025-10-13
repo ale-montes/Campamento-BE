@@ -13,14 +13,6 @@ inscripTallerRoutes.use(authMiddleware, checkPermission);
 inscripTallerRoutes.get('/', controller.findAll.bind(controller));
 inscripTallerRoutes.get('/:id', controller.findOne.bind(controller));
 inscripTallerRoutes.post('/', validateSchema(inscripTallerSchema), controller.add.bind(controller));
-inscripTallerRoutes.put(
-  '/:id',
-  validateSchema(inscripTallerSchema),
-  controller.update.bind(controller),
-);
-inscripTallerRoutes.patch(
-  '/:id',
-  validateSchema(inscripTallerUpdateSchema),
-  controller.update.bind(controller),
-);
+inscripTallerRoutes.put('/:id', validateSchema(inscripTallerSchema), controller.update.bind(controller));
+inscripTallerRoutes.patch('/:id', validateSchema(inscripTallerUpdateSchema), controller.update.bind(controller));
 inscripTallerRoutes.delete('/:id', controller.remove.bind(controller));

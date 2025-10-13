@@ -1,6 +1,7 @@
 import { Entity, Property, OneToMany, Collection, Cascade } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { InscripcionPeriodo } from '../periodo/inscripcion-periodo.entity.js';
+import { Taller } from '../talleres/taller.entity.js';
 
 type EstadoPeriodo = 'cerrado' | 'abierto' | 'en curso' | 'finalizado';
 @Entity()
@@ -30,4 +31,9 @@ export class Periodo extends BaseEntity {
     cascade: [Cascade.ALL],
   })
   incriptos = new Collection<InscripcionPeriodo>(this);
+
+  @OneToMany(() => Taller, (taller) => taller.periodo, {
+    cascade: [Cascade.ALL],
+  })
+  talleres = new Collection<Taller>(this);
 }

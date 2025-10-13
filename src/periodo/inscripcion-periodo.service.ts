@@ -12,19 +12,12 @@ export class InscripcionPeriodoService {
 
   async findOne(id: number, em: EntityManager): Promise<InscripcionPeriodo> {
     validateId(id);
-    const inscripcion = await em.findOne(
-      InscripcionPeriodo,
-      { id },
-      { populate: ['periodo', 'campista'] },
-    );
+    const inscripcion = await em.findOne(InscripcionPeriodo, { id }, { populate: ['periodo', 'campista'] });
     if (!inscripcion) throw new NotFoundError('Inscripción de periodo');
     return inscripcion;
   }
 
-  async add(
-    inscripcionData: InscripcionPeriodoInput,
-    em: EntityManager,
-  ): Promise<InscripcionPeriodo> {
+  async add(inscripcionData: InscripcionPeriodoInput, em: EntityManager): Promise<InscripcionPeriodo> {
     const periodo = await em.findOne(Periodo, { id: inscripcionData.periodo });
     if (!periodo) throw new NotFoundError('Periodo');
     if (periodo.estado !== 'abierto') {
@@ -39,11 +32,7 @@ export class InscripcionPeriodoService {
   async update(id: number, data: Partial<InscripcionPeriodo>, em: EntityManager): Promise<void> {
     validateId(id);
     await em.transactional(async (tEm) => {
-      const inscripcion = await tEm.findOne(
-        InscripcionPeriodo,
-        { id },
-        { lockMode: LockMode.PESSIMISTIC_WRITE },
-      );
+      const inscripcion = await tEm.findOne(InscripcionPeriodo, { id }, { lockMode: LockMode.PESSIMISTIC_WRITE });
       if (!inscripcion) throw new NotFoundError('Inscripción de periodo');
       tEm.assign(inscripcion, data);
       await tEm.flush();

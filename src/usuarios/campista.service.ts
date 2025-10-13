@@ -42,18 +42,10 @@ export class CampistaService {
     return sanitized;
   }
 
-  async update(
-    id: number,
-    data: Partial<Campista>,
-    em: EntityManager,
-  ): Promise<Omit<Campista, 'contrasena'>> {
+  async update(id: number, data: Partial<Campista>, em: EntityManager): Promise<Omit<Campista, 'contrasena'>> {
     validateId(id);
     const updated = await em.transactional(async (tEm) => {
-      const campista = await tEm.findOne(
-        Campista,
-        { id },
-        { lockMode: LockMode.PESSIMISTIC_WRITE },
-      );
+      const campista = await tEm.findOne(Campista, { id }, { lockMode: LockMode.PESSIMISTIC_WRITE });
       if (!campista) throw new NotFoundError(`Campista ${id} no encontrado`);
       if (data.contrasena) {
         data.contrasena = await bcrypt.hash(data.contrasena, 10);

@@ -14,9 +14,5 @@ instructorRoutes.get('/', controller.findAll.bind(controller));
 instructorRoutes.get('/:id', controller.findOne.bind(controller));
 instructorRoutes.post('/', validateSchema(instructorSchema), controller.add.bind(controller));
 instructorRoutes.put('/:id', validateSchema(instructorSchema), controller.update.bind(controller));
-instructorRoutes.patch(
-  '/:id',
-  validateSchema(instructorUpdateSchema),
-  controller.update.bind(controller),
-);
+instructorRoutes.patch('/:id', validateSchema(instructorUpdateSchema), controller.update.bind(controller));
 instructorRoutes.delete('/:id', controller.remove.bind(controller));
