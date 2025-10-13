@@ -24,9 +24,9 @@ Todas las entradas a la API están validadas con [Zod](https://zod.dev/):
 
 Este sistema está pensado para manejar:
 
-- Registro y gestión de usuarios (campistas, coordinadores, etc.)
+- Registro y gestión de usuarios (campistas, instructores y administradores.)
 - Inscripcion y gestion a Eventos, Talles y misiones
-- Asignar Notas
+- Elegir hospedaje en diferentes cabañas.
 - Validación cruzada de datos
 
 > El modelo de datos fue diseñado previamente a partir de un DER, asegurando integridad y relaciones correctas entre las entidades.
@@ -44,8 +44,8 @@ Este sistema está pensado para manejar:
 
 1. Cloná el repositorio
    ```bash
-   git clone git@github.com:usuario/sistema-campamento.git
-   cd sistema-campamento
+   git clone https://github.com/ale-montes/Campamento-BE
+   cd Campamento-BE
    ```
 2. Instala las dependencias
    ```bash
