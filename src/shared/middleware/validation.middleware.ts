@@ -15,3 +15,17 @@ export const validateSchema =
     req.body.sanitizedInput = result.data;
     next();
   };
+
+type RoleSchemas = {
+  [role: string]: ZodSchema;
+};
+
+export const validateSchemaByRole = (schemas: RoleSchemas) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const role = req.user?.role;
+    if (!role || !schemas[role]) {
+      return res.status(403).json({ message: 'Rol no válido o sin schema definido' });
+    }
+    return validateSchema(schemas[role])(req, res, next);
+  };
+};

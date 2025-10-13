@@ -1,18 +1,37 @@
 ### GET all campistas
 GET http://localhost:3000/api/campista
+Content-Type: application/json
 
-### GET by ID
-GET http://localhost:3000/api/campista/1
 
 ### GET all campistas
 GET http://localhost:3000/api/campista
+Content-Type: application/json
+
+
+### GET all campistas
+GET http://localhost:3000/api/campista
+Content-Type: application/json
+
 
 ### GET by ID
-GET http://localhost:3000/api/campista/1
+GET http://localhost:3000/api/campista/14
+Content-Type: application/json
+
+
+### GET by ID
+GET http://localhost:3000/api/campista/14
+Content-Type: application/json
+
+
+### GET by ID
+GET http://localhost:3000/api/campista/14
+Content-Type: application/json
+
 
 ### Create Clarisse La Rue
 POST http://localhost:3000/api/campista
 Content-Type: application/json
+
 
 {
   "nombre": "Clarisse",
@@ -28,6 +47,8 @@ Content-Type: application/json
 
 POST http://localhost:3000/api/campista
 Content-Type: application/json
+
+
 { 
   "nombre": "Juan",
   "apellido": "Pérez",

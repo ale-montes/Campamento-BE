@@ -1,12 +1,17 @@
 ### GET all eventos
 GET http://localhost:3000/api/eventos
+Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 ### GET by ID
 GET http://localhost:3000/api/eventos/1
+Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 ### Create Evento
 POST http://localhost:3000/api/eventos
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "titulo": "Gran fogata",
@@ -18,6 +23,7 @@ Content-Type: application/json
 ### Create Evento 2
 POST http://localhost:3000/api/eventos
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "titulo": "Torneo de arquería",

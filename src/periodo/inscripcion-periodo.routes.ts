@@ -1,17 +1,34 @@
 import { Router } from 'express';
-import { findAll, findOne, add, update, remove } from './inscripcion-periodo.controler.js';
+import { InscripcionPeriodoController } from './inscripcion-periodo.controler.js';
 import { authMiddleware } from '../shared/middleware/auth.middleware.js';
 import { checkPermission } from '../shared/middleware/permission.middleware.js';
 import { findByUserId } from './inscripcion-periodo.service.js';
-export const incripcionPeriodoRoutes = Router();
-//Rutas Publicas
+import { validateSchema } from '../shared/middleware/validation.middleware.js';
+import { inscripPeriodoSchema, inscripPeriodoUpdateSchema } from './inscripcion-periodo.schema.js';
 
-incripcionPeriodoRoutes.use(authMiddleware, checkPermission);
-//Rutas Privadas
-incripcionPeriodoRoutes.get('/', findAll);
-incripcionPeriodoRoutes.get('/:id', findOne);
-incripcionPeriodoRoutes.get('/user/:userId', findByUserId);
-incripcionPeriodoRoutes.post('/', add);
-incripcionPeriodoRoutes.put('/:id', update);
-incripcionPeriodoRoutes.patch('/:id', update);
-incripcionPeriodoRoutes.delete('/:id', remove);
+export const inscripPeriodoRoutes = Router();
+const controller = new InscripcionPeriodoController();
+
+// Middlewares globales
+inscripPeriodoRoutes.use(authMiddleware, checkPermission);
+
+// Rutas CRUD
+inscripPeriodoRoutes.get('/', controller.findAll.bind(controller));
+inscripPeriodoRoutes.get('/:id', controller.findOne.bind(controller));
+inscripPeriodoRoutes.get('/user/:userId', findByUserId);
+inscripPeriodoRoutes.post(
+  '/',
+  validateSchema(inscripPeriodoSchema),
+  controller.add.bind(controller),
+);
+inscripPeriodoRoutes.put(
+  '/:id',
+  validateSchema(inscripPeriodoSchema),
+  controller.update.bind(controller),
+);
+inscripPeriodoRoutes.patch(
+  '/:id',
+  validateSchema(inscripPeriodoUpdateSchema),
+  controller.update.bind(controller),
+);
+inscripPeriodoRoutes.delete('/:id', controller.remove.bind(controller));

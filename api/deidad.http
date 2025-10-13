@@ -3,10 +3,13 @@ GET http://localhost:3000/api/deidades
 
 ### Obtener por ID
 GET http://localhost:3000/api/deidades/1
+Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 ### Crear deidad 1
 POST http://localhost:3000/api/deidades
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "nombre": "Zeus",
@@ -18,6 +21,7 @@ Content-Type: application/json
 ### Crear deidad 2
 POST http://localhost:3000/api/deidades
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "nombre": "Athena",
@@ -29,6 +33,7 @@ Content-Type: application/json
 ### Crear deidad 3
 POST http://localhost:3000/api/deidades
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "nombre": "Hades",
@@ -40,6 +45,7 @@ Content-Type: application/json
 ### Crear deidad 4
 POST http://localhost:3000/api/deidades
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "nombre": "Poseidón",

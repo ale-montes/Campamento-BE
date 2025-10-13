@@ -14,13 +14,13 @@ import { cabaniaRoutes } from '../cabanas/cabania.routes.js';
 import { hospedaRoutes } from '../cabanas/hospeda.routes.js';
 import { authRoutes } from '../auth/auth.routes.js';
 import { periodoRoutes } from '../periodo/periodo.routes.js';
-import { incripcionPeriodoRoutes } from '../periodo/inscripcion-periodo.routes.js';
+import { inscripPeriodoRoutes } from '../periodo/inscripcion-periodo.routes.js';
 
 const router = Router();
 
 router.use('/auth', authRoutes);
 router.use('/periodo', periodoRoutes);
-router.use('/inscripcion-periodo', incripcionPeriodoRoutes);
+router.use('/inscripcion-periodo', inscripPeriodoRoutes);
 router.use('/admin', adminRoutes);
 router.use('/campista', campistaRoutes);
 router.use('/instructor', instructorRoutes);
