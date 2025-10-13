@@ -1,4 +1,4 @@
-import { MikroORM } from '@mikro-orm/core';
+import { MikroORM, RequestContext } from '@mikro-orm/core';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { MySqlDriver } from '@mikro-orm/mysql';
 
@@ -25,3 +25,7 @@ export const syncSchema = async () => {
 
   await generator.updateSchema();
 };
+
+export function getEm() {
+  return RequestContext.getEntityManager()!;
+}

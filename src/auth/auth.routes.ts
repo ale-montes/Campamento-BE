@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { login, register, resendVerification, verifyEmail, whoami } from './auth.controller.js';
+import { AuthController } from './auth.controller.js';
 import { authMiddleware } from '../shared/middleware/auth.middleware.js';
 import { campistaSchema, campistaUpdateSchema } from '../usuarios/campista.schema.js';
 import {
@@ -9,15 +9,9 @@ import {
 import { instructorUpdateSchema } from '../usuarios/instructor.schema.js';
 import { adminUpdateSchema } from '../usuarios/admin.schema.js';
 
+const authController = new AuthController();
 export const authRoutes = Router();
-//Rutas Publicas
-authRoutes.post('/register', register);
-authRoutes.get('/verify-email/:token', verifyEmail);
-authRoutes.put('/resend-verification', resendVerification);
-authRoutes.post('/login', login);
 
-//Rutas Privadas
-authRoutes.get('/me', authMiddleware, whoami);
 authRoutes.post(
   '/register',
   validateSchema(campistaSchema),
