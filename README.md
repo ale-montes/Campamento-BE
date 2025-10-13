@@ -7,7 +7,7 @@ Este proyecto es una API REST desarrollada en **Express + TypeScript**, que gest
 - [Node.js](https://nodejs.org/)
 - [Express.js](https://expressjs.com/)
 - [TypeScript](https://www.typescriptlang.org/)
-- [MikroORM](https://mikro-orm.io/) - ORM para PostgreSQL
+- [MikroORM](https://mikro-orm.io/) - ORM
 - [Zod](https://zod.dev/) - Validación de esquemas
 - [ESLint + Prettier](https://eslint.org/) - Estilo de código
 - [pnpm](https://pnpm.io/) - Gestor de paquetes rápido
