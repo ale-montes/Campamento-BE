@@ -16,10 +16,7 @@ export class UsuariosService {
   private instructorService = new InstructorService();
   private adminService = new AdminService();
 
-  async findByEmail(
-    email: string,
-    em: EntityManager,
-  ): Promise<{ user: UserEntity; role: string } | null> {
+  async findByEmail(email: string, em: EntityManager): Promise<{ user: UserEntity; role: string } | null> {
     const campista = await this.campistaService.findByEmail(email, em);
     if (campista) return { user: campista, role: 'campista' };
 
@@ -31,11 +28,7 @@ export class UsuariosService {
 
     return null;
   }
-  async findByIdAndRole(
-    id: number,
-    role: string,
-    em: EntityManager,
-  ): Promise<UserEntityOmitPass | null> {
+  async findByIdAndRole(id: number, role: string, em: EntityManager): Promise<UserEntityOmitPass | null> {
     switch (role) {
       case 'campista':
         return await this.campistaService.findOne(id, em);

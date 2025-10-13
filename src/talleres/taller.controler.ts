@@ -8,7 +8,7 @@ export class TallerController {
 
   async findAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const talleres = await this.service.findAll(getEm());
+      const talleres = await this.service.findAll(req.user!, getEm());
       res.status(200).json({ message: 'found all talleres', data: talleres });
     } catch (error) {
       next(error);

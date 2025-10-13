@@ -24,7 +24,6 @@ Content-Type: application/json
 Cookie: token={{tokencampista}}
 
 {
-  "campista": 14,
   "taller": 2,
   "fechaInscripcion": "2025-09-01T10:00:00Z",
   "estado": "aceptado"
@@ -36,8 +35,5 @@ Content-Type: application/json
 Cookie: token={{tokencampista}}
 
 {
-  "campista": 2,
-  "taller": 1,
-  "fechaInscripcion": "2025-09-02T10:00:00Z",
-  "estado": "pendiente"
+  "taller": 7
 }

@@ -1,11 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
-export const jsonErrorHandler: ErrorRequestHandler = (
-  err,
-  _req: Request,
-  res: Response,
-  _next: NextFunction,
-): void => {
+export const jsonErrorHandler: ErrorRequestHandler = (err, _req: Request, res: Response, _next: NextFunction): void => {
   if (err instanceof SyntaxError && 'body' in err) {
     console.error('[JSON Error]', err.message);
     res.status(400).json({ message: 'JSON inválido' });

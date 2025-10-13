@@ -1,9 +1,6 @@
 import nodemailer from 'nodemailer';
 
-export const sendVerificationEmail = async (
-  destino: string,
-  verificationUrl: string,
-): Promise<boolean> => {
+export const sendVerificationEmail = async (destino: string, verificationUrl: string): Promise<boolean> => {
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
     port: parseInt(process.env.SMTP_PORT || '587', 10),

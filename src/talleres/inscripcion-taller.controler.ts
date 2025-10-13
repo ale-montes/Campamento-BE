@@ -4,9 +4,7 @@ import { getEm } from '../shared/db/orm.js';
 import { validateId } from '../shared/validateParam.js';
 
 export class InscripcionTallerController {
-  constructor(
-    private readonly service: InscripcionTallerService = new InscripcionTallerService(),
-  ) {}
+  constructor(private readonly service: InscripcionTallerService = new InscripcionTallerService()) {}
 
   async findAll(req: Request, res: Response, next: NextFunction) {
     try {
@@ -29,7 +27,7 @@ export class InscripcionTallerController {
 
   async add(req: Request, res: Response, next: NextFunction) {
     try {
-      const inscripcion = await this.service.add(req.body.sanitizedInput, getEm());
+      const inscripcion = await this.service.add(req.body.sanitizedInput, req.user!, getEm());
       res.status(201).json({ message: 'inscripcion created', data: inscripcion });
     } catch (error) {
       next(error);

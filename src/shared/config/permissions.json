@@ -8,7 +8,7 @@
 "misiones":{"GET":["instructor","campista"],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},
 "asigna-mision":{"GET":["instructor","campista"],"POST":["instructor"],"PUT":[],"PATCH":["instructor"],"DELETE":[]},
 "periodo":{"GET":["instructor","campista"],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},
-"inscripcion-periodo":{"GET":["campista","instructor"],"POST":["campista"],"PUT":[],"PATCH":[],"DELETE":[]},
+"inscripcion-periodo":{"GET":["campista"],"POST":["campista"],"PUT":[],"PATCH":[],"DELETE":[]},
 "admin":{"GET":[],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},
 "instructor":{"GET":[],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},
 "campista":{"GET":[],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]}

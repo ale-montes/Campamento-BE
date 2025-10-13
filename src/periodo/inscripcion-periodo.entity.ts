@@ -1,4 +1,3 @@
-// asigna-mision.entity.ts
 import { Entity, Property, ManyToOne, Rel } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Campista } from '../usuarios/campista.entity.js';

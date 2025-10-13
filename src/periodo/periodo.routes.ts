@@ -12,13 +12,9 @@ export const periodoRoutes = Router();
 periodoRoutes.use(authMiddleware, checkPermission);
 
 periodoRoutes.get('/', controller.findAll.bind(controller));
-periodoRoutes.get('/vigente', controller.getVigente.bind(controller));
+periodoRoutes.get('/current', controller.getVigente.bind(controller));
 periodoRoutes.get('/:id', controller.findOne.bind(controller));
 periodoRoutes.post('/', validateSchema(periodoSchema), controller.add.bind(controller));
 periodoRoutes.put('/:id', validateSchema(periodoSchema), controller.update.bind(controller));
-periodoRoutes.patch(
-  '/:id',
-  validateSchema(periodoUpdateSchema),
-  controller.update.bind(controller),
-);
+periodoRoutes.patch('/:id', validateSchema(periodoUpdateSchema), controller.update.bind(controller));
 periodoRoutes.delete('/:id', controller.remove.bind(controller));

@@ -12,11 +12,9 @@ export const instructorSchema = z.object({
   isVerified: z.boolean().optional().default(false),
 });
 
-export const instructorUpdateSchema = instructorSchema
-  .partial()
-  .refine((data) => Object.keys(data).length > 0, {
-    message: 'Debes enviar al menos un campo para actualizar',
-  });
+export const instructorUpdateSchema = instructorSchema.partial().refine((data) => Object.keys(data).length > 0, {
+  message: 'Debes enviar al menos un campo para actualizar',
+});
 
 export type InstructorInput = z.infer<typeof instructorSchema>;
 export type InstructorUdateInput = z.infer<typeof instructorUpdateSchema>;

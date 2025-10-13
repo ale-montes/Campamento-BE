@@ -93,11 +93,9 @@ export const campistaSchema = z.object({
 });
 
 // Esquema para actualizaciones parciales (validación de al menos un campo)
-export const campistaUpdateSchema = campistaSchema
-  .partial()
-  .refine((data) => Object.keys(data).length > 0, {
-    message: 'Debes enviar al menos un campo para actualizar',
-  });
+export const campistaUpdateSchema = campistaSchema.partial().refine((data) => Object.keys(data).length > 0, {
+  message: 'Debes enviar al menos un campo para actualizar',
+});
 
 // Tipos inferidos para uso posterior
 export type CampistaInput = z.infer<typeof campistaSchema>;

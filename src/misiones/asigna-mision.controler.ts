@@ -22,11 +22,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const asignaMision = await em.findOneOrFail(
-      AsignaMision,
-      { id },
-      { populate: ['campista', 'mision'] },
-    );
+    const asignaMision = await em.findOneOrFail(AsignaMision, { id }, { populate: ['campista', 'mision'] });
     res.status(200).json({ message: 'found asignaMision', data: asignaMision });
   } catch (error: unknown) {
     if (error instanceof Error) {

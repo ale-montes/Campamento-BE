@@ -18,11 +18,9 @@ export const adminSchema = z.object({
   telefonoEmergencia: z.string().min(6).max(15).optional(),
 });
 
-export const adminUpdateSchema = adminSchema
-  .partial()
-  .refine((data) => Object.keys(data).length > 0, {
-    message: 'Debes enviar al menos un campo para actualizar',
-  });
+export const adminUpdateSchema = adminSchema.partial().refine((data) => Object.keys(data).length > 0, {
+  message: 'Debes enviar al menos un campo para actualizar',
+});
 
 export type AdminInput = z.infer<typeof adminSchema>;
 export type AdminUpdateInput = z.infer<typeof adminUpdateSchema>;

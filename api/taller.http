@@ -4,9 +4,9 @@ Content-Type: application/json
 Cookie: token={{tokencampista}}
 
 ### GET by ID
-GET http://localhost:3000/api/talleres/2
+GET http://localhost:3000/api/talleres/7
 Content-Type: application/json
-Cookie: token={{tokenadmin}}
+Cookie: token={{tokencampista}}
 
 ### Create Taller
 POST http://localhost:3000/api/talleres

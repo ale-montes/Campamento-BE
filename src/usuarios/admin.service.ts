@@ -42,11 +42,7 @@ export class AdminService {
     return sanitized;
   }
 
-  async update(
-    id: number,
-    data: Partial<Admin>,
-    em: EntityManager,
-  ): Promise<Omit<Admin, 'contrasena'>> {
+  async update(id: number, data: Partial<Admin>, em: EntityManager): Promise<Omit<Admin, 'contrasena'>> {
     validateId(id);
     const updated = await em.transactional(async (tEm) => {
       const admin = await tEm.findOne(Admin, { id }, { lockMode: LockMode.PESSIMISTIC_WRITE });

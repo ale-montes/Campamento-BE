@@ -4,9 +4,7 @@ import { getEm } from '../shared/db/orm.js';
 import { validateId } from '../shared/validateParam.js';
 
 export class InscripcionPeriodoController {
-  constructor(
-    private readonly service: InscripcionPeriodoService = new InscripcionPeriodoService(),
-  ) {}
+  constructor(private readonly service: InscripcionPeriodoService = new InscripcionPeriodoService()) {}
 
   async findAll(req: Request, res: Response, next: NextFunction) {
     try {

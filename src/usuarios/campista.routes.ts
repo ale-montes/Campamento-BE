@@ -15,9 +15,5 @@ campistaRoutes.get('/', controller.findAll.bind(controller));
 campistaRoutes.get('/:id', controller.findOne.bind(controller));
 campistaRoutes.post('/', validateSchema(campistaSchema), controller.add.bind(controller));
 campistaRoutes.put('/:id', validateSchema(campistaSchema), controller.update.bind(controller));
-campistaRoutes.patch(
-  '/:id',
-  validateSchema(campistaUpdateSchema),
-  controller.update.bind(controller),
-);
+campistaRoutes.patch('/:id', validateSchema(campistaUpdateSchema), controller.update.bind(controller));
 campistaRoutes.delete('/:id', controller.remove.bind(controller));

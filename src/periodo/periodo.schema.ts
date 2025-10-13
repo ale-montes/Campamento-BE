@@ -20,8 +20,6 @@ export const periodoSchema = z.object({
 
 export type PeriodoInput = z.infer<typeof periodoSchema>;
 
-export const periodoUpdateSchema = periodoSchema
-  .partial()
-  .refine((data) => Object.keys(data).length > 0, {
-    message: 'Debes enviar al menos un campo para actualizar',
-  });
+export const periodoUpdateSchema = periodoSchema.partial().refine((data) => Object.keys(data).length > 0, {
+  message: 'Debes enviar al menos un campo para actualizar',
+});

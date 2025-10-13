@@ -14,19 +14,7 @@ inscripPeriodoRoutes.use(authMiddleware, checkPermission);
 // Rutas CRUD
 inscripPeriodoRoutes.get('/', controller.findAll.bind(controller));
 inscripPeriodoRoutes.get('/:id', controller.findOne.bind(controller));
-inscripPeriodoRoutes.post(
-  '/',
-  validateSchema(inscripPeriodoSchema),
-  controller.add.bind(controller),
-);
-inscripPeriodoRoutes.put(
-  '/:id',
-  validateSchema(inscripPeriodoSchema),
-  controller.update.bind(controller),
-);
-inscripPeriodoRoutes.patch(
-  '/:id',
-  validateSchema(inscripPeriodoUpdateSchema),
-  controller.update.bind(controller),
-);
+inscripPeriodoRoutes.post('/', validateSchema(inscripPeriodoSchema), controller.add.bind(controller));
+inscripPeriodoRoutes.put('/:id', validateSchema(inscripPeriodoSchema), controller.update.bind(controller));
+inscripPeriodoRoutes.patch('/:id', validateSchema(inscripPeriodoUpdateSchema), controller.update.bind(controller));
 inscripPeriodoRoutes.delete('/:id', controller.remove.bind(controller));
