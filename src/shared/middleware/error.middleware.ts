@@ -4,7 +4,7 @@ import { HttpError, InternalServerError } from '../errors/http-error.js';
 export function errorMiddleware(err: unknown, req: Request, res: Response, _next: NextFunction): void {
   // Errores esperados (instancias de HttpError)
   if (err instanceof HttpError) {
-    logError(err, req); // logging estructurado opcional
+    logError(err, req);
     res.status(err.statusCode).json({
       success: false,
       error: {

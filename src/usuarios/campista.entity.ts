@@ -33,6 +33,3 @@ export class Campista extends Usuario {
   })
   hospedajes = new Collection<Hospeda>(this);
 }
-
-// @OneToOne(() => Usuario, { owner: true, deleteRule: 'CASCADE' })
-// usuario!: Usuario;

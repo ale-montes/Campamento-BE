@@ -27,7 +27,7 @@ export class CampistaController {
 
   async add(req: Request, res: Response, next: NextFunction) {
     try {
-      const campista = await this.service.add(req.body.sanitizedInput, getEm());
+      const campista = await this.service.add(req.user!.role, req.body.sanitizedInput, getEm());
       res.status(201).json({ message: 'campista creado', data: campista });
     } catch (error) {
       next(error);

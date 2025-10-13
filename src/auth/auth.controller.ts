@@ -84,7 +84,6 @@ export class AuthController {
     }
   }
 
-  // PUT /profile
   async updateProfile(req: Request, res: Response, next: NextFunction) {
     try {
       const em = getEm();

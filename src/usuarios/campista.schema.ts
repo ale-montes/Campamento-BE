@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const grupoSanguineoEnum = z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']);
 
 // Regex para validación de teléfonos (con prefijo + opcional)
-const telefonoRegex = /^[+]?[0-9]$/;
+const telefonoRegex = /^\+?[0-9]{7,15}$/;
 
 // Esquema principal del campista
 export const campistaSchema = z.object({
@@ -70,7 +70,7 @@ export const campistaSchema = z.object({
     .string()
     .min(2)
     .max(100)
-    .regex(/^[a-zA-ZÀ-ÿ\s'-]+$/, {
+    .regex(/^[a-zA-ZÀ-ÿ\s'-,]+$/, {
       message: 'El nombre solo puede contener letras, espacios, guiones y apóstrofes',
     })
     .optional(),
@@ -90,6 +90,8 @@ export const campistaSchema = z.object({
     .max(15, 'El teléfono de emergencia debe tener un máximo de 20 caracteres')
     .optional(),
   activo: z.boolean().optional().default(true),
+  isVerified: z.boolean().optional(),
+  verificationToken: z.string().optional(),
 });
 
 // Esquema para actualizaciones parciales (validación de al menos un campo)

@@ -3,7 +3,6 @@ import { Admin } from './admin.entity.js';
 import { AdminInput } from './admin.schema.js';
 import { NotFoundError } from '../shared/errors/http-error.js';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
 import { validateId } from '../shared/validateParam.js';
 
 export class AdminService {
@@ -30,12 +29,10 @@ export class AdminService {
 
   async add(data: AdminInput, em: EntityManager): Promise<Omit<Admin, 'contrasena'>> {
     const hashedPassword = await bcrypt.hash(data.contrasena, 10);
-    const token = crypto.randomUUID();
     const admin = em.create(Admin, {
       ...data,
       contrasena: hashedPassword,
-      isVerified: false,
-      verificationToken: token,
+      isVerified: true,
     });
     await em.persistAndFlush(admin);
     const { contrasena: _omit, ...sanitized } = admin;

@@ -3,7 +3,6 @@ import { Instructor } from './instructor.entity.js';
 import { InstructorInput } from './instructor.schema.js';
 import { NotFoundError } from '../shared/errors/http-error.js';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
 import { validateId } from '../shared/validateParam.js';
 
 export class InstructorService {
@@ -30,12 +29,10 @@ export class InstructorService {
 
   async add(data: InstructorInput, em: EntityManager): Promise<Omit<Instructor, 'contrasena'>> {
     const hashedPassword = await bcrypt.hash(data.contrasena, 10);
-    const token = crypto.randomUUID();
     const instructor = em.create(Instructor, {
       ...data,
       contrasena: hashedPassword,
-      isVerified: false,
-      verificationToken: token,
+      isVerified: true,
     });
     await em.persistAndFlush(instructor);
     const { contrasena: _omit, ...sanitized } = instructor;

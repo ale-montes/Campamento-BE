@@ -3,13 +3,12 @@
 ### Create Campista 2
 POST http://localhost:3000/api/auth/register
 Content-Type: application/json
-Cookie: token={{tokenadmin}}
 
 {
   "nombre": "Alejandro",
   "apellido": "Gómez",
-  "email": "gomez@gmail.com",
-  "telefono": "+543987654321",
+  "email": "gomez3@gmail.com",
+  "telefono": "+54398765432",
   "contrasena": "123456"
 }
 

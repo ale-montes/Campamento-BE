@@ -15,6 +15,3 @@ export class Instructor extends Usuario {
   })
   talleresDictados = new Collection<Taller>(this);
 }
-
-// @OneToOne(() => Usuario, { owner: true, deleteRule: 'CASCADE' })
-// usuario!: Usuario;
