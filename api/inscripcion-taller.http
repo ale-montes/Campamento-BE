@@ -35,5 +35,5 @@ Content-Type: application/json
 Cookie: token={{tokencampista}}
 
 {
-  "taller": 7
+  "taller": 6
 }

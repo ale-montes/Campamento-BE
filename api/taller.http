@@ -1,12 +1,12 @@
 ### GET all talleres
 GET http://localhost:3000/api/talleres
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 ### GET by ID
 GET http://localhost:3000/api/talleres/7
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 ### Create Taller
 POST http://localhost:3000/api/talleres

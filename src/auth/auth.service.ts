@@ -11,7 +11,7 @@ export class AuthService {
   private usuarioService = new UsuariosService();
 
   async register(data: CampistaInput, em: EntityManager) {
-    const campista = await this.campistaService.add(data, em);
+    const campista = await this.campistaService.add('campista', data, em);
     const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email?token=${campista.verificationToken}`;
     await sendVerificationEmail(campista.email, verificationUrl);
     return campista;
