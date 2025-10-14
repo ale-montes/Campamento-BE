@@ -6,6 +6,7 @@ import { UserPayload } from '../../types/user.js';
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   try {
     //Obtener el token desde cookie o header
+    const JWT_SECRET = (process.env.JWT_SECRET as string) || 'supersecret';
     const authHeader = req.headers.authorization;
     const token =
       req.cookies?.token || (authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined);
@@ -15,7 +16,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     }
 
     //Verificar token JWT
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload & UserPayload;
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload & UserPayload;
 
     //Asignar el usuario decodificado a la request
     req.user = {
