@@ -24,7 +24,8 @@ export class InscripcionTallerService {
       );
       return inscripciones;
     }
-    return await em.find(InscripcionTaller, {}, { populate: ['taller'] });
+    const inscripciones = await em.find(InscripcionTaller, {}, { populate: ['taller', 'campista'] });
+    return inscripciones;
   }
 
   async findOne(inscripTallerId: number, user: UserPayload, em: EntityManager): Promise<InscripcionTaller> {
