@@ -1,27 +1,62 @@
 import { EntityManager, LockMode } from '@mikro-orm/core';
 import { InscripcionPeriodo } from './inscripcion-periodo.entity.js';
-import { Periodo } from '../periodo/periodo.entity.js';
 import { NotFoundError, BadRequestError } from '../shared/errors/http-error.js';
 import { validateId } from '../shared/validateParam.js';
 import { InscripcionPeriodoInput } from './inscripcion-periodo.schema.js';
+import { UserPayload } from '../types/user.js';
+import { PeriodoService } from './periodo.service.js';
 
 export class InscripcionPeriodoService {
-  async findAll(em: EntityManager): Promise<InscripcionPeriodo[]> {
-    return await em.find(InscripcionPeriodo, {}, { populate: ['periodo', 'campista'] });
+  private periodoService = new PeriodoService();
+  private cachedInscripciones = new Map<number, InscripcionPeriodo>();
+  async findAll(user: UserPayload, em: EntityManager): Promise<InscripcionPeriodo[]> {
+    if (user.role === 'campista') {
+      const inscripciones = await em.find(
+        InscripcionPeriodo,
+        {
+          campista: user.id,
+        },
+        { populate: ['periodo'] },
+      );
+      return inscripciones;
+    }
+    return await em.find(InscripcionPeriodo, {}, { populate: ['periodo'] });
   }
 
-  async findOne(id: number, em: EntityManager): Promise<InscripcionPeriodo> {
-    validateId(id);
-    const inscripcion = await em.findOne(InscripcionPeriodo, { id }, { populate: ['periodo', 'campista'] });
+  async findOne(user: UserPayload, id: number, em: EntityManager): Promise<InscripcionPeriodo> {
+    const idInscripcion = validateId(id);
+    if (user.role === 'campista') {
+      const inscripcion = await em.findOne(
+        InscripcionPeriodo,
+        {
+          id: idInscripcion,
+          campista: user.id,
+        },
+        { populate: ['periodo'] },
+      );
+      if (!inscripcion) throw new NotFoundError('Inscripción');
+      return inscripcion;
+    }
+    const inscripcion = await em.findOne(InscripcionPeriodo, { id }, { populate: ['periodo'] });
     if (!inscripcion) throw new NotFoundError('Inscripción de periodo');
     return inscripcion;
   }
 
-  async add(inscripcionData: InscripcionPeriodoInput, em: EntityManager): Promise<InscripcionPeriodo> {
-    const periodo = await em.findOne(Periodo, { id: inscripcionData.periodo });
+  async add(
+    user: UserPayload,
+    inscripcionData: InscripcionPeriodoInput,
+    em: EntityManager,
+  ): Promise<InscripcionPeriodo> {
+    const idPeriodo = validateId(inscripcionData.periodo);
+    const periodo = await this.periodoService.findOne(idPeriodo, em);
     if (!periodo) throw new NotFoundError('Periodo');
-    if (periodo.estado !== 'abierto') {
-      throw new BadRequestError('El periodo no está abierto para inscripciones.');
+    if (user.role === 'campista') {
+      if (periodo.estado !== 'abierto') {
+        throw new BadRequestError('El periodo no está abierto para inscripciones.');
+      }
+      inscripcionData.campista = user.id;
+      inscripcionData.periodo = idPeriodo;
+      inscripcionData.estado = 'PAGADO';
     }
 
     const inscripcion = em.create(InscripcionPeriodo, inscripcionData);
@@ -44,5 +79,37 @@ export class InscripcionPeriodoService {
     const inscripcion = await em.findOne(InscripcionPeriodo, { id });
     if (!inscripcion) throw new NotFoundError('Inscripción de periodo');
     await em.removeAndFlush(inscripcion);
+  }
+
+  async getInscripcionVigente(campistaId: number, em: EntityManager): Promise<InscripcionPeriodo> {
+    const periodo = await this.periodoService.getVigente(em);
+
+    // Si existe cache
+    const cached = this.cachedInscripciones.get(campistaId);
+    if (cached && cached.periodo.id === periodo.id) {
+      return cached;
+    }
+
+    // Consulta a BBDD
+    const inscripcion = await em.findOne(
+      InscripcionPeriodo,
+      {
+        campista: campistaId,
+        periodo: periodo.id,
+      },
+      { populate: ['campista', 'periodo'] },
+    );
+
+    if (!inscripcion) {
+      throw new NotFoundError('El campista no está inscripto al período vigente');
+    }
+
+    // Cachear
+    this.cachedInscripciones.set(campistaId, inscripcion);
+    return inscripcion;
+  }
+
+  invalidateCache(campistaId: number): void {
+    this.cachedInscripciones.delete(campistaId);
   }
 }

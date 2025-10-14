@@ -8,7 +8,7 @@ export class InscripcionPeriodoController {
 
   async findAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const inscripciones = await this.service.findAll(getEm());
+      const inscripciones = await this.service.findAll(req.user!, getEm());
       res.status(200).json({ message: 'found inscripciones', data: inscripciones });
     } catch (error) {
       next(error);
@@ -18,7 +18,7 @@ export class InscripcionPeriodoController {
   async findOne(req: Request, res: Response, next: NextFunction) {
     try {
       const id = validateId(req.params.id);
-      const inscripcion = await this.service.findOne(id, getEm());
+      const inscripcion = await this.service.findOne(req.user!, id, getEm());
       res.status(200).json({ message: 'found inscripcion', data: inscripcion });
     } catch (error) {
       next(error);
@@ -27,7 +27,7 @@ export class InscripcionPeriodoController {
 
   async add(req: Request, res: Response, next: NextFunction) {
     try {
-      const inscripcion = await this.service.add(req.body.sanitizedInput, getEm());
+      const inscripcion = await this.service.add(req.user!, req.body.sanitizedInput, getEm());
       res.status(201).json({ message: 'inscripcion created', data: inscripcion });
     } catch (error) {
       next(error);
