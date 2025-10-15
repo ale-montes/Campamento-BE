@@ -14,8 +14,8 @@ export class Hospeda extends BaseEntity {
   @ManyToOne(() => Campista, { nullable: false })
   campista!: Rel<Campista>;
 
-  @Property({ nullable: false })
-  fechaInicio!: Date;
+  @Property({ nullable: true })
+  fechaInicio?: Date;
 
   @Property({ nullable: true })
   fechaFin?: Date;
