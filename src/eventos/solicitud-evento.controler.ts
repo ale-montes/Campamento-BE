@@ -6,7 +6,7 @@ const em = orm.em;
 
 async function findAll(req: Request, res: Response) {
   try {
-    const solicitudes = await em.find(SolicitudEvento, {}, { populate: ['campista', 'evento'] });
+    const solicitudes = await em.find(SolicitudEvento, {}, { populate: ['evento'] });
     res.status(200).json({ message: 'found all talleres', data: solicitudes });
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -22,7 +22,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const solicitud = await em.findOneOrFail(SolicitudEvento, { id }, { populate: ['campista', 'evento'] });
+    const solicitud = await em.findOneOrFail(SolicitudEvento, { id }, { populate: ['evento'] });
     res.status(200).json({ message: 'found solicitud', data: solicitud });
   } catch (error: unknown) {
     if (error instanceof Error) {

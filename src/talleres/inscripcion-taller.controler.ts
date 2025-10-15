@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { InscripcionTallerService } from './inscripcion-taller.service.js';
 import { getEm } from '../shared/db/orm.js';
 import { validateId } from '../shared/validateParam.js';
-import { ListaInscripcionesResponseSchema } from './inscripcion-taller.schema.js';
 
 export class InscripcionTallerController {
   constructor(private readonly service: InscripcionTallerService = new InscripcionTallerService()) {}
@@ -10,8 +9,7 @@ export class InscripcionTallerController {
   async findAll(req: Request, res: Response, next: NextFunction) {
     try {
       const inscripciones = await this.service.findAll(req.user!, getEm());
-      const salidaSat = ListaInscripcionesResponseSchema.parse(inscripciones);
-      res.status(200).json({ message: 'found inscripciones', data: salidaSat });
+      res.status(200).json({ message: 'found inscripciones', data: inscripciones });
     } catch (error) {
       next(error);
     }
@@ -29,7 +27,7 @@ export class InscripcionTallerController {
 
   async add(req: Request, res: Response, next: NextFunction) {
     try {
-      const inscripcion = await this.service.add(req.body.sanitizedInput, req.user!, getEm());
+      const inscripcion = await this.service.add(req.body!.sanitizedInput, req.user!, getEm());
       res.status(201).json({ message: 'inscripcion created', data: inscripcion });
     } catch (error) {
       next(error);

@@ -1,18 +1,69 @@
 import { Router } from 'express';
-import { findAll, findOne, add, update, remove } from './cabania.controler.js';
-import { validateSchema } from '../shared/middleware/validation.middleware.js';
-import { cabanaSchema, cabanaUpdateSchema } from './cabanas.schema.js';
+import { CabaniaController } from './cabania.controler.js';
 import { authMiddleware } from '../shared/middleware/auth.middleware.js';
+import {
+  cabaniaInputSchemaAdmin,
+  cabaniaInputSchemaCampista,
+  cabaniaOutputSchemaAdmin,
+  cabaniaOutputSchemaCampista,
+  cabaniaInputSchemaInstructor,
+  cabaniaInputUpdateSchemaInstructor,
+  cabaniaInputUpdateSchemaAdmin,
+  cabaniaInputUpdateSchemaCampista,
+  cabaniaOutputSchemaInstructor,
+} from './cabania.schema.js';
 import { checkPermission } from '../shared/middleware/permission.middleware.js';
-
+import { validateResponseByRole, validateRequestByRole } from '../shared/middleware/validateByRole.middleware.js';
 export const cabaniaRoutes = Router();
-//Rutas Publicas
+const cabaniaController = new CabaniaController();
 
+// Todas las rutas requieren autenticación y permisos
 cabaniaRoutes.use(authMiddleware, checkPermission);
-//Rutas Privadas
-cabaniaRoutes.get('/', findAll);
-cabaniaRoutes.get('/:id', findOne);
-cabaniaRoutes.post('/', validateSchema(cabanaSchema), add);
-cabaniaRoutes.put('/:id', validateSchema(cabanaUpdateSchema), update);
-cabaniaRoutes.patch('/:id', validateSchema(cabanaUpdateSchema), update);
-cabaniaRoutes.delete('/:id', remove);
+
+// Rutas privadas
+cabaniaRoutes.get(
+  '/',
+  validateResponseByRole({
+    admin: cabaniaOutputSchemaAdmin,
+    campista: cabaniaOutputSchemaCampista,
+    instructor: cabaniaOutputSchemaInstructor,
+  }),
+  cabaniaController.findAll.bind(cabaniaController),
+);
+cabaniaRoutes.get(
+  '/:id',
+  validateResponseByRole({
+    admin: cabaniaOutputSchemaAdmin,
+    campista: cabaniaOutputSchemaCampista,
+    instructor: cabaniaOutputSchemaInstructor,
+  }),
+  cabaniaController.findOne.bind(cabaniaController),
+);
+cabaniaRoutes.post(
+  '/',
+  validateRequestByRole({
+    admin: cabaniaInputSchemaAdmin,
+    campista: cabaniaInputSchemaCampista,
+    instructor: cabaniaInputSchemaInstructor,
+  }),
+  cabaniaController.add.bind(cabaniaController),
+);
+cabaniaRoutes.put(
+  '/:id',
+  validateRequestByRole({
+    admin: cabaniaInputUpdateSchemaAdmin,
+    campista: cabaniaInputUpdateSchemaCampista,
+    instructor: cabaniaInputUpdateSchemaInstructor,
+  }),
+  cabaniaController.update.bind(cabaniaController),
+);
+cabaniaRoutes.patch(
+  '/:id',
+  validateRequestByRole({
+    admin: cabaniaInputUpdateSchemaAdmin,
+    campista: cabaniaInputUpdateSchemaCampista,
+    instructor: cabaniaInputUpdateSchemaInstructor,
+  }),
+  cabaniaController.update.bind(cabaniaController),
+);
+cabaniaRoutes.delete('/:id', cabaniaController.remove.bind(cabaniaController));
