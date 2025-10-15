@@ -1,63 +1,128 @@
 import { z } from 'zod';
 
-// INPUT SCHEMAS
+/* -------------------------- INPUT SCHEMAS -------------------------- */
 
-export const inscripTallerSchema = z.object({
+// Input Admin
+export const inscripcionTallerInputSchemaAdmin = z.object({
+  campista: z.number().int().positive(), // id de campista
+  taller: z.number().int().positive(), // id de taller
+  estado: z.enum(['aceptado', 'rechazado', 'pendiente']).default('pendiente'),
+  nota: z.number().min(0).max(10).optional(),
+  comentario: z.string().max(500).optional(),
+});
+
+// Input Campista (puede inscribirse a un taller)
+export const inscripcionTallerInputSchemaCampista = z.object({
   taller: z.number().int().positive(),
-  campista: z.number().int().positive().optional(),
-  estado: z.enum(['aceptado', 'rechazado', 'pendiente']).optional().default('aceptado'),
-  nota: z.number().int().min(0).max(100).optional(),
-  comentario: z.string().min(1).max(500).optional(),
 });
 
-export type InscripcionTallerInput = z.infer<typeof inscripTallerSchema>;
-
-export const inscripTallerUpdateSchema = inscripTallerSchema.partial().refine((data) => Object.keys(data).length > 0, {
-  message: 'Debes enviar al menos un campo para actualizar',
+// Input Instructor (puede modificar estado o nota)
+export const inscripcionTallerInputSchemaInstructor = z.object({
+  estado: z.enum(['aceptado', 'rechazado', 'pendiente']).optional(),
+  nota: z.number().min(0).max(10).optional(),
+  comentario: z.string().max(500).optional(),
 });
 
-// OUTPUT SCHEMAS
+/* -------------------------- INPUT UPDATE SCHEMAS -------------------------- */
 
-// Datos públicos del taller
-export const TallerSchema = z
+// Update Admin
+export const inscripcionTallerInputUpdateSchemaAdmin = inscripcionTallerInputSchemaAdmin
+  .partial()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'Debes enviar al menos un campo para actualizar',
+  });
+
+// Update Campista (puede cancelar o editar comentario)
+export const inscripcionTallerInputUpdateSchemaCampista = z
   .object({
-    id: z.number(),
-    titulo: z.string(),
-    descripcion: z.string(),
-    fechaHora: z.date().or(z.string()),
-    lugar: z.string(),
-    estado: z.string(),
+    comentario: z.string().max(500).optional(),
   })
-  .strip(); // elimina propiedades no definidas
+  .partial()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'Debes enviar al menos un campo para actualizar',
+  });
 
-// Datos públicos del campista
-export const CampistaSchema = z
+// Update Instructor
+export const inscripcionTallerInputUpdateSchemaInstructor = inscripcionTallerInputSchemaInstructor
+  .partial()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'Debes enviar al menos un campo para actualizar',
+  });
+
+/* -------------------------- OUTPUT SCHEMAS -------------------------- */
+
+const inscripcionTallerBaseOutput = {
+  id: z.number(),
+  estado: z.enum(['aceptado', 'rechazado', 'pendiente']),
+  nota: z.number().nullable().optional(),
+  comentario: z.string().nullable().optional(),
+};
+
+// Output Admin
+export const inscripcionTallerOutputSchemaAdmin = z
   .object({
-    id: z.number(),
-    nombre: z.string(),
-    apellido: z.string(),
-    email: z.string(),
-    telefono: z.string(),
+    ...inscripcionTallerBaseOutput,
+    createdAt: z.string().or(z.date()),
+    updatedAt: z.string().or(z.date()),
+    campista: z.object({
+      id: z.number(),
+      nombre: z.string(),
+      apellido: z.string(),
+      email: z.string().email(),
+    }),
+    taller: z.object({
+      id: z.number(),
+      titulo: z.string(),
+      descripcion: z.string(),
+      fechaHora: z.string().or(z.date()),
+      lugar: z.string(),
+    }),
   })
   .strip();
 
-// Estructura de salida de una inscripción
-export const InscripcionResponseSchema = z
+// Output Campista
+export const inscripcionTallerOutputSchemaCampista = z
   .object({
-    id: z.number(),
-    estado: z.string(),
-    nota: z.number().nullable().optional(),
-    comentario: z.string().nullable().optional(),
-    createdAt: z.date().or(z.string()),
-    updatedAt: z.date().or(z.string()),
-    taller: TallerSchema,
-    campista: CampistaSchema.optional(),
+    ...inscripcionTallerBaseOutput,
+    taller: z.object({
+      id: z.number(),
+      titulo: z.string(),
+      descripcion: z.string(),
+      fechaHora: z.string().or(z.date()),
+      lugar: z.string(),
+      estado: z.enum(['abierto', 'cerrado', 'en progreso', 'cancelado', 'completado']),
+    }),
   })
   .strip();
 
-// Lista de inscripciones
-export const ListaInscripcionesResponseSchema = z.array(InscripcionResponseSchema);
+// Output Instructor
+export const inscripcionTallerOutputSchemaInstructor = z
+  .object({
+    ...inscripcionTallerBaseOutput,
+    campista: z.object({
+      id: z.number(),
+      nombre: z.string(),
+      apellido: z.string(),
+      email: z.string().email(),
+    }),
+    taller: z.object({
+      id: z.number(),
+      titulo: z.string(),
+      fechaHora: z.string().or(z.date()),
+    }),
+  })
+  .strip();
 
-// Tipos derivados para TypeScript
-export type InscripcionResponse = z.infer<typeof InscripcionResponseSchema>;
-export type ListaInscripcionesResponse = z.infer<typeof ListaInscripcionesResponseSchema>;
+/* -------------------------- TYPES -------------------------- */
+
+export type InscripcionTallerInputAdmin = z.infer<typeof inscripcionTallerInputSchemaAdmin>;
+export type InscripcionTallerUpdateInputAdmin = z.infer<typeof inscripcionTallerInputUpdateSchemaAdmin>;
+export type InscripcionTallerOutputAdmin = z.infer<typeof inscripcionTallerOutputSchemaAdmin>;
+
+export type InscripcionTallerInputCampista = z.infer<typeof inscripcionTallerInputSchemaCampista>;
+export type InscripcionTallerUpdateInputCampista = z.infer<typeof inscripcionTallerInputUpdateSchemaCampista>;
+export type InscripcionTallerOutputCampista = z.infer<typeof inscripcionTallerOutputSchemaCampista>;
+
+export type InscripcionTallerInputInstructor = z.infer<typeof inscripcionTallerInputSchemaInstructor>;
+export type InscripcionTallerUpdateInputInstructor = z.infer<typeof inscripcionTallerInputUpdateSchemaInstructor>;
+export type InscripcionTallerOutputInstructor = z.infer<typeof inscripcionTallerOutputSchemaInstructor>;

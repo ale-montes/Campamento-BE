@@ -8,7 +8,7 @@ import { orm, syncSchema } from './shared/db/orm.js';
 import { RequestContext } from '@mikro-orm/core';
 import { jsonErrorHandler } from './shared/jsonErrorHandler.js';
 import { apiLimiter } from './shared/ratelimit.js';
-import routes from './shared/routes.js';
+import routes from './routes.js';
 import { errorMiddleware } from './shared/middleware/error.middleware.js';
 
 dotenv.config();

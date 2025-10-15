@@ -3,15 +3,20 @@ GET http://localhost:3000/api/talleres
 Content-Type: application/json
 Cookie: token={{tokenadmin}}
 
+### GET all talleres
+GET http://localhost:3000/api/talleres
+Content-Type: application/json
+Cookie: token={{tokencampista}}
+
 ### GET by ID
-GET http://localhost:3000/api/talleres/7
+GET http://localhost:3000/api/talleres/1
 Content-Type: application/json
 Cookie: token={{tokenadmin}}
 
 ### Create Taller
 POST http://localhost:3000/api/talleres
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 {
   "titulo": "Taller de Manualidades",
@@ -20,7 +25,8 @@ Cookie: token={{tokencampista}}
   "lugar": "Zona 2: El rincón creativo",
   "instructor": 1,
   "cupo": 15,
-  "duracionMin": 90
+  "duracionMin": 90,
+  "periodo": 2
 }
 
 ### Create Taller 2

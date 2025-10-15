@@ -27,8 +27,8 @@ export class TallerController {
 
   async add(req: Request, res: Response, next: NextFunction) {
     try {
-      const taller = await this.service.add(req.body.sanitizedInput, getEm());
-      res.status(201).json({ message: 'taller created', data: taller });
+      await this.service.add(req.body.sanitizedInput, getEm());
+      res.status(201).json({ message: 'taller created' });
     } catch (error) {
       next(error);
     }

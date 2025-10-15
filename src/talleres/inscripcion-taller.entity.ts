@@ -13,7 +13,7 @@ export class InscripcionTaller extends BaseEntity {
   @ManyToOne(() => Taller, { nullable: false })
   taller!: Rel<Taller>;
 
-  @Property({ nullable: true, default: true })
+  @Property({ nullable: true, default: 'aceptado' })
   estado?: EstadoTaller;
 
   @Property({ nullable: true })
