@@ -1,6 +1,5 @@
 import { EntityManager, LockMode } from '@mikro-orm/core';
 import { Taller } from './taller.entity.js';
-import { TallerInput } from './taller.schema.js';
 import { NotFoundError } from '../shared/errors/http-error.js';
 import { validateId } from '../shared/validateParam.js';
 import { PeriodoService } from '../periodo/periodo.service.js';
@@ -12,20 +11,20 @@ export class TallerService {
   async findAll(user: UserPayload, em: EntityManager): Promise<Taller[]> {
     if (user.role === 'campista') {
       const { id: periodoVigenteId } = await this.periodoService.getVigente(em);
-      const talleres = await em.find(Taller, { periodo: periodoVigenteId }, { populate: ['periodo'] });
+      const talleres = await em.find(Taller, { periodo: periodoVigenteId }, { populate: ['periodo', 'instructor'] });
       return talleres;
     }
-    const talleres = await em.find(Taller, {});
+    const talleres = await em.find(Taller, {}, { populate: ['periodo', 'instructor'] });
     return talleres;
   }
 
   async findOne(id: number, em: EntityManager): Promise<Taller> {
-    const taller = await em.findOne(Taller, { id });
+    const taller = await em.findOne(Taller, { id }, { populate: ['periodo', 'instructor'] });
     if (!taller) throw new NotFoundError('Taller');
     return taller;
   }
 
-  async add(tallerData: TallerInput, em: EntityManager): Promise<Taller> {
+  async add(tallerData: Taller, em: EntityManager): Promise<Taller> {
     const taller = em.create(Taller, tallerData);
     await em.persistAndFlush(taller);
     return taller;

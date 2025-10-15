@@ -3,9 +3,9 @@ import { InscripcionTaller } from './inscripcion-taller.entity.js';
 import { BadRequestError, NotFoundError } from '../shared/errors/http-error.js';
 import { validateId } from '../shared/validateParam.js';
 import { UserPayload } from '../types/user.js';
-import { InscripcionTallerInput } from './inscripcion-taller.schema.js';
 import { PeriodoService } from '../periodo/periodo.service.js';
 import { TallerService } from './taller.service.js';
+import { InscripcionTallerInputAdmin } from './inscripcion-taller.schema.js';
 
 export class InscripcionTallerService {
   private periodoService = new PeriodoService();
@@ -46,22 +46,22 @@ export class InscripcionTallerService {
     return inscripcion;
   }
 
-  async add(inscripcionData: InscripcionTallerInput, user: UserPayload, em: EntityManager): Promise<InscripcionTaller> {
+  async add(
+    inscripcionData: InscripcionTallerInputAdmin,
+    user: UserPayload,
+    em: EntityManager,
+  ): Promise<InscripcionTaller> {
     const periodoVigente = await this.periodoService.getVigente(em);
 
     if (user.role === 'campista') {
-      inscripcionData.campista = user.id;
-      inscripcionData.estado = 'pendiente';
-      delete inscripcionData.nota;
-      delete inscripcionData.comentario;
+      const idCampista = Number(user.id);
+      inscripcionData.campista = idCampista;
+      inscripcionData.estado = 'aceptado';
       const taller = await this.tallerService.findOne(inscripcionData.taller, em);
       if (!taller) throw new NotFoundError('Taller');
       if (taller.periodo.id !== periodoVigente.id) {
         throw new BadRequestError('Solo puedes inscribirte a talleres del período vigente');
       }
-    }
-    if (typeof inscripcionData.campista === 'undefined') {
-      throw new BadRequestError('Falta el ID del campista');
     }
     const yaInscripto = await em.findOne(InscripcionTaller, {
       campista: inscripcionData.campista,
