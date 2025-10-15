@@ -33,8 +33,7 @@ const cabinsData = [
       'https://images.unsplash.com/photo-1576613775061-75e52d6e6b0e?q=80&w=1112&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     deityDescription:
       'Es la cabaña número 1, la más grande y voluminosa de todas las cabañas del campamento, aunque no está amueblada. Construida de mármol blanco con grandes columnas y puertas de bronce que parecen rayos según el ángulo de visión. Contiene una estatua de seis metros de Zeus con escudo y rayo.',
-    location:
-      'Al inicio del área central del círculo de cabañas, cabaña más grande e impresionante',
+    location: 'Al inicio del área central del círculo de cabañas, cabaña más grande e impresionante',
     camperAttributes: [
       {
         name: 'Liderazgo',
@@ -239,8 +238,7 @@ const cabinsData = [
     cabinNumber: 12,
     imageUrl:
       'https://plus.unsplash.com/premium_photo-1677354136477-6c9f75f65038?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWFzY2FyYWRlfGVufDB8fDB8fHww',
-    deityDescription:
-      'Cabaña decorada con racimos de uva. Número de habitantes pequeño. Capitán: Pólux.',
+    deityDescription: 'Cabaña decorada con racimos de uva. Número de habitantes pequeño. Capitán: Pólux.',
     location: 'Área oeste del círculo de cabañas',
     camperAttributes: [
       { name: 'Fiesta', description: 'Habilidad para organizar celebraciones.' },
@@ -257,8 +255,7 @@ const cabinsData = [
       'https://images.unsplash.com/photo-1603516863860-7d5c93a83fe8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     deityDescription:
       'Cabaña de obsidiana con cráneo sobre la puerta y antorchas de fuego griego encendidas las 24 horas. Capitán: Nico di Angelo.',
-    location:
-      'Área oeste del círculo de cabañas, sigue la flora muerta y el suelo árido para encontrarla',
+    location: 'Área oeste del círculo de cabañas, sigue la flora muerta y el suelo árido para encontrarla',
     camperAttributes: [
       {
         name: 'Control de muertos',
@@ -355,8 +352,7 @@ const cabinsData = [
     cabinNumber: 19,
     imageUrl:
       'https://images.unsplash.com/photo-1605142859862-978be7eba909?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXphcnxlbnwwfHwwfHx8MA%3D%3D',
-    deityDescription:
-      'Cabaña que parece un mini casino de Las Vegas. No se conocen ni mencionan ocupantes.',
+    deityDescription: 'Cabaña que parece un mini casino de Las Vegas. No se conocen ni mencionan ocupantes.',
     location: 'Área oeste del circulo de cabañas',
     camperAttributes: [
       { name: 'Suerte', description: 'Atrae o maneja la fortuna de manera especial.' },
