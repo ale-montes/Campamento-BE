@@ -1,17 +1,17 @@
 ### Obtener todas las deidades
 GET http://localhost:3000/api/deidades
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 ### Obtener por ID
 GET http://localhost:3000/api/deidades/1
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 ### Crear deidad 1
 POST http://localhost:3000/api/deidades
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 {
   "nombre": "Zeus",
@@ -47,12 +47,14 @@ Cookie: token={{tokencampista}}
 ### Crear deidad 4
 POST http://localhost:3000/api/deidades
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 {
-  "nombre": "Poseidón",
-  "descripcion": "Dios del mar, los terremotos y los caballos en la mitología griega.",
-  "lema": "Fuerza y tempestad",
-  "simbolo": "Tridente"
+  "nombre": "Apolo",
+  "descripcion": "Dios del sol, la música, la poesía, la profecía y la medicina en la mitología griega.",
+  "lema": "Armonía y luz",
+  "simbolo": "Lira y laurel"
 }
+
+
 

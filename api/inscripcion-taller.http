@@ -1,15 +1,15 @@
 ### GET all inscripciones a talleres
 GET http://localhost:3000/api/inscripcion-taller/
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 ### GET all inscripciones a talleres
 GET http://localhost:3000/api/inscripcion-taller/
 Content-Type: application/json
-Cookie: token={{tokenadmin}}
+Cookie: token={{tokencampista}}
 
 ### GET by ID
-GET http://localhost:3000/api/inscripcion-taller/2
+GET http://localhost:3000/api/inscripcion-taller/3
 Content-Type: application/json
 Cookie: token={{tokenadmin}}
 
@@ -35,5 +35,5 @@ Content-Type: application/json
 Cookie: token={{tokencampista}}
 
 {
-  "taller": 6
+  "taller": 5
 }
