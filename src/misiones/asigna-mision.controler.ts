@@ -6,7 +6,7 @@ const em = orm.em;
 
 async function findAll(req: Request, res: Response) {
   try {
-    const misionesAsignadas = await em.find(AsignaMision, {}, { populate: ['campista', 'mision'] });
+    const misionesAsignadas = await em.find(AsignaMision, {}, { populate: ['mision'] });
     res.status(200).json({ message: 'found all misiones', data: misionesAsignadas });
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -22,7 +22,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const asignaMision = await em.findOneOrFail(AsignaMision, { id }, { populate: ['campista', 'mision'] });
+    const asignaMision = await em.findOneOrFail(AsignaMision, { id }, { populate: ['mision'] });
     res.status(200).json({ message: 'found asignaMision', data: asignaMision });
   } catch (error: unknown) {
     if (error instanceof Error) {
