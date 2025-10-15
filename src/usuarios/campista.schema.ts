@@ -94,6 +94,17 @@ export const campistaSchema = z.object({
   verificationToken: z.string().optional(),
 });
 
+export const loginSchema = z.object({
+  email: z.string().email(),
+  contrasena: z
+    .string()
+    .min(6, 'La contraseña debe tener al menos 6 caracteres')
+    .regex(
+      /^[a-zA-Z0-9@*_!¡?¿[{}()]{6,30}$/,
+      'La contraseña solo puede contener caracteres alfanuméricos y los símbolos @, *, _,?,¿,!,¡,{,},(,)',
+    ),
+});
+
 // Esquema para actualizaciones parciales (validación de al menos un campo)
 export const campistaUpdateSchema = campistaSchema.partial().refine((data) => Object.keys(data).length > 0, {
   message: 'Debes enviar al menos un campo para actualizar',
