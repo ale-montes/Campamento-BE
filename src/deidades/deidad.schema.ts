@@ -52,18 +52,6 @@ export const deidadOutputSchemaAdmin = z
     ...deidadBaseOutput,
     createdAt: z.string().or(z.date()),
     updatedAt: z.string().or(z.date()),
-    cabanias: z
-      .array(
-        z.object({
-          id: z.number(),
-          nombre: z.string(),
-          capacidad: z.number(),
-          descripcion: z.string(),
-          ubicacion: z.string(),
-          cabinStatus: z.enum(['Activo', 'Inactivo']),
-        }),
-      )
-      .optional(),
   })
   .strip();
 
@@ -71,18 +59,6 @@ export const deidadOutputSchemaAdmin = z
 export const deidadOutputSchemaCampista = z
   .object({
     ...deidadBaseOutput,
-    cabanias: z
-      .array(
-        z.object({
-          id: z.number(),
-          nombre: z.string(),
-          capacidad: z.number(),
-          descripcion: z.string(),
-          ubicacion: z.string(),
-          cabinStatus: z.enum(['Activo', 'Inactivo']),
-        }),
-      )
-      .optional(),
   })
   .strip();
 
@@ -90,18 +66,6 @@ export const deidadOutputSchemaCampista = z
 export const deidadOutputSchemaInstructor = z
   .object({
     ...deidadBaseOutput,
-    cabanias: z
-      .array(
-        z.object({
-          id: z.number(),
-          nombre: z.string(),
-          capacidad: z.number(),
-          descripcion: z.string(),
-          ubicacion: z.string(),
-          cabinStatus: z.enum(['Activo', 'Inactivo']),
-        }),
-      )
-      .optional(),
   })
   .strip();
 
