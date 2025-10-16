@@ -51,9 +51,10 @@ export class InscripcionPeriodoService {
     const periodo = await this.periodoService.findOne(idPeriodo, em);
     if (!periodo) throw new NotFoundError('Periodo');
     if (user.role === 'campista') {
-      if (periodo.estado !== 'abierto') {
-        throw new BadRequestError('El periodo no está abierto para inscripciones.');
-      }
+      //Se comenta esta parte para hacer pruebas de inscripcion a periodo vigente 'en curso' y evitar depender de las fechas
+      // if (periodo.estado !== 'abierto') {
+      //   throw new BadRequestError('El periodo no está abierto para inscripciones.');
+      // }
       inscripcionData.campista = user.id;
       inscripcionData.periodo = idPeriodo;
       inscripcionData.estado = 'PAGADO';

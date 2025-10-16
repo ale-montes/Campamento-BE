@@ -11,7 +11,11 @@ export class TallerService {
   async findAll(user: UserPayload, em: EntityManager): Promise<Taller[]> {
     if (user.role === 'campista') {
       const { id: periodoVigenteId } = await this.periodoService.getVigente(em);
-      const talleres = await em.find(Taller, { periodo: periodoVigenteId }, { populate: ['periodo', 'instructor'] });
+      const talleres = await em.find(
+        Taller,
+        { estado: 'abierto', periodo: periodoVigenteId, instructor: { activo: true } },
+        { populate: ['periodo', 'instructor'] },
+      );
       return talleres;
     }
     const talleres = await em.find(Taller, {}, { populate: ['periodo', 'instructor'] });
@@ -46,10 +50,13 @@ export class TallerService {
 
   async remove(id: number, em: EntityManager): Promise<void> {
     validateId(id);
+
     const taller = await em.findOne(Taller, { id });
     if (!taller) {
-      throw new NotFoundError(`Taller with id ${id} not found`);
+      throw new NotFoundError(`Taller con id ${id} no encontrado`);
     }
-    await em.removeAndFlush(taller);
+
+    taller.estado = 'cancelado';
+    await em.flush();
   }
 }
