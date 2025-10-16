@@ -1,7 +1,7 @@
+import 'dotenv/config';
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import 'reflect-metadata';
 import cookieParser from 'cookie-parser';
 import { orm, syncSchema } from './shared/db/orm.js';
@@ -11,7 +11,6 @@ import { apiLimiter } from './shared/ratelimit.js';
 import routes from './routes.js';
 import { errorMiddleware } from './shared/middleware/error.middleware.js';
 
-dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 const apiBasePath = process.env.API_BASE_PATH || '/api';
@@ -34,7 +33,7 @@ app.use(apiBasePath, routes);
 //Error middleware
 app.use(errorMiddleware);
 
-await syncSchema(); //never in production
+// await syncSchema(); //never in production
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);

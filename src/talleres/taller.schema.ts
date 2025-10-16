@@ -27,6 +27,7 @@ export const tallerInputSchemaInstructor = z.object({
   cupo: z.number().int().min(1).max(500),
   duracionMin: z.number().int().min(1).max(480),
   estado: z.enum(['abierto', 'cerrado', 'en progreso', 'cancelado', 'completado']).default('abierto'),
+  instructor: z.number().int().positive(), // id del instructor
   periodo: z.number().int().positive(),
 });
 
@@ -110,6 +111,11 @@ export const tallerOutputSchemaInstructor = z
     ...tallerBaseOutput,
     createdAt: z.string().or(z.date()).optional(),
     updatedAt: z.string().or(z.date()).optional(),
+    instructor: z.object({
+      id: z.number(),
+      nombre: z.string(),
+      apellido: z.string(),
+    }),
     periodo: z.object({
       id: z.number(),
       nombre: z.string(),
