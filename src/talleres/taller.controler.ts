@@ -48,7 +48,7 @@ export class TallerController {
     try {
       const id = validateId(req.params.id);
       await this.service.remove(id, getEm());
-      res.status(200).json({ message: 'taller deleted' });
+      res.status(200).json({ message: 'taller cancelado' });
     } catch (error) {
       next(error);
     }

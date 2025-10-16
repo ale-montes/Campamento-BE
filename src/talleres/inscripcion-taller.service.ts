@@ -58,6 +58,9 @@ export class InscripcionTallerService {
       inscripcionData.campista = idCampista;
       inscripcionData.estado = 'aceptado';
       const taller = await this.tallerService.findOne(inscripcionData.taller, em);
+      if (taller.estado !== 'abierto') {
+        throw new BadRequestError('Solo puedes inscribirte a talleres Abiertos');
+      }
       if (!taller) throw new NotFoundError('Taller');
       if (taller.periodo.id !== periodoVigente.id) {
         throw new BadRequestError('Solo puedes inscribirte a talleres del período vigente');
