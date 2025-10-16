@@ -48,7 +48,7 @@ export class InstructorController {
     try {
       const id = validateId(req.params.id);
       await this.service.remove(id, getEm());
-      res.status(200).json({ message: 'instructor eliminado' });
+      res.status(200).json({ message: 'instructor marcado como inactivo' });
     } catch (error) {
       next(error);
     }

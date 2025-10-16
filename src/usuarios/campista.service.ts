@@ -21,7 +21,7 @@ export class CampistaService {
   }
 
   async findByEmail(email: string, em: EntityManager): Promise<Campista | null> {
-    return em.findOne(Campista, { email });
+    return em.findOne(Campista, { email, activo: true });
   }
 
   async findByVerificationToken(token: string, em: EntityManager): Promise<Campista | null> {
@@ -84,8 +84,13 @@ export class CampistaService {
 
   async remove(id: number, em: EntityManager): Promise<void> {
     validateId(id);
+
     const campista = await em.findOne(Campista, { id });
-    if (!campista) throw new NotFoundError(`Campista ${id} no encontrado`);
-    await em.removeAndFlush(campista);
+    if (!campista) {
+      throw new NotFoundError(`Campista ${id} no encontrado`);
+    }
+
+    campista.activo = false;
+    await em.flush();
   }
 }

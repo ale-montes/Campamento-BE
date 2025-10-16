@@ -48,7 +48,7 @@ export class CabaniaController {
     try {
       const id = validateId(req.params.id);
       await this.service.remove(id, getEm());
-      res.status(200).json({ message: 'cabania marked as inactive' });
+      res.status(200).json({ message: 'cabania marcado como inactivo' });
     } catch (error) {
       next(error);
     }

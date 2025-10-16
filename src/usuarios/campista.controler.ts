@@ -48,7 +48,7 @@ export class CampistaController {
     try {
       const id = validateId(req.params.id);
       await this.service.remove(id, getEm());
-      res.status(200).json({ message: 'campista eliminado' });
+      res.status(200).json({ message: 'campista marcado como inactivo' });
     } catch (error) {
       next(error);
     }
