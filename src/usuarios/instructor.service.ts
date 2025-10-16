@@ -20,7 +20,7 @@ export class InstructorService {
   }
 
   async findByEmail(email: string, em: EntityManager): Promise<Instructor | null> {
-    return em.findOne(Instructor, { email });
+    return em.findOne(Instructor, { email, activo: true });
   }
 
   async findByVerificationToken(token: string, em: EntityManager): Promise<Instructor | null> {
@@ -58,7 +58,11 @@ export class InstructorService {
   async remove(id: number, em: EntityManager): Promise<void> {
     validateId(id);
     const instructor = await em.findOne(Instructor, { id });
-    if (!instructor) throw new NotFoundError(`Instructor ${id} no encontrado`);
-    await em.removeAndFlush(instructor);
+    if (!instructor) {
+      throw new NotFoundError(`Instructor ${id} no encontrado`);
+    }
+
+    instructor.activo = false;
+    await em.flush();
   }
 }
