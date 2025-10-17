@@ -2,7 +2,7 @@ import { EntityManager, LockMode } from '@mikro-orm/core';
 import { InscripcionPeriodo } from './inscripcion-periodo.entity.js';
 import { NotFoundError, BadRequestError } from '../shared/errors/http-error.js';
 import { validateId } from '../shared/validateParam.js';
-import { InscripcionPeriodoInput } from './inscripcion-periodo.schema.js';
+import { InscripcionPeriodoInputAdmin } from './inscripcion-periodo.schema.js';
 import { UserPayload } from '../types/user.js';
 import { PeriodoService } from './periodo.service.js';
 
@@ -16,11 +16,11 @@ export class InscripcionPeriodoService {
         {
           campista: user.id,
         },
-        { populate: ['periodo'] },
+        { populate: ['periodo', 'campista'] },
       );
       return inscripciones;
     }
-    return await em.find(InscripcionPeriodo, {}, { populate: ['periodo'] });
+    return await em.find(InscripcionPeriodo, {}, { populate: ['periodo', 'campista'] });
   }
 
   async findOne(user: UserPayload, id: number, em: EntityManager): Promise<InscripcionPeriodo> {
@@ -37,19 +37,24 @@ export class InscripcionPeriodoService {
       if (!inscripcion) throw new NotFoundError('Inscripción');
       return inscripcion;
     }
-    const inscripcion = await em.findOne(InscripcionPeriodo, { id }, { populate: ['periodo'] });
+    const inscripcion = await em.findOne(InscripcionPeriodo, { id }, { populate: ['periodo', 'campista'] });
     if (!inscripcion) throw new NotFoundError('Inscripción de periodo');
     return inscripcion;
   }
 
   async add(
     user: UserPayload,
-    inscripcionData: InscripcionPeriodoInput,
+    inscripcionData: InscripcionPeriodoInputAdmin,
     em: EntityManager,
   ): Promise<InscripcionPeriodo> {
     const idPeriodo = validateId(inscripcionData.periodo);
     const periodo = await this.periodoService.findOne(idPeriodo, em);
     if (!periodo) throw new NotFoundError('Periodo');
+    const repetido = await em.findOne(InscripcionPeriodo, {
+      campista: user.id,
+      periodo: idPeriodo,
+    });
+    if (repetido) throw new BadRequestError('Ya estás inscripto a este periodo');
     if (user.role === 'campista') {
       //Se comenta esta parte para hacer pruebas de inscripcion a periodo vigente 'en curso' y evitar depender de las fechas
       // if (periodo.estado !== 'abierto') {
@@ -59,7 +64,6 @@ export class InscripcionPeriodoService {
       inscripcionData.periodo = idPeriodo;
       inscripcionData.estado = 'PAGADO';
     }
-
     const inscripcion = em.create(InscripcionPeriodo, inscripcionData);
     await em.persistAndFlush(inscripcion);
     return inscripcion;

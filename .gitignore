@@ -16,7 +16,6 @@ Thumbs.db
 
 # Variables de entorno
 .env
-.env.* 
 
 # Archivos temporales
 *.swp

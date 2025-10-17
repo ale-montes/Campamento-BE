@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { InscripcionPeriodoService } from './inscripcion-periodo.service.js';
 import { getEm } from '../shared/db/orm.js';
 import { validateId } from '../shared/validateParam.js';
+import { BadRequestError } from '../shared/errors/http-error.js';
 
 export class InscripcionPeriodoController {
   constructor(private readonly service: InscripcionPeriodoService = new InscripcionPeriodoService()) {}
@@ -27,8 +28,8 @@ export class InscripcionPeriodoController {
 
   async add(req: Request, res: Response, next: NextFunction) {
     try {
-      const inscripcion = await this.service.add(req.user!, req.body.sanitizedInput, getEm());
-      res.status(201).json({ message: 'inscripcion created', data: inscripcion });
+      await this.service.add(req.user!, req.body.sanitizedInput, getEm());
+      res.status(201).json({ message: 'inscripcion created' });
     } catch (error) {
       next(error);
     }
@@ -55,8 +56,9 @@ export class InscripcionPeriodoController {
   }
   async getInscripcionVigente(req: Request, res: Response, next: NextFunction) {
     try {
+      if (req.user!.role !== 'campista') throw new BadRequestError('Inscripción');
       const periodo = await this.service.getInscripcionVigente(req.user!, getEm());
-      res.status(200).json({ message: 'periodo vigente', date: periodo });
+      res.status(200).json({ message: 'periodo vigente', data: periodo });
     } catch (error) {
       next(error);
     }

@@ -8,8 +8,8 @@ export class AsignaMisionController {
 
   async findAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const data = await this.service.findAll(req.user!, getEm());
-      res.status(200).json({ message: 'found asignaMision', data });
+      const asignaciones = await this.service.findAll(req.user!, getEm());
+      res.status(200).json({ message: 'found asignaMision', data: asignaciones });
     } catch (error) {
       next(error);
     }
@@ -18,8 +18,8 @@ export class AsignaMisionController {
   async findOne(req: Request, res: Response, next: NextFunction) {
     try {
       const id = validateId(req.params.id);
-      const data = await this.service.findOne(req.user!, id, getEm());
-      res.status(200).json({ message: 'found asignaMision', data });
+      const asignacion = await this.service.findOne(req.user!, id, getEm());
+      res.status(200).json({ message: 'found asignaMision', data: asignacion });
     } catch (error) {
       next(error);
     }
