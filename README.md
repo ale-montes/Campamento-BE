@@ -73,7 +73,7 @@ src/
    ```bash
    pnpm install
    ```
-3. Configuramos el archivo .env (database_url, y smtp)
+3. Configuramos el archivo .env. Se puede utilizar el .env.example solo hay que solicitar database_url y credenciales smtp a los integrantes.
 
 3. Corre el servidor en modo desarrollo con recarga
    ```bash
