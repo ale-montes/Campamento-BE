@@ -72,4 +72,6 @@ hospedaRoutes.patch(
   hospedaController.update.bind(hospedaController),
 );
 
+hospedaRoutes.patch('/:id/move', hospedaController.moveCampista.bind(hospedaController));
+
 hospedaRoutes.delete('/:id', hospedaController.remove.bind(hospedaController));

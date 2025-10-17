@@ -53,4 +53,12 @@ export class InscripcionPeriodoController {
       next(error);
     }
   }
+  async getInscripcionVigente(req: Request, res: Response, next: NextFunction) {
+    try {
+      const periodo = await this.service.getInscripcionVigente(req.user!, getEm());
+      res.status(200).json({ message: 'periodo vigente', date: periodo });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

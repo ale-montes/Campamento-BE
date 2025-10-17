@@ -82,7 +82,8 @@ export class InscripcionPeriodoService {
     await em.removeAndFlush(inscripcion);
   }
 
-  async getInscripcionVigente(campistaId: number, em: EntityManager): Promise<InscripcionPeriodo> {
+  async getInscripcionVigente(user: UserPayload, em: EntityManager): Promise<InscripcionPeriodo> {
+    const campistaId = Number(user.id);
     const periodo = await this.periodoService.getVigente(em);
 
     // Si existe cache
