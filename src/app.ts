@@ -6,7 +6,6 @@ import 'reflect-metadata';
 import cookieParser from 'cookie-parser';
 import { orm, syncSchema } from './shared/db/orm.js';
 import { RequestContext } from '@mikro-orm/core';
-import { jsonErrorHandler } from './shared/jsonErrorHandler.js';
 import { apiLimiter } from './shared/ratelimit.js';
 import routes from './routes.js';
 import { errorMiddleware } from './shared/middleware/error.middleware.js';
@@ -19,7 +18,6 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
-app.use(jsonErrorHandler);
 app.use(apiBasePath, apiLimiter);
 
 // Crear RequestContext
