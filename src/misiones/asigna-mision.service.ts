@@ -45,7 +45,7 @@ export class AsignaMisionService {
   }
 
   async add(user: UserPayload, data: AsignaMisionInputInstructor, em: EntityManager): Promise<AsignaMision> {
-    if (user.role !== 'instructor') throw new BadRequestError('No tiene permisos para crear');
+    if (user.role !== 'instructor' && user.role !== 'admin') throw new BadRequestError('No tiene permisos para crear');
     const asignaMision = em.create(AsignaMision, data);
     await em.persistAndFlush(asignaMision);
     return asignaMision;
@@ -53,7 +53,8 @@ export class AsignaMisionService {
 
   async update(id: number, data: Partial<AsignaMision>, user: UserPayload, em: EntityManager): Promise<AsignaMision> {
     validateId(id);
-    if (user.role !== 'instructor') throw new BadRequestError('No tiene permisos para actualizar');
+    if (user.role !== 'instructor' && user.role !== 'admin')
+      throw new BadRequestError('No tiene permisos para actualizar');
 
     return await em.transactional(async (tEm) => {
       const asignaMision = await tEm.findOne(AsignaMision, { id }, { lockMode: LockMode.PESSIMISTIC_WRITE });
