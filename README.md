@@ -15,9 +15,9 @@ Gestiona usuarios, talleres, hospedajes y actividades del campamento mediante un
 
 ## 🧠 Funcionalidad del sistema
 El sistema permite gestionar las operaciones principales del campamento:
-Registro y autenticación de usuarios (campistas, instructores, administradores)
+- Registro y autenticación de usuarios (campistas, instructores, administradores)
 - Gestión de hospedajes en cabañas
-- Inscripción y gestión de talleres y misiones
+- Inscripción y gestión de talleres, misiones y eventos
 - Asignación de periodos vigentes
 - Validación cruzada y control de acceso por rol
 - Envío de correos automáticos (validaciones SMTP)
