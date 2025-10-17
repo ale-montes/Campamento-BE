@@ -66,14 +66,7 @@ export const campistaSchema = z.object({
       message: 'El nombre solo puede contener letras, espacios, guiones y apóstrofes',
     })
     .optional(),
-  direccion: z
-    .string()
-    .min(2)
-    .max(100)
-    .regex(/^[a-zA-ZÀ-ÿ\s'-,]+$/, {
-      message: 'El nombre solo puede contener letras, espacios, guiones y apóstrofes',
-    })
-    .optional(),
+  direccion: z.string().min(2).max(100).optional(),
   alergias: z
     .string()
     .min(2)
