@@ -29,37 +29,43 @@ const eventoBaseOutput = {
 /**
  * Output Admin: toda la info, incluyendo timestamps y periodo completo
  */
-export const eventoOutputSchemaAdmin = z.object({
-  ...eventoBaseOutput,
-  createdAt: z.string().or(z.date()),
-  updatedAt: z.string().or(z.date()),
-  periodo: z.object({
-    id: z.number(),
-    nombre: z.string().optional(),
-  }),
-});
+export const eventoOutputSchemaAdmin = z
+  .object({
+    ...eventoBaseOutput,
+    createdAt: z.string().or(z.date()),
+    updatedAt: z.string().or(z.date()),
+    periodo: z.object({
+      id: z.number(),
+      nombre: z.string().optional(),
+    }),
+  })
+  .strip();
 
 /**
  * Output Instructor: info básica + periodo id
  */
-export const eventoOutputSchemaInstructor = z.object({
-  ...eventoBaseOutput,
-  periodo: z.object({
-    id: z.number(),
-    nombre: z.string().optional(),
-  }),
-});
+export const eventoOutputSchemaInstructor = z
+  .object({
+    ...eventoBaseOutput,
+    periodo: z.object({
+      id: z.number(),
+      nombre: z.string().optional(),
+    }),
+  })
+  .strip();
 
 /**
  * Output Campista: info mínima del evento
  */
-export const eventoOutputSchemaCampista = z.object({
-  ...eventoBaseOutput,
-  periodo: z.object({
-    id: z.number(),
-    nombre: z.string().optional(),
-  }),
-});
+export const eventoOutputSchemaCampista = z
+  .object({
+    ...eventoBaseOutput,
+    periodo: z.object({
+      id: z.number(),
+      nombre: z.string().optional(),
+    }),
+  })
+  .strip();
 
 /* -------------------------- TYPES -------------------------- */
 

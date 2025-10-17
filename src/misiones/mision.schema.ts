@@ -25,15 +25,17 @@ export const misionUpdateSchemaInstructor = z.object({}).refine((data) => Object
 });
 
 /* -------------------------- OUTPUT SCHEMA -------------------------- */
-export const misionOutputSchemaAdmin = z.object({
-  id: z.number(),
-  titulo: z.string(),
-  descripcion: z.string(),
-  recompensa: z.string().optional(),
-  pista: z.string().optional(),
-  createdAt: z.string().or(z.date()),
-  updatedAt: z.string().or(z.date()),
-});
+export const misionOutputSchemaAdmin = z
+  .object({
+    id: z.number(),
+    titulo: z.string(),
+    descripcion: z.string(),
+    recompensa: z.string().optional(),
+    pista: z.string().optional(),
+    createdAt: z.string().or(z.date()),
+    updatedAt: z.string().or(z.date()),
+  })
+  .strip();
 
 export const misionOutputSchemaCampista = misionOutputSchemaAdmin.omit({ createdAt: true, updatedAt: true });
 export const misionOutputSchemaInstructor = misionOutputSchemaCampista;
