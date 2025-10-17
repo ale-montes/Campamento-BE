@@ -1,7 +1,7 @@
 ### Obtener todas las hospedajes
 GET http://localhost:3000/api/hospedaje
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 ### Obtener todas las hospedajes
 GET http://localhost:3000/api/hospedaje
@@ -44,4 +44,24 @@ Cookie: token={{tokencampista}}
   "campista": 3,
   "fechaInicio": "2023-10-03T12:00:00Z",
   "estado": "reservada"
+}
+
+
+
+### Obtener por ID
+PATCH  http://localhost:3000/api/hospedaje/1/move
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+{
+  "cabania": 4
+}
+
+### Obtener por ID
+PATCH  http://localhost:3000/api/hospedaje/1
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+{
+  "estado": "finalizada"
 }

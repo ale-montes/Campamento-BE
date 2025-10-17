@@ -4,20 +4,21 @@ Content-Type: application/json
 Cookie: token={{tokencampista}}
 
 ### GET by ID
-GET http://localhost:3000/api/eventos/1
+GET http://localhost:3000/api/eventos/3
 Content-Type: application/json
 Cookie: token={{tokencampista}}
 
 ### Create Evento
 POST http://localhost:3000/api/eventos
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 {
-  "titulo": "Gran fogata",
-  "descripcion": "Una noche mágica junto al fuego con historias y canciones.",
-  "fechahora": "2023-10-15T19:00:00Z",
-  "lugar": "Plaza central del campamento"
+  "titulo": "Torneo de Orientación Nocturna",
+  "descripcion": "Competencia por equipos para encontrar puntos marcados en el bosque utilizando brújula y mapa. Requiere linterna y ropa cómoda.",
+  "fechahora": "2023-11-10T22:00:00Z",
+  "lugar": "Zona norte del campamento",
+  "periodo": 2
 }
 
 ### Create Evento 2
@@ -30,4 +31,15 @@ Cookie: token={{tokencampista}}
   "descripcion": "Competencia amistosa de tiro con arco para todos los campistas.",
   "fechahora": "2023-10-16T10:00:00Z",
   "lugar": "Campo de tiro del campamento"
+}
+
+### editar evento
+PUT http://localhost:3000/api/eventos/3
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+{
+
+  "lugar": "Zona norte del campamento 3"
+
 }

@@ -4,7 +4,7 @@ Content-Type: application/json
 Cookie: token={{tokencampista}}
 
 ### GET by ID
-GET http://localhost:3000/api/inscripcion-periodo/1
+GET http://localhost:3000/api/inscripcion-periodo/3
 Content-Type: application/json
 Cookie: token={{tokencampista}}
 
@@ -14,9 +14,13 @@ Content-Type: application/json
 Cookie: token={{tokencampista}}
 
 {
-  "campista": 2,
-  "periodo": 1,
   "metodoPago": "TRANSFERENCIA",
-  "referenciaPago": "ABC123XYZ",
-  "estado": "PENDIENTE"
+  "referenciaPago": "ABC123XYZ"
 }
+
+
+
+### Estoy inscripto al periodo vigente?
+GET http://localhost:3000/api/inscripcion-periodo/current
+Content-Type: application/json
+Cookie: token={{tokencampista}}
