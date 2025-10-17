@@ -24,7 +24,7 @@ Registro y autenticación de usuarios (campistas, instructores, administradores)
 
 Todo el modelo de datos se diseñó a partir de un DER que garantiza la integridad referencial y las relaciones correctas entre entidades.
 
-##🔐 Validaciones
+## 🔐 Validaciones
 - Cada request entrante y respuesta saliente se valida usando Zod, garantizando:
 - Formato y tipo correcto de los datos
 - Reglas de negocio (IDs válidos, estados, rangos, etc.)
@@ -40,7 +40,7 @@ Todo el modelo de datos se diseñó a partir de un DER que garantiza la integrid
 | `pnpm run start` | Compila TypeScript y ejecuta el servidor desde `dist/` |
 | `pnpm run lint`  | Corre ESLint                                           |
 
-📂 Estructura del proyecto
+## 📂 Estructura del proyecto
 ```bash
 src/
 ├── auth/                 # Autenticación
