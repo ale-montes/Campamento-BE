@@ -6,8 +6,29 @@ const em = orm.em;
 
 async function findAll(req: Request, res: Response) {
   try {
-    const misionesAsignadas = await em.find(AsignaMision, {}, { populate: ['campista', 'mision'] });
-    res.status(200).json({ message: 'found all misiones', data: misionesAsignadas });
+    if (req.user?.role === 'campista') {
+      const id = req.user.id;
+      console.log(id);
+      const misionesAsignadas = await em.find(
+        AsignaMision,
+        { campista: Number(id) },
+        { populate: ['campista', 'mision'] },
+      );
+      res.status(200).json({
+        message: 'found my misiones',
+        data: misionesAsignadas,
+      });
+    } else {
+      const misionesAsignadas = await em.find(
+        AsignaMision,
+        {},
+        { populate: ['campista', 'mision'] },
+      );
+      res.status(200).json({
+        message: 'found all misiones',
+        data: misionesAsignadas,
+      });
+    }
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
