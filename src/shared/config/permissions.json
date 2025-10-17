@@ -2,7 +2,7 @@
 "inscripcion-taller":{"GET":["campista","instructor"],"POST":["campista"],"PUT":[],"PATCH":["instructor"],"DELETE":[]},
 "eventos":{"GET":["instructor","campista"],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},
 "solicitud-evento":{"GET":["instructor","campista"],"POST":["campista"],"PUT":[],"PATCH":["instructor"],"DELETE":[]},
-"deidades":{"GET":[],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},
+"deidades":{"GET":["campista"],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},
 "cabanias":{"GET":["instructor","campista"],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},
 "hospedaje":{"GET":["instructor","campista"],"POST":["campista"],"PUT":[],"PATCH":[],"DELETE":[]},
 "misiones":{"GET":["instructor","campista"],"POST":[],"PUT":[],"PATCH":[],"DELETE":[]},

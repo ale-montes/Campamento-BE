@@ -15,7 +15,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     }
 
     //Verificar token JWT
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload & UserPayload;
+    const JWT_SECRET = (process.env.JWT_SECRET as string) || 'supersecret';
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload & UserPayload;
 
     //Asignar el usuario decodificado a la request
     req.user = {

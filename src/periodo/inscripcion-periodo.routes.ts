@@ -2,20 +2,82 @@ import { Router } from 'express';
 import { InscripcionPeriodoController } from './inscripcion-periodo.controler.js';
 import { authMiddleware } from '../shared/middleware/auth.middleware.js';
 import { checkPermission } from '../shared/middleware/permission.middleware.js';
-import { validateSchema } from '../shared/middleware/validation.middleware.js';
-import { inscripPeriodoSchema, inscripPeriodoUpdateSchema } from './inscripcion-periodo.schema.js';
+import { validateRequestByRole, validateResponseByRole } from '../shared/middleware/validateByRole.middleware.js';
+import {
+  inscripcionPeriodoInputSchemaAdmin,
+  inscripcionPeriodoInputSchemaCampista,
+  inscripcionPeriodoUpdateSchemaAdmin,
+  inscripcionPeriodoOutputSchemaAdmin,
+  inscripcionPeriodoOutputSchemaInstructor,
+  inscripcionPeriodoOutputSchemaCampista,
+} from './inscripcion-periodo.schema.js';
 
 export const inscripPeriodoRoutes = Router();
 const controller = new InscripcionPeriodoController();
 
-// Middlewares globales
+//  Middlewares globales
 inscripPeriodoRoutes.use(authMiddleware, checkPermission);
 
-// Rutas CRUD
-inscripPeriodoRoutes.get('/', controller.findAll.bind(controller));
-inscripPeriodoRoutes.get('/current', controller.getInscripcionVigente.bind(controller));
-inscripPeriodoRoutes.get('/:id', controller.findOne.bind(controller));
-inscripPeriodoRoutes.post('/', validateSchema(inscripPeriodoSchema), controller.add.bind(controller));
-inscripPeriodoRoutes.put('/:id', validateSchema(inscripPeriodoSchema), controller.update.bind(controller));
-inscripPeriodoRoutes.patch('/:id', validateSchema(inscripPeriodoUpdateSchema), controller.update.bind(controller));
+// GET ALL
+inscripPeriodoRoutes.get(
+  '/',
+  validateResponseByRole({
+    admin: inscripcionPeriodoOutputSchemaAdmin,
+    instructor: inscripcionPeriodoOutputSchemaInstructor,
+    campista: inscripcionPeriodoOutputSchemaCampista,
+  }),
+  controller.findAll.bind(controller),
+);
+// GET INSCRIPCIÓN VIGENTE
+inscripPeriodoRoutes.get(
+  '/current',
+  validateResponseByRole({
+    campista: inscripcionPeriodoOutputSchemaCampista,
+  }),
+  controller.getInscripcionVigente.bind(controller),
+);
+
+//  GET ONE
+inscripPeriodoRoutes.get(
+  '/:id',
+  validateResponseByRole({
+    admin: inscripcionPeriodoOutputSchemaAdmin,
+    instructor: inscripcionPeriodoOutputSchemaInstructor,
+    campista: inscripcionPeriodoOutputSchemaCampista,
+  }),
+  controller.findOne.bind(controller),
+);
+
+//  CREATE (todos los roles)
+inscripPeriodoRoutes.post(
+  '/',
+  validateRequestByRole({
+    admin: inscripcionPeriodoInputSchemaAdmin,
+    campista: inscripcionPeriodoInputSchemaCampista,
+  }),
+  validateResponseByRole({
+    admin: inscripcionPeriodoOutputSchemaAdmin,
+    campista: inscripcionPeriodoOutputSchemaCampista,
+  }),
+  controller.add.bind(controller),
+);
+
+//  UPDATE (solo admin)
+inscripPeriodoRoutes.put(
+  '/:id',
+  validateRequestByRole({
+    admin: inscripcionPeriodoInputSchemaAdmin,
+  }),
+  controller.update.bind(controller),
+);
+
+inscripPeriodoRoutes.patch(
+  '/:id',
+  validateRequestByRole({
+    admin: inscripcionPeriodoUpdateSchemaAdmin,
+  }),
+  controller.update.bind(controller),
+);
+
+// DELETE (solo admin)
 inscripPeriodoRoutes.delete('/:id', controller.remove.bind(controller));
