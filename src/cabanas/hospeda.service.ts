@@ -26,7 +26,21 @@ export class HospedaService {
     return await em.find(Hospeda, {}, { populate: ['campista', 'cabania', 'periodo'] });
   }
 
-  async findOne(id: number, em: EntityManager): Promise<Hospeda> {
+  async findOne(user: UserPayload, idHospeda: number, em: EntityManager): Promise<Hospeda> {
+    const { id } = await this.periodoService.getVigente(em);
+    if (user.role === 'campista') {
+      const hospeda = await em.findOne(
+        Hospeda,
+        {
+          id: idHospeda,
+          periodo: id,
+          campista: user.id,
+        },
+        { populate: ['cabania', 'campista', 'periodo'] },
+      );
+      if (!hospeda) throw new NotFoundError('Inscripción');
+      return hospeda;
+    }
     const hospeda = await em.findOne(Hospeda, { id }, { populate: ['campista', 'cabania', 'periodo'] });
     if (!hospeda) throw new NotFoundError('Hospedaje');
     return hospeda;
@@ -87,5 +101,18 @@ export class HospedaService {
     const hospeda = await em.findOne(Hospeda, { id });
     if (!hospeda) throw new NotFoundError('Hospedaje');
     await em.removeAndFlush(hospeda);
+  }
+
+  async moveCampista(id: number, nuevaCabaniaId: number, em: EntityManager): Promise<Hospeda> {
+    if (!nuevaCabaniaId) throw new BadRequestError('Debe enviar cabaña');
+
+    return await em.transactional(async (tEm) => {
+      const hospeda = await tEm.findOne(Hospeda, { id }, { lockMode: LockMode.PESSIMISTIC_WRITE });
+      if (!hospeda) throw new NotFoundError('Hospedaje');
+
+      hospeda.cabania = tEm.getReference(Cabania, nuevaCabaniaId);
+      await tEm.flush();
+      return hospeda;
+    });
   }
 }
