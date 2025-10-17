@@ -53,4 +53,5 @@ notas.md
 
 pnpm-lock.yaml
 
-/tests
+tests/
+api/

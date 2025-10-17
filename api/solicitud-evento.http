@@ -14,27 +14,25 @@ Content-Type: application/json
 Cookie: token={{tokencampista}}
 
 {
-  "campista": 4,
-  "evento": 1,
-  "estado": "pendiente"
+  "evento": 1
 }
 
 ### Create Solicitud Evento 2
 POST http://localhost:3000/api/solicitud-evento
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 {
-  "campista": 4,
+  "campista": 14,
   "evento": 2,
   "estado": "pendiente"
 }
 
 ### Update Solicitud Evento (cambiar estado)
-PUT http://localhost:3000/api/solicitud-evento/1
+PATCH http://localhost:3000/api/solicitud-evento/4
 Content-Type: application/json
 Cookie: token={{tokenadmin}}
 
 {
-  "estado": "aprobada"
+  "estado": "aceptado"
 }

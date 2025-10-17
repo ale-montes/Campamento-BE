@@ -104,3 +104,13 @@ Cookie: token={{tokenadmin}}
   "alergias": "mani",
   "telefono": "123456789"
 }
+
+
+### Login de usuario con email y contraseña validos CAMPISTA
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "qmb.tecno44@gmail.com",
+  "contrasena": "123456"
+}
