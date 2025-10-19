@@ -43,7 +43,7 @@ export const campistaSchema = z.object({
     .refine(
       (date) => {
         const age = new Date().getFullYear() - date.getFullYear();
-        return age >= 18; // Validar que el usuario sea mayor de 18 años
+        return age >= 9; // Validar que el usuario sea mayor de 18 años
       },
       {
         message: 'El campista debe ser mayor de 18 años',
@@ -66,7 +66,14 @@ export const campistaSchema = z.object({
       message: 'El nombre solo puede contener letras, espacios, guiones y apóstrofes',
     })
     .optional(),
-  direccion: z.string().min(2).max(100).optional(),
+  direccion: z
+    .string()
+    .min(2, { message: 'La dirección debe tener al menos 2 caracteres' })
+    .max(100, { message: 'La dirección no puede superar los 100 caracteres' })
+    .regex(/^[a-zA-ZÀ-ÿ0-9\s.,°#\-'/()]+$/, {
+      message: "La dirección solo puede contener letras, números, espacios y los caracteres . , ° # - ' / ( )",
+    })
+    .optional(),
   alergias: z
     .string()
     .min(2)
