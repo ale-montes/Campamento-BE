@@ -1,11 +1,33 @@
 ### Obtener todas las cabañas
 GET http://localhost:3000/api/cabanias
+Content-Type: application/json
+Cookie: token={{tokencampista}}
+
+### Obtener todas las cabañas
+GET http://localhost:3000/api/cabanias
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+
+### Obtener todas las cabañas
+GET http://localhost:3000/api/cabanias
+Content-Type: application/json
+Cookie: token={{tokeninstructor}}
+
 ### Obtener por ID
 GET http://localhost:3000/api/cabanias/1
+Content-Type: application/json
+Cookie: token={{tokencampista}}
+
+### Obtener por ID
+GET http://localhost:3000/api/cabanias/1
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 ### Crear Cabaña 1
 POST http://localhost:3000/api/cabanias
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "nombre": "Cabaña del bosque",
@@ -18,6 +40,7 @@ Content-Type: application/json
 ### Crear Cabaña 2
 POST http://localhost:3000/api/cabanias
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "nombre": "Cabaña del lago",
@@ -28,14 +51,11 @@ Content-Type: application/json
 }
 
 ### Crear Cabaña 3
-POST http://localhost:3000/api/cabanias
+PATCH  http://localhost:3000/api/cabanias/1
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
-  "nombre": "Cabaña de la montaña",
-  "capacidad": 4,
-  "descripcion": "Cabaña rústica en la ladera de la montaña, perfecta para escapadas.",
-  "ubicacion": "Sector este del campamento",
-  "deidad": 3
+  "capacidad": 8
 }
 

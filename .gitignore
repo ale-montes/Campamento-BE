@@ -16,7 +16,6 @@ Thumbs.db
 
 # Variables de entorno
 .env
-.env.* 
 
 # Archivos temporales
 *.swp
@@ -54,4 +53,5 @@ notas.md
 
 pnpm-lock.yaml
 
-/tests
+tests/
+api/

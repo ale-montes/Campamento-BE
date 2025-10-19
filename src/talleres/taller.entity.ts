@@ -3,6 +3,7 @@ import { Entity, Property, ManyToOne, Cascade, Collection, Rel, OneToMany } from
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Instructor } from '../usuarios/instructor.entity.js';
 import { InscripcionTaller } from '../talleres/inscripcion-taller.entity.js';
+import { Periodo } from '../periodo/periodo.entity.js';
 
 @Entity()
 export class Taller extends BaseEntity {
@@ -22,7 +23,7 @@ export class Taller extends BaseEntity {
   cupo!: number;
 
   @Property({ nullable: false })
-  duracionHoras!: number;
+  duracionMin!: number;
 
   @Property({ nullable: false, default: 'abierto' })
   estado!: 'abierto' | 'cerrado' | 'en progreso' | 'cancelado' | 'completado';
@@ -34,4 +35,7 @@ export class Taller extends BaseEntity {
     cascade: [Cascade.ALL],
   })
   inscripciones = new Collection<InscripcionTaller>(this);
+
+  @ManyToOne(() => Periodo, { nullable: false })
+  periodo!: Rel<Periodo>;
 }

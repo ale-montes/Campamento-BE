@@ -1,16 +1,18 @@
 import { Router } from 'express';
-import { findAll, findOne, add, update, remove } from './instructor.controler.js';
+import { InstructorController } from './instructor.controler.js';
 import { authMiddleware } from '../shared/middleware/auth.middleware.js';
+import { validateSchema } from '../shared/middleware/validation.middleware.js';
+import { instructorSchema, instructorUpdateSchema } from './instructor.schema.js';
 import { checkPermission } from '../shared/middleware/permission.middleware.js';
 
 export const instructorRoutes = Router();
-//Rutas Publicas
+const controller = new InstructorController();
 
 instructorRoutes.use(authMiddleware, checkPermission);
-//Rutas Privadas
-instructorRoutes.get('/', findAll);
-instructorRoutes.get('/:id', findOne);
-instructorRoutes.post('/', add);
-instructorRoutes.put('/:id', update);
-instructorRoutes.patch('/:id', update);
-instructorRoutes.delete('/:id', remove);
+
+instructorRoutes.get('/', controller.findAll.bind(controller));
+instructorRoutes.get('/:id', controller.findOne.bind(controller));
+instructorRoutes.post('/', validateSchema(instructorSchema), controller.add.bind(controller));
+instructorRoutes.put('/:id', validateSchema(instructorSchema), controller.update.bind(controller));
+instructorRoutes.patch('/:id', validateSchema(instructorUpdateSchema), controller.update.bind(controller));
+instructorRoutes.delete('/:id', controller.remove.bind(controller));

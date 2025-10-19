@@ -1,40 +1,35 @@
 ### GET all campistas
 GET http://localhost:3000/api/campista
-
-### GET by ID
-GET http://localhost:3000/api/campista/1
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 ### GET all campistas
 GET http://localhost:3000/api/campista
+Content-Type: application/json
+Cookie: token={{tokencampista}}
+
+### GET all campistas
+GET http://localhost:3000/api/campista
+Content-Type: application/json
+Cookie: token={{tokeninstructor}}
 
 ### GET by ID
-GET http://localhost:3000/api/campista/1
-
-### Create Clarisse La Rue
-POST http://localhost:3000/api/campista
+GET http://localhost:3000/api/campista/14
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
-{
-  "nombre": "Clarisse",
-  "apellido": "La Rue",
-  "email": "clarisse.larue@chb.com",
-  "telefono": "555-0103",
-  "contrasena": "aresPower",
-  "fechaNac": "1990-03-18",
-  "direccion": "Cabaña 5, Campamento Mestizo",
-  "alergias": "Ninguna conocida",
-  "grupoSanguineo": "A"
-}
-
-POST http://localhost:3000/api/campista
+### GET by ID
+GET http://localhost:3000/api/campista/14
 Content-Type: application/json
-{ 
-  "nombre": "Juan",
-  "apellido": "Pérez",
-  "email": "juanperez2@gmail.com",
-  "telefono": "+543123456789",
-  "contrasena": "$2b$12$wEa8ibV0tmJ774RHB7Qk3e56rmHjhcJpE4zzFZe/ymUc/9CmA9OVG"
-}
+Cookie: token={{tokenadmin}}
+
+### GET by ID
+GET http://localhost:3000/api/campista/14
+Content-Type: application/json
+Cookie: token={{tokeninstructor}}
+
+
+
 ### Create Percy Jackson
 POST http://localhost:3000/api/campista
 Content-Type: application/json
@@ -166,15 +161,16 @@ Content-Type: application/json
 ### Create Leo Valdez
 POST http://localhost:3000/api/campista
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "nombre": "Leo",
   "apellido": "Valdez",
   "email": "leo.valdez@chb.com",
-  "telefono": "555-0112",
+  "telefono": "+595550112",
   "contrasena": "badboyleo",
   "fechaNac": "1994-07-07",
-  "direccion": "Cabaña 9, Campamento Mestizo",
+  "direccion": "Campamento Mestizo",
   "alergias": "Ninguna conocida",
-  "grupoSanguineo": "AB"
+  "grupoSanguineo": "AB+"
 }

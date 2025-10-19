@@ -1,101 +1,56 @@
-import { Request, Response } from 'express';
-import { Campista } from './campista.entity.js';
-import { orm } from '../shared/db/orm.js';
-import bcrypt from 'bcryptjs';
+import { Request, Response, NextFunction } from 'express';
+import { CampistaService } from './campista.service.js';
+import { getEm } from '../shared/db/orm.js';
+import { validateId } from '../shared/validateParam.js';
 
-const em = orm.em;
+export class CampistaController {
+  constructor(private readonly service = new CampistaService()) {}
 
-async function findAll(req: Request, res: Response) {
-  try {
-    const campistas = await em.find(Campista, {});
-    const campistasSanitized = campistas.map(({ contrasena: _omit, ...rest }) => rest);
-    res.status(200).json({ message: 'found all campistas', data: campistasSanitized });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
+  async findAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const campistas = await this.service.findAll(getEm());
+      res.status(200).json({ message: 'found all campistas', data: campistas });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async findOne(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = validateId(req.params.id);
+      const campista = await this.service.findOne(id, getEm());
+      res.status(200).json({ success: true, data: campista });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async add(req: Request, res: Response, next: NextFunction) {
+    try {
+      const campista = await this.service.add(req.user!.role, req.body.sanitizedInput, getEm());
+      res.status(201).json({ message: 'campista creado', data: campista });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = validateId(req.params.id);
+      const campista = await this.service.update(id, req.body.sanitizedInput, getEm());
+      res.status(200).json({ message: 'campista actualizado', data: campista });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async remove(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = validateId(req.params.id);
+      await this.service.remove(id, getEm());
+      res.status(200).json({ message: 'campista marcado como inactivo' });
+    } catch (error) {
+      next(error);
     }
   }
 }
-
-async function findOne(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const { contrasena: _omit, ...campistaSanitized } = await em.findOneOrFail(Campista, { id });
-    res.status(200).json({ message: 'found user', data: campistaSanitized });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function add(req: Request, res: Response) {
-  try {
-    const { contrasena, ...rest } = req.body;
-    const hashedPassword = await bcrypt.hash(contrasena, 10);
-    const token = crypto.randomUUID();
-    const campista = em.create(Campista, {
-      ...rest,
-      contrasena: hashedPassword,
-      isVerified: false,
-      verificationToken: token,
-    });
-    await em.flush();
-    res
-      .status(201)
-      .json({ message: 'user created, email pendient the verification', email: campista.email });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function update(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const campista = em.getReference(Campista, id);
-    em.assign(campista, req.body);
-    await em.flush();
-    res.status(200).json({ message: 'user updated' });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-async function remove(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const campista = em.getReference(Campista, id);
-    await em.removeAndFlush(campista);
-    res.status(200).send({ message: 'user deleted' });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    } else {
-      console.log('Unknown error', error);
-      res.status(500).json({ message: 'Unknown error' });
-    }
-  }
-}
-
-export { findAll, findOne, add, update, remove };

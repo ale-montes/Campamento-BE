@@ -1,4 +1,4 @@
-@tokenmail = cde9e583-9952-4b14-aaa2-8ed43e977458
+@tokenmail = 6d39429b-463a-4a11-8770-68cb033f0b3e
 
 ### Create Campista 2
 POST http://localhost:3000/api/auth/register
@@ -7,8 +7,18 @@ Content-Type: application/json
 {
   "nombre": "Alejandro",
   "apellido": "Gómez",
-  "email": "gomez@gmail.com",
-  "telefono": "+543987654321",
+  "email": "gomez3@gmail.com",
+  "telefono": "+54398765432",
+  "contrasena": "123456"
+}
+
+
+### Login de usuario con email y contraseña validos ADMIN
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "lukecastenllan@gmail.com",
   "contrasena": "123456"
 }
 
@@ -22,7 +32,7 @@ Content-Type: application/json
   "contrasena": "123456"
 }
 
-### Login de usuario con email y contraseña validos InSTRUCTOR
+### Login de usuario con email y contraseña validos INSTRUCTOR
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
@@ -35,15 +45,33 @@ Content-Type: application/json
 ###verificar verifyEmail
 GET http://localhost:3000/api/auth/verify-email/{{tokenmail}}
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 ###Consultar quien soy con token valido
 GET http://localhost:3000/api/auth/me
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+###Consultar quien soy con token valido
+GET http://localhost:3000/api/auth/me
+Content-Type: application/json
+Cookie: token={{tokencampista}}
+
+###Consultar quien soy con token valido
+GET http://localhost:3000/api/auth/me
+Content-Type: application/json
+Cookie: token={{tokeninstructor}}
+
+### Consultar quien soy con token admin
+GET http://localhost:3000/api/auth/me
+Authorization: Bearer {{tokencampista}}
 Content-Type: application/json
 
 
 ###Reenviar email de verificacion
 PUT http://localhost:3000/api/auth/resend-verification
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "email": "qmb.tecno@gmail.com"
@@ -52,8 +80,37 @@ Content-Type: application/json
 ###Login de admin
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "email": "lukecastenllan@gmail.com",
+  "contrasena": "123456"
+}
+
+
+### Login de usuario con email y contraseña validos ADMIN
+GET http://localhost:3000/api/auth/profile
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+
+
+### Login de usuario con email y contraseña validos ADMIN
+PATCH http://localhost:3000/api/auth/profile
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+{
+  "alergias": "mani",
+  "telefono": "123456789"
+}
+
+
+### Login de usuario con email y contraseña validos CAMPISTA
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "qmb.tecno44@gmail.com",
   "contrasena": "123456"
 }

@@ -44,36 +44,8 @@ export abstract class Usuario extends BaseEntity {
   activo?: boolean = true;
 
   @Property({ default: false })
-  isVerified: boolean = false;
+  isVerified?: boolean = false;
 
   @Property({ nullable: true })
   verificationToken?: string | null;
 }
-
-//### Herencia de tabla por clase concreta
-// @OneToOne(() => Campista, (campista) => campista.usuario, {
-//   nullable: true,
-//   cascade: [Cascade.PERSIST, Cascade.REMOVE],
-//   orphanRemoval: true,
-// })
-// campista?: Campista;
-
-// @OneToOne(() => Instructor, (instructor) => instructor.usuario, {
-//   nullable: true,
-//   cascade: [Cascade.PERSIST, Cascade.REMOVE],
-//   orphanRemoval: true,
-// })
-// instructor?: Instructor;
-
-// @OneToOne(() => Admin, (admin) => admin.usuario, {
-//   nullable: true,
-//   cascade: [Cascade.PERSIST, Cascade.REMOVE],
-//   orphanRemoval: true,
-// })
-// admin?: Admin;
-
-//### Herencia de una sola tabla
-// @Entity({
-//   discriminatorColumn: 'type',
-//   discriminatorMap: { usuario: 'Usuario', campista: 'Campista', instructor: 'Instructor', admin: 'Admin' },
-// })

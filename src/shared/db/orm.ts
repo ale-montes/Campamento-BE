@@ -1,4 +1,4 @@
-import { MikroORM } from '@mikro-orm/core';
+import { MikroORM, RequestContext } from '@mikro-orm/core';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { MySqlDriver } from '@mikro-orm/mysql';
 
@@ -6,7 +6,7 @@ export const orm = await MikroORM.init({
   entities: ['dist/**/*.entity.js'],
   entitiesTs: ['src/**/*.entity.ts'],
   driver: MySqlDriver,
-  clientUrl: process.env.DATABASE_URL || 'mysql://admin:camp123@localhost:3307/camp',
+  clientUrl: process.env.DATABASE_URL,
   highlighter: new SqlHighlighter(),
   debug: true,
   schemaGenerator: {
@@ -25,3 +25,7 @@ export const syncSchema = async () => {
 
   await generator.updateSchema();
 };
+
+export function getEm() {
+  return RequestContext.getEntityManager()!;
+}

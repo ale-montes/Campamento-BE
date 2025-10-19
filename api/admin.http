@@ -1,13 +1,17 @@
 ### GET all characters
 GET http://localhost:3000/api/admin
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 ### GET by ID
 GET http://localhost:3000/api/admin/1
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 ### Create Admin
 POST http://localhost:3000/api/admin
 Content-Type: application/json
-
+Cookie: token={{tokenadmin}}
 {
   "nombre": "Luke",
   "apellido": "Castellan",
@@ -24,6 +28,7 @@ Content-Type: application/json
 ### Create admin  2
 POST http://localhost:3000/api/admin
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "nombre": "Dionisio",
@@ -41,6 +46,7 @@ Content-Type: application/json
 ### update admin
 PATCH  http://localhost:3000/api/admin/1
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "verificationToken": null,

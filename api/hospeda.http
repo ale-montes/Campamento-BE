@@ -1,22 +1,31 @@
 ### Obtener todas las hospedajes
 GET http://localhost:3000/api/hospedaje
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+### Obtener todas las hospedajes
+GET http://localhost:3000/api/hospedaje
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
 ### Obtener por ID
 GET http://localhost:3000/api/hospedaje/1
+Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 ### Crear Hospedaje 1
 POST http://localhost:3000/api/hospedaje
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
-  "cabania": 1,
-  "campista": 4,
-  "fechaInicio": "2023-10-01T12:00:00Z",
-  "estado": "reservada"
+  "cabania": 2
 }
 
 ### Crear Hospedaje 2
 POST http://localhost:3000/api/hospedaje
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "cabania": 2,
@@ -28,10 +37,31 @@ Content-Type: application/json
 ### Crear Hospedaje 3
 POST http://localhost:3000/api/hospedaje
 Content-Type: application/json
+Cookie: token={{tokencampista}}
 
 {
   "cabania": 3,
   "campista": 3,
   "fechaInicio": "2023-10-03T12:00:00Z",
   "estado": "reservada"
+}
+
+
+
+### Obtener por ID
+PATCH  http://localhost:3000/api/hospedaje/1/move
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+{
+  "cabania": 4
+}
+
+### Obtener por ID
+PATCH  http://localhost:3000/api/hospedaje/1
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+{
+  "estado": "finalizada"
 }

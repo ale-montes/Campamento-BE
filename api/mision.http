@@ -1,12 +1,27 @@
 ### GET all misiones
 GET http://localhost:3000/api/misiones
+Content-Type: application/json
+Cookie: token={{tokencampista}}
+
+### GET all misiones
+GET http://localhost:3000/api/misiones
+Content-Type: application/json
+Cookie: token={{tokeninstructor}}
 
 ### GET by ID
 GET http://localhost:3000/api/misiones/1
+Content-Type: application/json
+Cookie: token={{tokencampista}}
+
+### GET by ID
+GET http://localhost:3000/api/misiones/1
+Content-Type: application/json
+Cookie: token={{tokeninstructor}}
 
 ### Create Mision
 POST http://localhost:3000/api/misiones
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "titulo": "Caza del tesoro",
@@ -18,6 +33,7 @@ Content-Type: application/json
 ### Create Mision 2
 POST http://localhost:3000/api/misiones
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "titulo": "Descubre la cueva de las hadas",

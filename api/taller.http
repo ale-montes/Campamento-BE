@@ -3,27 +3,36 @@ GET http://localhost:3000/api/talleres
 Content-Type: application/json
 Cookie: token={{tokenadmin}}
 
+### GET all talleres
+GET http://localhost:3000/api/talleres
+Content-Type: application/json
+Cookie: token={{tokencampista}}
+
 ### GET by ID
-GET http://localhost:3000/api/talleres/2
+GET http://localhost:3000/api/talleres/1
 Content-Type: application/json
 Cookie: token={{tokenadmin}}
 
 ### Create Taller
 POST http://localhost:3000/api/talleres
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 {
-  "titulo": "Taller de RCP",
-  "descripcion": "Aprende a actuar ante una urgencia y se el heroe.",
-  "fechaHora": "2025-10-01T10:00:00Z",
-  "lugar": "Zona 8: La cueva de los héroes",
-  "instructor": 1
+  "titulo": "Taller de Manualidades",
+  "descripcion": "Aprende a hacer manualidades con materiales reciclados.",
+  "fechaHora": "2025-10-01T10:00:00.000Z",
+  "lugar": "Zona 2: El rincón creativo",
+  "instructor": 1,
+  "cupo": 15,
+  "duracionMin": 90,
+  "periodo": 2
 }
 
 ### Create Taller 2
 POST http://localhost:3000/api/talleres
 Content-Type: application/json
+Cookie: token={{tokenadmin}}
 
 {
   "titulo": "Taller de Supervivencia",
@@ -44,4 +53,13 @@ Cookie: token={{tokenadmin}}
   "fechaHora": "2025-10-03T10:00:00Z",
   "lugar": "Zona 5: La clínica móvil",
   "instructor": 1
+}
+
+### actualizar taller
+PATCH http://localhost:3000/api/talleres/2
+Content-Type: application/json
+Cookie: token={{tokenadmin}}
+
+{
+    "estado": "cerrado"
 }
