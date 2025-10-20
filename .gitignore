@@ -1,4 +1,5 @@
 # Node.js
+/api/
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -54,4 +55,3 @@ notas.md
 pnpm-lock.yaml
 
 tests/
-api/
