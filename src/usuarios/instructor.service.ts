@@ -4,6 +4,7 @@ import { InstructorInput } from './instructor.schema.js';
 import { NotFoundError } from '../shared/errors/http-error.js';
 import bcrypt from 'bcryptjs';
 import { validateId } from '../shared/validateParam.js';
+import { hashPassword } from '../shared/password.utils.js';
 
 export class InstructorService {
   async findAll(em: EntityManager): Promise<Omit<Instructor, 'contrasena'>[]> {
@@ -25,6 +26,17 @@ export class InstructorService {
 
   async findByVerificationToken(token: string, em: EntityManager): Promise<Instructor | null> {
     return em.findOne(Instructor, { verificationToken: token });
+  }
+
+  async findByResetToken(token: string, em: EntityManager) {
+    return await em.findOne(Instructor, { resetPasswordToken: token });
+  }
+
+  async updatePassword(id: number, newPassword: string, em: EntityManager) {
+    const instructor = await em.findOne(Instructor, { id });
+    if (!instructor) throw new Error('Instructor no encontrado');
+    instructor.contrasena = await hashPassword(newPassword);
+    await em.flush();
   }
 
   async add(data: InstructorInput, em: EntityManager): Promise<Omit<Instructor, 'contrasena'>> {

@@ -94,4 +94,29 @@ export class AuthController {
       next(error);
     }
   }
+
+  async recuperarPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const em = getEm();
+      const email = req.body.email as string;
+      if (!email) throw new Error('Email no proporcionado');
+      const result = await this.service.forgotPassword(email, em);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async resetearPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const em = getEm();
+      const { token, newpassword } = req.body;
+      if (!token) throw new Error('Token no proporcionado');
+      if (!newpassword) throw new Error('Email no proporcionado');
+      const result = await this.service.resetPassword(token, newpassword, em);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

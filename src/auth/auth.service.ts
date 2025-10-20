@@ -1,10 +1,13 @@
 import { CampistaService } from '../usuarios/campista.service.js';
 import { UsuariosService, UserEntityOmitPass, UserEntity } from '../usuarios/usuarios.service.js';
 import { sendVerificationEmail } from './email.service.js';
+import { sendResetPasswordEmail } from './email.service.js';
 import { generateJwtToken } from '../shared/jwtUtils.js';
 import { CampistaInput } from '../usuarios/campista.schema.js';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import { EntityManager } from '@mikro-orm/core';
+import { hashPassword } from '../shared/password.utils.js';
 
 export class AuthService {
   private campistaService = new CampistaService();
@@ -51,6 +54,48 @@ export class AuthService {
     const result = await sendVerificationEmail(user.email, verificationUrl);
     if (!result) throw new Error('Problemas al enviar el Correo');
     return { message: 'Correo de verificación reenviado.' };
+  }
+
+  async forgotPassword(email: string, em: EntityManager) {
+    const userResult = await this.usuarioService.findByEmail(email, em);
+    if (!userResult) throw new Error('Usuario no encontrado');
+
+    const { user } = userResult;
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetPasswordExpires = new Date(Date.now() + 30 * 60 * 1000); // 30 min
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = resetPasswordExpires;
+
+    await em.persistAndFlush(user);
+
+    const resetUrl = `${process.env.FRONTEND_URL}/auth/reset-password?token=${resetToken}`;
+    const emailSent = await sendResetPasswordEmail(user.email, resetUrl);
+
+    if (!emailSent) throw new Error('No se pudo enviar el correo de recuperación');
+
+    return { message: 'Correo de recuperación enviado si el usuario existe' };
+  }
+
+  async resetPassword(token: string, newPassword: string, em: EntityManager) {
+    // Buscar al usuario por token
+    const user = await this.usuarioService.findByResetToken(token, em);
+    if (!user) throw new Error('Token inválido');
+
+    // Verificar expiración
+    if (user.resetPasswordExpires! < new Date()) {
+      throw new Error('Token expirado');
+    }
+
+    // Actualizar contraseña y limpiar campos
+    user.contrasena = await hashPassword(newPassword);
+    user.resetPasswordToken = null;
+    user.resetPasswordExpires = null;
+
+    await em.persistAndFlush(user);
+
+    return { message: 'Contraseña actualizada correctamente' };
   }
 
   async getProfile(user: { id: number; role: string }, em: EntityManager): Promise<UserEntityOmitPass | null> {
