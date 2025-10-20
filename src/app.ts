@@ -31,7 +31,7 @@ app.use(apiBasePath, routes);
 //Error middleware
 app.use(errorMiddleware);
 
-await syncSchema(); //never in production
+// await syncSchema(); //never in production
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);

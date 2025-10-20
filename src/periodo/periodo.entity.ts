@@ -30,6 +30,9 @@ export class Periodo extends BaseEntity {
   @Property({ nullable: false, default: 'cerrado' })
   estado!: EstadoPeriodo;
 
+  @Property({ nullable: false })
+  importe!: number;
+
   @OneToMany(() => InscripcionPeriodo, (inscripcion) => inscripcion.periodo, {
     cascade: [Cascade.ALL],
   })
