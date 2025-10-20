@@ -5,6 +5,7 @@ import type { Campista } from './campista.entity.js';
 import type { Instructor } from './instructor.entity.js';
 import type { Admin } from './admin.entity.js';
 import { EntityManager } from '@mikro-orm/core';
+import { hashPassword } from '../shared/password.utils.js';
 
 export type UserEntity = Campista | Instructor | Admin;
 export type UserEntityOmitPass =
@@ -57,5 +58,32 @@ export class UsuariosService {
       default:
         throw new Error('Rol no reconocido');
     }
+  }
+  async findByResetToken(token: string, em: EntityManager) {
+    const admin = await this.adminService.findByResetToken(token, em);
+    if (admin) return admin;
+
+    const campista = await this.campistaService.findByResetToken(token, em);
+    if (campista) return campista;
+
+    const instructor = await this.instructorService.findByResetToken(token, em);
+    if (instructor) return instructor;
+
+    return null;
+  }
+
+  async updatePassword(email: string, newPassword: string, em: EntityManager) {
+    const hashed = await hashPassword(newPassword);
+
+    const admin = await this.adminService.findByEmail(email, em);
+    if (admin) return this.adminService.updatePassword(admin.id!, hashed, em);
+
+    const campista = await this.campistaService.findByEmail(email, em);
+    if (campista) return this.campistaService.updatePassword(campista.id!, hashed, em);
+
+    const instructor = await this.instructorService.findByEmail(email, em);
+    if (instructor) return this.instructorService.updatePassword(instructor.id!, hashed, em);
+
+    throw new Error('Usuario no encontrado');
   }
 }

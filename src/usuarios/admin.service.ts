@@ -4,6 +4,8 @@ import { AdminInput } from './admin.schema.js';
 import { NotFoundError } from '../shared/errors/http-error.js';
 import bcrypt from 'bcryptjs';
 import { validateId } from '../shared/validateParam.js';
+import { hashPassword } from '../shared/password.utils.js';
+import { Instructor } from './instructor.entity.js';
 
 export class AdminService {
   async findAll(em: EntityManager): Promise<Omit<Admin, 'contrasena'>[]> {
@@ -23,8 +25,19 @@ export class AdminService {
     return em.findOne(Admin, { email });
   }
 
+  async findByResetToken(token: string, em: EntityManager) {
+    return await em.findOne(Instructor, { resetPasswordToken: token });
+  }
+
   async updateVerific(token: string, em: EntityManager): Promise<Admin | null> {
     return em.findOne(Admin, { verificationToken: token });
+  }
+
+  async updatePassword(id: number, newPassword: string, em: EntityManager) {
+    const admin = await em.findOne(Admin, { id });
+    if (!admin) throw new Error('Admin no encontrado');
+    admin.contrasena = await hashPassword(newPassword);
+    await em.flush();
   }
 
   async add(data: AdminInput, em: EntityManager): Promise<Omit<Admin, 'contrasena'>> {

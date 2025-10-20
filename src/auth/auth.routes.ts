@@ -1,7 +1,13 @@
 import { Router } from 'express';
 import { AuthController } from './auth.controller.js';
 import { authMiddleware } from '../shared/middleware/auth.middleware.js';
-import { campistaSchema, campistaUpdateSchema, loginSchema } from '../usuarios/campista.schema.js';
+import {
+  campistaSchema,
+  campistaUpdateSchema,
+  loginSchema,
+  recuperarContrasena,
+  resetearContrasena,
+} from '../usuarios/campista.schema.js';
 import { validateSchema, validateSchemaByRole } from '../shared/middleware/validation.middleware.js';
 import { instructorUpdateSchema } from '../usuarios/instructor.schema.js';
 import { adminUpdateSchema } from '../usuarios/admin.schema.js';
@@ -14,6 +20,16 @@ authRoutes.post('/register', validateSchema(campistaSchema), authController.regi
 authRoutes.post('/login', validateSchema(loginSchema), authController.login.bind(authController));
 authRoutes.get('/verify-email/:token', authController.verifyEmail.bind(authController));
 authRoutes.put('/resend-verification', authController.resendVerification.bind(authController));
+authRoutes.post(
+  '/forgot-password',
+  validateSchema(recuperarContrasena),
+  authController.recuperarPassword.bind(authController),
+);
+authRoutes.post(
+  '/reset-password',
+  validateSchema(resetearContrasena),
+  authController.resetearPassword.bind(authController),
+);
 
 // Rutas protegidas
 authRoutes.get('/me', authMiddleware, authController.whoami.bind(authController));

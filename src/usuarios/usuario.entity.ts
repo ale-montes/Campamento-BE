@@ -48,4 +48,10 @@ export abstract class Usuario extends BaseEntity {
 
   @Property({ nullable: true })
   verificationToken?: string | null;
+
+  @Property({ nullable: true })
+  resetPasswordToken?: string | null;
+
+  @Property({ nullable: true })
+  resetPasswordExpires?: Date | null;
 }

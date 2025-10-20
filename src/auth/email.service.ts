@@ -53,3 +53,53 @@ export const sendVerificationEmail = async (destino: string, verificationUrl: st
     return false;
   }
 };
+
+export const sendResetPasswordEmail = async (destino: string, resetUrl: string): Promise<boolean> => {
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || '587', 10),
+    secure: false,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+
+  try {
+    await transporter.sendMail({
+      from: '"Soporte" <support@campament.org>',
+      to: destino,
+      subject: 'Recupera tu contraseña',
+      html: `
+        <div style="font-family: Arial, sans-serif; background-color:#f9f9f9; padding:20px;">
+          <table width="100%" cellspacing="0" cellpadding="0" style="max-width:600px; margin:auto; background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+            <tr>
+              <td style="background:#78a000; color:#ffffff; text-align:center; padding:20px; font-size:24px; font-weight:bold;">
+                Recuperación de contraseña
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:30px; color:#333333; font-size:16px;">
+                <p>Hola,</p>
+                <p>Recibimos una solicitud para restablecer tu contraseña. Si fuiste tú, haz clic en el siguiente botón:</p>
+                <div style="text-align:center; margin:30px 0;">
+                  <a href="${resetUrl}" 
+                     style="background:#78a000; color:#ffffff; padding:12px 24px; text-decoration:none; border-radius:6px; font-size:16px; display:inline-block;">
+                    Restablecer contraseña
+                  </a>
+                </div>
+                <p>Si no solicitaste este cambio, puedes ignorar este mensaje.</p>
+                <p style="word-break:break-all; color:#78a000;">${resetUrl}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `,
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Error al enviar el correo de recuperación:', error);
+    return false;
+  }
+};

@@ -5,6 +5,7 @@ import { ConflictError, InternalServerError, NotFoundError } from '../shared/err
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { validateId } from '../shared/validateParam.js';
+import { hashPassword } from '../shared/password.utils.js';
 
 export class CampistaService {
   async findAll(em: EntityManager): Promise<Omit<Campista, 'contrasena'>[]> {
@@ -26,6 +27,17 @@ export class CampistaService {
 
   async findByVerificationToken(token: string, em: EntityManager): Promise<Campista | null> {
     return em.findOne(Campista, { verificationToken: token });
+  }
+
+  async findByResetToken(token: string, em: EntityManager) {
+    return await em.findOne(Campista, { resetPasswordToken: token });
+  }
+
+  async updatePassword(id: number, newPassword: string, em: EntityManager) {
+    const campista = await em.findOne(Campista, { id });
+    if (!campista) throw new Error('Campista no encontrado');
+    campista.contrasena = await hashPassword(newPassword);
+    await em.flush();
   }
 
   async add(role: string, data: CampistaInput, em: EntityManager): Promise<Omit<Campista, 'contrasena'>> {
