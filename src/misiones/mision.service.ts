@@ -2,10 +2,15 @@ import { EntityManager, LockMode } from '@mikro-orm/core';
 import { Mision } from './mision.entity.js';
 import { MisionInputAdmin } from './mision.schema.js';
 import { NotFoundError } from '../shared/errors/http-error.js';
+import { UserPayload } from '../types/user.js';
 
 export class MisionService {
-  async findAll(em: EntityManager): Promise<Mision[]> {
-    return await em.find(Mision, {});
+  async findAll(em: EntityManager, user: UserPayload, includeInactive: boolean = false): Promise<Mision[]> {
+    //chequeamos que solo el admin pueda pedir inactivas
+    if (user.role !== 'admin') {
+      includeInactive = false;
+    }
+    return await em.find(Mision, {}, { filters: { activeMision: !includeInactive } });
   }
 
   async findOne(id: number, em: EntityManager): Promise<Mision> {
@@ -34,6 +39,8 @@ export class MisionService {
   async remove(id: number, em: EntityManager): Promise<void> {
     const mision = await em.findOne(Mision, { id });
     if (!mision) throw new NotFoundError(`Misión con id ${id} no encontrada`);
-    await em.removeAndFlush(mision);
+    mision.isActive = false;
+    await em.flush();
+    //await em.removeAndFlush(mision);
   }
 }

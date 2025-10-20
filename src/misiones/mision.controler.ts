@@ -8,7 +8,9 @@ export class MisionController {
 
   async findAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const misiones = await this.service.findAll(getEm());
+      const { isActive } = req.query;
+      const misiones = await this.service.findAll(getEm(), req.user!, isActive === 'true');
+      //const misiones = await this.service.findAll(getEm());
       res.status(200).json({ message: 'found all misiones', data: misiones });
     } catch (error) {
       next(error);
