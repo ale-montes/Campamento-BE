@@ -1,7 +1,7 @@
 ### GET all asignaciones a misiones
 GET http://localhost:3000/api/asigna-mision
 Content-Type: application/json
-Cookie: token={{tokencampista}}
+Cookie: token={{tokenadmin}}
 
 ### GET by ID
 GET http://localhost:3000/api/asigna-mision/3
@@ -14,8 +14,8 @@ Content-Type: application/json
 Cookie: token={{tokeninstructor}}
 
 {
-  "campista": 14,
-  "mision": 1,
+  "campista": 1,
+  "mision": 18,
   "estado": "asignada",
   "periodo": 1
 }

@@ -32,12 +32,17 @@ export const misionOutputSchemaAdmin = z
     descripcion: z.string(),
     recompensa: z.string().optional(),
     pista: z.string().optional(),
+    isActive: z.boolean().optional(),
     createdAt: z.string().or(z.date()),
     updatedAt: z.string().or(z.date()),
   })
   .strip();
 
-export const misionOutputSchemaCampista = misionOutputSchemaAdmin.omit({ createdAt: true, updatedAt: true });
+export const misionOutputSchemaCampista = misionOutputSchemaAdmin.omit({
+  createdAt: true,
+  updatedAt: true,
+  isActive: true,
+});
 export const misionOutputSchemaInstructor = misionOutputSchemaCampista;
 
 /* -------------------------- TYPES -------------------------- */
