@@ -15,6 +15,7 @@ export const periodoSchema = z.object({
   fechaFinPer: dateField,
   fechaInicioInsc: dateField,
   fechaFinInsc: dateField,
+  importe: z.number(),
   estado: z.enum(['en curso', 'cerrado', 'abierto', 'finalizado']).optional().default('cerrado'),
 });
 
