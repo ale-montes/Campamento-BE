@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
-import morgan from 'morgan';
+// import morgan from 'morgan';
 import cors from 'cors';
 import 'reflect-metadata';
 import cookieParser from 'cookie-parser';
@@ -9,16 +9,21 @@ import { RequestContext } from '@mikro-orm/core';
 import { apiLimiter } from './shared/ratelimit.js';
 import routes from './routes.js';
 import { errorMiddleware } from './shared/middleware/error.middleware.js';
+import { requestLogger } from './shared/middleware/request-logger.middleware.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
 const apiBasePath = process.env.API_BASE_PATH || '/api';
 
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(apiBasePath, apiLimiter);
+
+//Middleware para registrar cada request
+app.use(requestLogger);
 
 // Crear RequestContext
 app.use((req, res, next) => {
