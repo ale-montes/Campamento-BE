@@ -6,7 +6,7 @@ import { z } from 'zod';
 export const cabaniaInputSchemaAdmin = z.object({
   nombre: z.string().min(2).max(100),
   capacidad: z.number().int().min(1).max(100),
-  descripcion: z.string().min(10).max(500),
+  descripcion: z.string().min(10).max(1000),
   ubicacion: z.string().min(2).max(100),
   cabinStatus: z.enum(['Activo', 'Inactivo']).default('Activo'),
   deidad: z.number().int().positive(), // id de deidad

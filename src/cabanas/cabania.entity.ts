@@ -11,7 +11,7 @@ export class Cabania extends BaseEntity {
   @Property({ nullable: false })
   capacidad!: number;
 
-  @Property({ nullable: false })
+  @Property({ type: 'string', length: 1000, nullable: false })
   descripcion!: string;
 
   @Property({ nullable: false })
