@@ -19,6 +19,32 @@ export class PeriodoService {
   }
 
   async add(data: PeriodoInput, em: EntityManager): Promise<Periodo> {
+    if (data.fechaInicioPer >= data.fechaFinPer) {
+      throw new Error('La fecha de inicio del período no puede ser mayor o igual a la de fin.');
+    }
+    const solapado = await em.findOne(Periodo, {
+      $or: [
+        // Caso 1: el inicio del nuevo período cae dentro de otro
+        {
+          fechaInicioPer: { $lte: data.fechaInicioPer },
+          fechaFinPer: { $gte: data.fechaInicioPer },
+        },
+        // Caso 2: el fin del nuevo período cae dentro de otro
+        {
+          fechaInicioPer: { $lte: data.fechaFinPer },
+          fechaFinPer: { $gte: data.fechaFinPer },
+        },
+        // Caso 3: el nuevo período abarca completamente a otro
+        {
+          fechaInicioPer: { $gte: data.fechaInicioPer },
+          fechaFinPer: { $lte: data.fechaFinPer },
+        },
+      ],
+    });
+    if (solapado) {
+      throw new Error('El rango de fechas se superpone con un período existente.');
+    }
+
     const periodo = em.create(Periodo, data);
     await em.persistAndFlush(periodo);
     return periodo;

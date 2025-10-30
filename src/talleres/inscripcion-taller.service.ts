@@ -6,10 +6,12 @@ import { UserPayload } from '../types/user.js';
 import { PeriodoService } from '../periodo/periodo.service.js';
 import { TallerService } from './taller.service.js';
 import { InscripcionTallerInputAdmin } from './inscripcion-taller.schema.js';
+import { InscripcionPeriodoService } from '../periodo/inscripcion-periodo.service.js';
 
 export class InscripcionTallerService {
   private periodoService = new PeriodoService();
   private tallerService = new TallerService();
+  private inscripcionPeriodoService = new InscripcionPeriodoService();
 
   async findAll(user: UserPayload, em: EntityManager): Promise<InscripcionTaller[]> {
     if (user.role === 'campista') {
@@ -54,6 +56,7 @@ export class InscripcionTallerService {
     const periodoVigente = await this.periodoService.getVigente(em);
 
     if (user.role === 'campista') {
+      await this.inscripcionPeriodoService.getInscripcionVigente(user, em);
       const idCampista = Number(user.id);
       inscripcionData.campista = idCampista;
       inscripcionData.estado = 'aceptado';
